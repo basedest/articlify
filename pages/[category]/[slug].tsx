@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next'
 import mongoose from 'mongoose'
 import { ArticleModel, Article } from '../../lib/ArticleTypes'
-import { mongocon } from '../../lib/lib'
 
 const Article = ({sample}) => {
   return (
