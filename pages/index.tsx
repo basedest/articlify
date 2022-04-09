@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   await mongoose.connect(process.env.MONGODB_URI)
   let articles = await ArticleModel.find().exec()
   articles = JSON.parse(JSON.stringify(articles)) 
-  console.log(articles)
   
   return {
     props: { articles },
