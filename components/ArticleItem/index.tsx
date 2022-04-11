@@ -11,10 +11,11 @@ const ArticleItem = (props: Article) => {
                     alt='Image for article'
                     className='articleItem__pic'
                     width={600} height={300}
+                    layout='responsive'
                     src={`${img}`}
                 />
                 <div className='articleItem__info'>
-                    <Link href={props.slug}>
+                    <Link href={`/${props.category}/${props.slug}`}>
                         <a className='articleItem__title'>{props.title}</a>
                     </Link>
                     <p className='articleItem__text'>

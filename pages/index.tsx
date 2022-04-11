@@ -29,7 +29,7 @@ export default Home
 export const getServerSideProps: GetServerSideProps = async () => {
   await mongoose.connect(process.env.MONGODB_URI)
   let articles = await ArticleModel.find().exec()
-  articles = JSON.parse(JSON.stringify(articles)) 
+  articles = JSON.parse(JSON.stringify(articles))
   
   return {
     props: { articles },

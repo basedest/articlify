@@ -17,6 +17,11 @@ const Header = () => {
                     </Link>
                 </li>
                 <li>
+                    <Link href='/editor'>
+                        <a>Редактор</a>
+                    </Link>
+                </li>
+                <li>
                     <Link href='/about'>
                         <a>О нас</a>
                     </Link>

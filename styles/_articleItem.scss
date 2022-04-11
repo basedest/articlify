@@ -4,8 +4,9 @@
     height: fit-content;
     display: grid;
     grid-template-columns: 1fr;
-    //row-gap: 10px;
     align-items: center;
+    box-shadow: 0 4px 8px 0 #11111122;
+    border-radius: 15px;
 }
 
 .articleItem__info {
@@ -23,6 +24,7 @@
     letter-spacing: -0.03em;
     text-align: start;
     font-weight: 600;
+    margin: 0 15px 0 15px;
 }
 
 .articleItem__text {
@@ -39,19 +41,22 @@
     font-weight: 300;
     text-align: start;
     display: block;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .articleItem__etc {
     display: flex;
     flex-direction: row;
     gap: 0.5em;
+    margin: 0 15px 15px 15px;
 }
 
 .articleItem__pic {
     object-fit: cover;
     width: 100%;
-    height: 250px;
-    border-radius: 5px;
+    //height: 250px;
+    border-radius: 15px;
     max-width: 100%;
     display: block;
     border-style: none;
