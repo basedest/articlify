@@ -1,6 +1,8 @@
 # Articlify
 
-## _Blog app based on Next.js web framework_
+### _Blog app based on Next.js web framework_
+
+---
 
 It uses MongoDB for data storage.    
 In order to run server on your machine you have to define `MONGODB_URI` in `.env.local`
