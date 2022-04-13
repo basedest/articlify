@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Article } from "../../lib/ArticleTypes"
 
-const ArticleItem = (props: Article) => {
+const ArticleItem:React.FC<Article> = props => {
     const img = props.img ?? `/img/${props.category}.jpg`
     return (
         <div className='articleList'>

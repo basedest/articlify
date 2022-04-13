@@ -5,7 +5,7 @@ export interface ListProps {
     articles: Article[]
 }
 
-const ArticleList = ({articles}: ListProps) => {
+const ArticleList:React.FC<ListProps> = ({articles}) => {
   return (
     <div style={{
         display: 'flex',
