@@ -7,14 +7,7 @@ export interface ListProps {
 
 const ArticleList:React.FC<ListProps> = ({articles}) => {
   return (
-    <div style={{
-        display: 'flex',
-        placeItems: 'center',
-        flexDirection: 'column',
-        paddingTop: '1.5rem',
-        paddingBottom: '1.5rem',
-        gap: '2rem',
-    }}>
+    <div className="articleList">
         {
             articles.map(article => <ArticleItem key={article.slug} {...article}/>)
         }

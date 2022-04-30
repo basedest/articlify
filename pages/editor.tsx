@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSaveCallback, useLoadData, options, useSetData, useClearDataCallback } from '../components/Editor'
+import MyInput from '../components/input/MyInput'
+import { Article } from '../lib/ArticleTypes'
+import Select from 'react-select'
+import TagsPicker from '../components/TagsPicker'
 
 const Editor: any = dynamic(
   () => import('../components/Editor/editor').then(mod => mod.EditorContainer),
@@ -10,24 +14,70 @@ const Editor: any = dynamic(
 export default function EditorPage() {
   const [editor, setEditor] = useState(null)
   
-  // save handler
-  const onSave = useSaveCallback(editor)
-
   // load data
   const { data, loading } = useLoadData()
-
+  
   // set saved data
-  useSetData(editor, data);
-
+  useSetData(editor, data)
+  
   // clear data callback
   const clearData = useClearDataCallback(editor)
-
+  
   const disabled = editor === null || loading
+  
+  const [article, setArticle] = useState<Article>()
+
+  const onSave = useSaveCallback(editor, article)
 
   return (
     <div className="container">
 
       <main>
+        <div className="inputs">
+          <MyInput 
+            value={article?.title}
+            onChange={e => setArticle({...article, title: e.target.value})}
+            type="text" 
+            placeholder="Название..."
+          />
+          <textarea
+            className='myInput' 
+            style={{
+                marginBottom: -4,
+                marginTop: -1,
+                font: "inherit",
+            }}
+            name="desc"
+            placeholder="Описание..."
+            onChange={e => setArticle({...article, description: e.target.value})}
+          >
+          </textarea>
+          <MyInput 
+            value={article?.author}
+            onChange={e => setArticle({...article, author: e.target.value})}
+            type="text"
+            placeholder="Автор..."
+          />
+          
+          <Select
+            placeholder={'Выберите категорию'}
+            onChange={selected => setArticle({...article, category: selected.value})}
+            options={[
+              { value: 'art',     label: 'art'     },
+              { value: 'games',   label: 'games'   },
+              { value: 'it',      label: 'it'      },
+              { value: 'movies',  label: 'movies'  },
+              { value: 'music',   label: 'music'   },
+              { value: 'science', label: 'science' },
+              { value: 'sports',  label: 'sports'  },
+              { value: 'travel',  label: 'travel'  },
+            ]}
+          />
+
+          <TagsPicker 
+            onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
+          />
+        </div>
         <div className="editorContainer">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
         </div>
@@ -58,6 +108,7 @@ export default function EditorPage() {
         .editorContainer {
           width: 100%;
           margin-bottom: 10px;
+          z-index: 0;
         }
 
         button {
@@ -87,6 +138,9 @@ export default function EditorPage() {
             width: 100%;
             flex-direction: column;
           }
+        }
+        .inputs {
+          margin-bottom: 1rem;
         }
       `}</style>
 

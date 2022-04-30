@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Article } from "../../lib/ArticleTypes"
+import TagsList from "../TagsList"
 
 const ArticleItem:React.FC<Article> = props => {
     const img = props.img ?? `/img/${props.category}.jpg`
@@ -12,6 +13,7 @@ const ArticleItem:React.FC<Article> = props => {
                     className='articleItem__pic'
                     width={600} height={300}
                     layout='responsive'
+                    priority={true}
                     src={`${img}`}
                 />
                 <div className='articleItem__info'>
@@ -26,6 +28,7 @@ const ArticleItem:React.FC<Article> = props => {
                         <p>•</p>
                         <p>{new Date(props.createdAt).toDateString()}</p>
                     </div>
+                    <TagsList tags={props.tags} />
                 </div>
             </article>
         </div>
