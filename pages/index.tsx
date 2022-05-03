@@ -16,7 +16,7 @@ const Home: NextPage<any, any> = ({articles, version}) => {
         <h1 className='title'>
           Articlify {version}
         </h1>
-        <h2>Место для ваших статей</h2>
+        <h2>The best digital media platform on the internet</h2>
         <hr />
         <ArticleList articles={articles} />
       </main>

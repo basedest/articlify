@@ -1,6 +1,7 @@
 @import "./header";
 @import "./home";
 @import "./articleList";
+@import "./articlePage";
 @import "./tags";
 @import "./input";
 
@@ -15,6 +16,9 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 * {

@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const {article, data} = req.body as Params
     const {slug} = article
-    console.log(article)
+    console.log(data)
     await mongoose.connect(process.env.MONGODB_URI)
     await PageModel.create({slug, data})
     await ArticleModel.create(article)

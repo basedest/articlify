@@ -8,22 +8,22 @@ const Header:React.FC = () => {
             <ul>
                 <li>
                     <Link href='/'>
-                        <a>Главная</a>
+                        <a>Main</a>
                     </Link>
                 </li>
                 <li>
                     <Link href='/category'>
-                        <a>Категории</a>
+                        <a>Categories</a>
                     </Link>
                 </li>
                 <li>
                     <Link href='/editor'>
-                        <a>Редактор</a>
+                        <a>Editor</a>
                     </Link>
                 </li>
                 <li>
                     <Link href='/about'>
-                        <a>О нас</a>
+                        <a>About</a>
                     </Link>
                 </li>
             </ul>

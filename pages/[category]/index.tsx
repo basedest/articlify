@@ -1,9 +1,14 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import mongoose from 'mongoose'
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
+import ArticleList from '../../components/ArticleList'
+import { ArticleModel } from '../../lib/ArticleTypes'
 
-const Category = ({category}) => {
+const Category = ({articles}) => {
   return (
-    <div>{category}</div>
+    <main className="main">
+      <ArticleList articles={articles} />
+    </main>
   )
 }
 
@@ -13,27 +18,30 @@ interface IParams extends ParsedUrlQuery {
   category: string
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { category } = context.params as IParams
+  await mongoose.connect(process.env.MONGODB_URI)
+  let articles = await ArticleModel.find({category}).exec()
+  articles = JSON.parse(JSON.stringify(articles))
   return {
       props: {
-          category
+          articles
       }
   }
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-      paths: [
-        {params: {category: 'art'}},
-        {params: {category: 'it'}},
-        {params: {category: 'games'}},
-        {params: {category: 'music'}},
-        {params: {category: 'science'}},
-        {params: {category: 'sports'}},
-        {params: {category: 'travel'}},
-        {params: {category: 'movies'}},
-      ],
-      fallback: false
-  }
-}
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   return {
+//       paths: [
+//         {params: {category: 'art'}},
+//         {params: {category: 'it'}},
+//         {params: {category: 'games'}},
+//         {params: {category: 'music'}},
+//         {params: {category: 'science'}},
+//         {params: {category: 'sports'}},
+//         {params: {category: 'travel'}},
+//         {params: {category: 'movies'}},
+//       ],
+//       fallback: false
+//   }
+// }

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 header {
   position: -webkit-sticky;
   position: sticky;
@@ -24,6 +25,10 @@ header {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+header a:hover {
+  text-decoration: none;
 }
 
 header .logo {
@@ -200,6 +205,10 @@ header ul li a {
   border-radius: 15px;
 }
 
+.articleItem a:hover {
+  text-decoration: none;
+}
+
 .articleItem__info {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -264,6 +273,176 @@ header ul li a {
   border-style: none;
 }
 
+.article {
+  font-size: 1.1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  place-items: center;
+  justify-self: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  max-width: 1000px;
+}
+
+.article h1 {
+  font-size: 4rem;
+}
+
+.article article a {
+  color: #e74c3c;
+}
+
+.article article p {
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.article article h2, .article article h3 {
+  margin-bottom: 1rem;
+  font-weight: inherit;
+  line-height: 1.375;
+}
+
+.article article h2 {
+  margin-top: 3rem;
+  font-size: 1.875rem;
+}
+
+.article article h3 {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+
+.article article code {
+  border-radius: 5px;
+  border: 1px solid #BCBEC0;
+  padding: 2px;
+  font-family: Monaco, Consolas,"Andale  Mono","DejaVu Sans Mono", monospace;
+}
+
+.article article blockquote {
+  display: block;
+  border-width: 2px 0;
+  border-style: solid;
+  border-color: #eee;
+  padding: 1.5em 0 0.5em;
+  margin: 1.5em 0;
+  position: relative;
+}
+
+.article article blockquote:before {
+  content: '\201C';
+  position: absolute;
+  top: 0em;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background: #fff;
+  width: 3rem;
+  height: 2rem;
+  font: 6em/1.08em 'PT Sans', sans-serif;
+  color: #666;
+  text-align: center;
+}
+
+.article article blockquote:after {
+  content: "– " attr(cite);
+  display: block;
+  text-align: right;
+  font-weight: 500;
+  color: #e74c3c;
+}
+
+.article article figure {
+  text-align: center;
+  width: 100%;
+}
+
+.article article mark {
+  background: rgba(245, 235, 111, 0.29);
+  padding: 3px 0;
+}
+
+.article__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.article__container .img {
+  border-radius: 10px;
+  width: 100%;
+}
+
+.article__head {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.article__authordate {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 0.5em;
+  place-self: center;
+  place-content: center;
+  place-items: center;
+}
+
+.article__category {
+  font-weight: 600;
+  color: #e74c3c;
+}
+
+.article__description {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.article__delimiter {
+  margin: 6rem 0 5rem 0;
+  text-align: center;
+}
+
+.article__delimiter:before {
+  display: inline-block;
+  content: "***";
+  font-size: 30px;
+  line-height: 65px;
+  height: 30px;
+  letter-spacing: 0.2em;
+}
+
+.tags {
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.tags__item {
+  background-color: #daeaff;
+  border: solid 1px #0001;
+  border-radius: 10px;
+  padding: 0.25rem 0.5rem 0.4rem 0.5rem;
+}
+
 .tags {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -315,6 +494,10 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 * {

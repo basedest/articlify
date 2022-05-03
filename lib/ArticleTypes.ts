@@ -59,7 +59,7 @@ const PageSchema = new Schema<ArticlePage>({
         required: true,
         unique: true
     },
-    data: [Object],
+    data: Object,
 })
 
 export const PageModel = models.Page || model<ArticlePage>('Page', PageSchema)

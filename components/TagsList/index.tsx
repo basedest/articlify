@@ -7,7 +7,7 @@ type Props = {
 const TagsList = ({tags}: Props) => {
   return (
     <div className="tags">
-        {tags.map((tag, _) => (
+        {tags?.map((tag, _) => (
           <div key={tag as Key} className="tags__item">
             {tag}
           </div>)

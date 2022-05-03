@@ -4,7 +4,7 @@
     {
       "type": "header",
       "data": {
-        "text": "Заголовок...",
+        "text": "Header...",
         "level": 2
       }
     },
@@ -12,7 +12,7 @@
       "id": "B5cJREo-NG",
       "type": "paragraph",
       "data": {
-          "text": "кароче пишите тут фигню свою ёпта"
+          "text": "Start editing"
       }
     }
   ],

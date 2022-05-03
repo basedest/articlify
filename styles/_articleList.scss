@@ -19,6 +19,9 @@
     align-items: center;
     box-shadow: 0 4px 8px 0 #11111122;
     border-radius: 15px;
+    a:hover {
+        text-decoration: none;
+    }
 }
 
 .articleItem__info {

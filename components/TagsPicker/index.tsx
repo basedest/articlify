@@ -26,6 +26,7 @@ class TagsPicker extends Component<Props> {
     render() {
         return (
         <CreatableSelect
+            placeholder='Tags...'
             className={classes.picker}
             isMulti
             isClearable

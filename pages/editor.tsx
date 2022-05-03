@@ -38,7 +38,7 @@ export default function EditorPage() {
             value={article?.title}
             onChange={e => setArticle({...article, title: e.target.value})}
             type="text" 
-            placeholder="Название..."
+            placeholder="Title..."
           />
           <textarea
             className='myInput' 
@@ -48,7 +48,7 @@ export default function EditorPage() {
                 font: "inherit",
             }}
             name="desc"
-            placeholder="Описание..."
+            placeholder="Description..."
             onChange={e => setArticle({...article, description: e.target.value})}
           >
           </textarea>
@@ -56,11 +56,10 @@ export default function EditorPage() {
             value={article?.author}
             onChange={e => setArticle({...article, author: e.target.value})}
             type="text"
-            placeholder="Автор..."
+            placeholder="Author..."
           />
-          
           <Select
-            placeholder={'Выберите категорию'}
+            placeholder={'Category...'}
             onChange={selected => setArticle({...article, category: selected.value})}
             options={[
               { value: 'art',     label: 'art'     },
@@ -73,7 +72,6 @@ export default function EditorPage() {
               { value: 'travel',  label: 'travel'  },
             ]}
           />
-
           <TagsPicker 
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
           />
@@ -116,7 +114,7 @@ export default function EditorPage() {
           color: #fff !important;
           text-transform: uppercase;
           text-decoration: none;
-          background: #267dcc;
+          background: #27e;
           padding: 20px;
           border-radius: 5px;
           display: inline-block;
