@@ -5,6 +5,8 @@ import MyInput from '../components/input/MyInput'
 import { Article } from '../lib/ArticleTypes'
 import Select from 'react-select'
 import TagsPicker from '../components/TagsPicker'
+import { useSession } from "next-auth/react"
+import AccessDenied from '../components/access-denied'
 
 const Editor: any = dynamic(
   () => import('../components/Editor/editor').then(mod => mod.EditorContainer),
@@ -16,6 +18,9 @@ export default function EditorPage() {
   
   // load data
   const { data, loading } = useLoadData()
+  
+  const { data: session, status } = useSession()
+  const authLoading = status === "loading"
   
   // set saved data
   useSetData(editor, data)
@@ -29,9 +34,16 @@ export default function EditorPage() {
 
   const onSave = useSaveCallback(editor, article)
 
+  // When rendering client side don't display anything until loading is complete
+  if (typeof window !== "undefined" && loading && authLoading) return null
+
+  // If no session exists, display access denied message
+  if (!session) {
+    return <AccessDenied />
+  }
+
   return (
     <div className="container">
-
       <main>
         <div className="inputs">
           <MyInput 
@@ -43,7 +55,7 @@ export default function EditorPage() {
           <textarea
             className='myInput' 
             style={{
-                marginBottom: -4,
+                marginBottom: -1,
                 marginTop: -1,
                 font: "inherit",
             }}
@@ -52,12 +64,6 @@ export default function EditorPage() {
             onChange={e => setArticle({...article, description: e.target.value})}
           >
           </textarea>
-          <MyInput 
-            value={article?.author}
-            onChange={e => setArticle({...article, author: e.target.value})}
-            type="text"
-            placeholder="Author..."
-          />
           <Select
             placeholder={'Category...'}
             onChange={selected => setArticle({...article, category: selected.value})}
@@ -139,6 +145,7 @@ export default function EditorPage() {
         }
         .inputs {
           margin-bottom: 1rem;
+          width: 100%;
         }
       `}</style>
 

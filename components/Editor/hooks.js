@@ -1,10 +1,12 @@
 import { useCallback, useState, useEffect } from "react"
 import initialData from './data.json'
 export const dataKey = 'editorData'
+import { useSession } from "next-auth/react"
 
 export const useSaveCallback = (editor, originalArticle) => {
+  const { data: session, status } = useSession()
   return useCallback(async () => {
-    if (!editor) return
+    if (!editor && !session && status !== 'loading') return
     try {
       const data = await editor.save()
       console.group('EDITOR onSave')
@@ -14,7 +16,8 @@ export const useSaveCallback = (editor, originalArticle) => {
       console.groupEnd()
       const article = {...originalArticle,
         slug: originalArticle.title.toLocaleLowerCase().split(' ').join('-'),
-        createdAt: new Date
+        createdAt: new Date,
+        author: session.user.name
       }
       const response = await fetch('/api/save-article', {
         method: 'POST',
@@ -26,8 +29,8 @@ export const useSaveCallback = (editor, originalArticle) => {
     } catch (e) {
       console.error('SAVE RESULT failed', e);
     }
-  }, [editor, originalArticle])
-};
+  }, [editor, originalArticle, session, status])
+}
 
 // Set editor data after initializing
 export const useSetData = (editor, data) => {

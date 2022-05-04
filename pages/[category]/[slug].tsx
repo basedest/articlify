@@ -1,10 +1,10 @@
 import { GetServerSideProps, GetStaticProps } from 'next'
 import mongoose from 'mongoose'
-import { ArticleModel, Article, PageModel } from '../../lib/ArticleTypes'
+import { ArticleModel, PageModel } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
 
-const Article = ({article, page}) => {
+const ArticlePage = ({article, page}) => {
   const img = article.img ?? `/img/${article.category}.jpg`
   return (
     <>
@@ -75,7 +75,7 @@ const Article = ({article, page}) => {
   )
 }
 
-export default Article
+export default ArticlePage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   await mongoose.connect(process.env.MONGODB_URI)

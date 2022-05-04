@@ -4,6 +4,7 @@
 @import "./articlePage";
 @import "./tags";
 @import "./input";
+@import "./colors";
 
 html,
 body {
@@ -16,8 +17,9 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  animation-duration: 75ms;
   &:hover {
-    text-decoration: underline;
+    color: $accent-color;
   }
 }
 

@@ -1,3 +1,5 @@
+@import './colors';
+
 .article {
     font-size: 1.1rem;
     display: flex;
@@ -10,7 +12,10 @@
     }
     article {
         a {
-            color: #e74c3c;
+            color: $accent-color;
+            &:hover {
+                text-decoration: underline;
+            }
         }
         p {
             margin-bottom: 1.5rem;
@@ -102,7 +107,7 @@
     }
     &__category {
         font-weight: 600;
-        color: #e74c3c;
+        color: $accent-color;
     }
     &__description {
         margin-top: 2rem;
