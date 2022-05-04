@@ -6,7 +6,6 @@
     place-items: center;
     justify-self: center;
     height: fit-content;
-    max-width: 1000px;
     h1 {
         font-size: 4rem;
     }
@@ -86,6 +85,8 @@
         padding-top: 1.25rem;
         padding-bottom: 1.25rem;
         flex-direction: column;
+        max-width: 1000px;
+        margin: auto;
         .img {
             border-radius: 10px;
             width: 100%;
@@ -95,6 +96,10 @@
     &__head {
         text-align: center;
         font-size: 1.2rem;
+        .tags {
+            justify-content: center;
+            align-items: center;
+        }
     }
 
     &__authordate {
@@ -124,16 +129,5 @@
             height: 30px;
             letter-spacing: 0.2em;
         }
-    }
-}
-
-.tags {
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-    &__item {
-        background-color: #daeaff;
-        border: solid 1px #0001;
-        border-radius: 10px;
-        padding: 0.25rem 0.5rem 0.4rem 0.5rem;
     }
 }

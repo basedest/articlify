@@ -403,7 +403,6 @@
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  max-width: 1000px;
 }
 
 .article h1 {
@@ -505,6 +504,8 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  max-width: 1000px;
+  margin: auto;
 }
 
 .article__container .img {
@@ -515,6 +516,15 @@
 .article__head {
   text-align: center;
   font-size: 1.2rem;
+}
+
+.article__head .tags {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .article__authordate {
@@ -553,18 +563,6 @@
   line-height: 65px;
   height: 30px;
   letter-spacing: 0.2em;
-}
-
-.tags {
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
-}
-
-.tags__item {
-  background-color: #daeaff;
-  border: solid 1px #0001;
-  border-radius: 10px;
-  padding: 0.25rem 0.5rem 0.4rem 0.5rem;
 }
 
 .tags {
