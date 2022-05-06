@@ -68,7 +68,6 @@ const ArticlePage = ({article, page}) => {
               })
             }
           </article>
-          <button onClick={() => console.log(article)}>test</button>
         </div>
       </div>
     </>
