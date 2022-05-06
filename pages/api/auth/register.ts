@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           regDate: new Date()
         })
         await user.save()
-        res.status(200).json({message: 'success'})
+        res.status(201).json(user)
       }
       catch (e) {
         res.status(400).json(e)

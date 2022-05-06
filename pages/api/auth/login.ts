@@ -9,13 +9,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const {password} =req.body
         await mongoose.connect(process.env.MONGODB_URI)
         const user = await UserModel.findOne({name})
+        
         if (!user) {
           res.status(400).json({message: 'invalid username'})
           return
         }
         const isMatch = await user.comparePassword(password)
         if (isMatch) {
-          res.status(200).json({message: 'success'})
+          res.status(200).json(user)
         }
         else {
           res.status(400).json({message: 'invalid password'})

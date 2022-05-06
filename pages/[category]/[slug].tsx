@@ -5,6 +5,7 @@ import Image from 'next/image'
 import TagsList from '../../components/TagsList'
 
 const ArticlePage = ({article, page}) => {
+  if (!article) return null
   const img = article.img ?? `/img/${article.category}.png`
   return (
     <>

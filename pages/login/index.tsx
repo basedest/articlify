@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react"
 import FormInput from "../../components/FormInput"
 
 const Login = () => {
+  const router = useRouter()
   const [message, setMessage] = useState('')
   const [values, setValues] = useState({
     username: "",
@@ -37,7 +39,10 @@ const Login = () => {
       }
     })
     .then(response => response.json())
-    .then(data => setMessage(data.message))
+    .then(data => {
+      setMessage(data.message)
+      if (!message) router.push('/')
+    })
     .catch(console.error)
   }
 
