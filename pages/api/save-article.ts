@@ -12,11 +12,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const {article, data} = req.body as Params
     const {slug} = article
-    console.log(data)
-    await mongoose.connect(process.env.MONGODB_URI)
-    await PageModel.create({slug, data})
-    await ArticleModel.create(article)
-    res.status(200).json('ok')
+    try {
+      await mongoose.connect(process.env.MONGODB_URI)
+      await PageModel.create({slug, data})
+      await ArticleModel.create(article)
+    }
+    catch (error) {
+      res.status(400).json(error)
+      return
+    }
+    res.status(201).json({message: 'success'})
   }
 }
 

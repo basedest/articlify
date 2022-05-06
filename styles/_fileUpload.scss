@@ -1,0 +1,13 @@
+@import './colors';
+
+.file-upload {
+    .loading {
+        color: $info-color;
+    }
+    .error {
+        color: $error-color;
+    }
+    .success {
+        color: $success-color;
+    }
+}

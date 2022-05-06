@@ -1,7 +1,6 @@
 import { OutputBlockData } from '@editorjs/editorjs';
 import { Schema, model, models } from 'mongoose';
 
-// 1. Create an interface representing a document in MongoDB.
 export interface Article {
     slug: string
     title: string
@@ -13,7 +12,6 @@ export interface Article {
     tags?: Array<string>
 }
 
-// 2. Create a Schema corresponding to the document interface.
 const ArticleSchema = new Schema<Article>({
     slug: {
         type: String,
@@ -40,10 +38,10 @@ const ArticleSchema = new Schema<Article>({
         type: Date,
         required: true
     },
+    img: String,
     tags: [String]
 })
 
-// 3. Create a Model.
 export const ArticleModel = models.Article || model<Article>('Article', ArticleSchema)
 
 //------------------------------------------------------------------------------------

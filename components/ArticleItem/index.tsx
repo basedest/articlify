@@ -4,14 +4,14 @@ import { Article } from "../../lib/ArticleTypes"
 import TagsList from "../TagsList"
 
 const ArticleItem:React.FC<Article> = props => {
-    const img = props.img ?? `/img/${props.category}.jpg`
+    const img = props.img ?? `/img/${props.category}.png`
     return (
         <div className='articleList'>
             <article className='articleItem'>
                 <Image
                     alt='Image for article'
                     className='articleItem__pic'
-                    width={600} height={300}
+                    width={2} height={1}
                     layout='responsive'
                     priority={true}
                     src={`${img}`}

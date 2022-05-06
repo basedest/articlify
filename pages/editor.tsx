@@ -7,6 +7,7 @@ import Select from 'react-select'
 import TagsPicker from '../components/TagsPicker'
 import { useSession } from "next-auth/react"
 import AccessDenied from '../components/access-denied'
+import FileUpload from '../components/FileUpload'
 
 const Editor: any = dynamic(
   () => import('../components/Editor/editor').then(mod => mod.EditorContainer),
@@ -28,11 +29,20 @@ export default function EditorPage() {
   // clear data callback
   const clearData = useClearDataCallback(editor)
   
-  const disabled = editor === null || loading
+  const disabled = editor === null || loading || authLoading
   
   const [article, setArticle] = useState<Article>()
-
-  const onSave = useSaveCallback(editor, article)
+  
+  const [img, setImg] = useState<string | null>(null)
+  
+  const onSave = useSaveCallback(editor, 
+    {...article, 
+      img,
+      slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
+      createdAt: new Date,
+      author: session?.user.name
+    },
+    )
 
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== "undefined" && loading && authLoading) return null
@@ -76,16 +86,21 @@ export default function EditorPage() {
               { value: 'science', label: 'science' },
               { value: 'sports',  label: 'sports'  },
               { value: 'travel',  label: 'travel'  },
+              { value: 'other',   label: 'other'   },
             ]}
           />
           <TagsPicker 
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
           />
+          <div className="image">
+            Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
+            <FileUpload filenameCB={setImg} />
+          </div>
         </div>
         <div className="editorContainer">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
         </div>
-        <button disabled={disabled} type="button" onClick={onSave}>Сохранить статью</button>{' '}
+        <button disabled={disabled} type="button" onClick={onSave}>save article</button>{' '}
       </main>
 
       <style jsx>{`
@@ -113,6 +128,12 @@ export default function EditorPage() {
           width: 100%;
           margin-bottom: 10px;
           z-index: 0;
+        }
+
+        .hint {
+          font-size: 0.8em;
+          color: #777;
+          margin-left: 1em;
         }
 
         button {

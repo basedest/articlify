@@ -5,7 +5,7 @@ import Image from 'next/image'
 import TagsList from '../../components/TagsList'
 
 const ArticlePage = ({article, page}) => {
-  const img = article.img ?? `/img/${article.category}.jpg`
+  const img = article.img ?? `/img/${article.category}.png`
   return (
     <>
       <div className="article__container">
@@ -18,7 +18,7 @@ const ArticlePage = ({article, page}) => {
           </div>
           <div className="article__category">{article.category}</div>
           <div className="article__description">{article.description}</div>
-          <Image className='img' src={img} alt="article image" height="500" width="800" />
+          <Image className='img' src={img} alt="article image" height="1" width="2" layout='responsive' />
           <TagsList tags={article.tags}/>
         </div>
         <div className="article">
@@ -68,6 +68,7 @@ const ArticlePage = ({article, page}) => {
               })
             }
           </article>
+          <button onClick={() => console.log(article)}>test</button>
         </div>
       </div>
     </>
@@ -80,6 +81,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   await mongoose.connect(process.env.MONGODB_URI)
   const {slug} = context.params
   let article = await ArticleModel.findOne({slug})
+  
   article = JSON.parse(JSON.stringify(article))
   let page = await PageModel.findOne({slug})
   page = JSON.parse(JSON.stringify(page))

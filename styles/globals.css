@@ -516,6 +516,7 @@
 .article__head {
   text-align: center;
   font-size: 1.2rem;
+  width: 100%;
 }
 
 .article__head .tags {
@@ -606,6 +607,113 @@
   border: 2px solid #28f;
 }
 
+.register {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100vh;
+}
+
+.register form {
+  background-color: white;
+  padding: 30px 60px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 5px 10px 5px #aaa;
+          box-shadow: 0px 5px 10px 5px #aaa;
+}
+
+.register p {
+  text-align: center;
+  color: #777;
+}
+
+.register p a {
+  color: #e74c3c;
+}
+
+.register p a:hover {
+  text-decoration: underline;
+}
+
+.register h1 {
+  color: #d62c1a;
+  text-align: center;
+}
+
+.register button {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.register button:hover {
+  background-color: #a82315;
+}
+
+.formInput {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 280px;
+}
+
+.formInput input {
+  padding: 15px;
+  margin: 10px 0px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.formInput label {
+  font-size: 12px;
+  color: gray;
+}
+
+.formInput span {
+  font-size: 12px;
+  padding: 3px;
+  color: red;
+  display: none;
+}
+
+.formInput input:invalid[focused="true"] {
+  border: 1px solid red;
+}
+
+.formInput input:invalid[focused="true"] ~ span {
+  display: block;
+}
+
+.file-upload .loading {
+  color: #33b5e5;
+}
+
+.file-upload .error {
+  color: #f44;
+}
+
+.file-upload .success {
+  color: #00C851;
+}
+
 html,
 body {
   padding: 0;
@@ -638,5 +746,33 @@ hr {
   border-style: inset;
   border-width: 1px;
   width: 90vw;
+}
+
+.access-denied {
+  text-align: center;
+}
+
+.access-denied a {
+  color: #e74c3c;
+}
+
+.access-denied a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  padding: 10px;
+  border: none;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.btn:hover {
+  background-color: #a82315;
 }
 /*# sourceMappingURL=globals.css.map */

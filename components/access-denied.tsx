@@ -5,13 +5,13 @@ export default function AccessDenied() {
   return (
     <main
       style={{
-        height: '100vh',
+        height: '95vh',
         display: 'grid',
         justifyContent: 'center',
         placeItems: 'center',
       }}
     >
-      <div>
+      <div className="access-denied">
         <h1>Access Denied</h1>
         <p>
           <Link href="/api/auth/signin">
@@ -21,9 +21,10 @@ export default function AccessDenied() {
                   signIn()
                 }}
               >
-                You must be signed in to view this page
+                sign in
               </a>
           </Link>
+          {' '}to view this page
         </p>
       </div>
     </main>

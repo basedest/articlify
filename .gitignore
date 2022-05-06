@@ -16,6 +16,9 @@
 # production
 /build
 
+#page for testing features
+/pages/test.tsx
+
 # misc
 .DS_Store
 *.pem

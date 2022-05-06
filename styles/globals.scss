@@ -5,6 +5,8 @@
 @import "./tags";
 @import "./input";
 @import "./colors";
+@import "./register";
+@import "./fileUpload";
 
 html,
 body {
@@ -36,4 +38,31 @@ hr {
   border-style: inset;
   border-width: 1px;
   width: 90vw;
+}
+
+.access-denied {
+  text-align: center;
+  a {
+    color: $accent-color;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.btn {
+  //height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: $accent-color;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  
+  &:hover {
+      background-color: adjust-color($color: $accent-color, $lightness: -20%);
+  }
 }

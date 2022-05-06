@@ -1,12 +1,12 @@
 import { useCallback, useState, useEffect } from "react"
 import initialData from './data.json'
-export const dataKey = 'editorData'
-import { useSession } from "next-auth/react"
+import { useRouter } from 'next/router'
+import { Article } from "../../lib/ArticleTypes"
 
-export const useSaveCallback = (editor, originalArticle) => {
-  const { data: session, status } = useSession()
+export const useSaveCallback = (editor, article: Article) => {
+  const router = useRouter()
   return useCallback(async () => {
-    if (!editor && !session && status !== 'loading') return
+    if (!editor) return
     try {
       const data = await editor.save()
       console.group('EDITOR onSave')
@@ -14,22 +14,22 @@ export const useSaveCallback = (editor, originalArticle) => {
       localStorage.setItem(dataKey, JSON.stringify(data))
       console.info('Saved in localStorage')
       console.groupEnd()
-      const article = {...originalArticle,
-        slug: originalArticle.title.toLocaleLowerCase().split(' ').join('-'),
-        createdAt: new Date,
-        author: session.user.name
-      }
+
       const response = await fetch('/api/save-article', {
         method: 'POST',
         body: JSON.stringify({article, data}),
         headers: {
             'Content-Type': 'application/json'
-        }
-    })
-    } catch (e) {
+          }
+      })
+      response.status === 201
+      ? router.push(`/${article.category}/${article.slug}`)
+      : alert("check your inputs. something's just not right...")
+    } 
+    catch (e) {
       console.error('SAVE RESULT failed', e);
     }
-  }, [editor, originalArticle, session, status])
+  }, [editor, article, router])
 }
 
 // Set editor data after initializing
@@ -38,7 +38,7 @@ export const useSetData = (editor, data) => {
     if (!editor || !data) {
       return
     }
-
+    
     editor.isReady.then(() => {
       // fixing an annoying warning in Chrome `addRange(): The given range isn't in document.`
       setTimeout(() => {
@@ -67,7 +67,7 @@ export const useClearDataCallback = (editor) => {
 export const useLoadData = () => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
-
+  
   // Mimic async data load
   useEffect(() => {
     setLoading(true)
@@ -86,12 +86,14 @@ export const useLoadData = () => {
       console.groupEnd()
       setLoading(false)
     }, 200);
-
+    
     return () => {
       setLoading(false)
       clearTimeout(id)
     }
   }, [])
-
+  
   return { data, loading }
 };
+
+export const dataKey = 'editorData'

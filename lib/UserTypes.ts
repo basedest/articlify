@@ -1,28 +1,29 @@
 import { Schema, model, models } from 'mongoose'
+import bcrypt from "bcryptjs"
 
-// 1. Create an interface representing a document in MongoDB.
 export interface User {
-    uName:      string
     name:       string
     email:      string
+    password:   string
     regDate:    Date
     avatar?:    string
     articles?:  Array<string>
 }
 
-// 2. Create a Schema corresponding to the document interface.
-const schema = new Schema<User>({
-    uName: {
-        type: String,
-        required: true 
-    },
+const UserSchema = new Schema<User>({
     name: {
         type: String,
-        required: true 
+        required: true,
+        unique: true
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
+    },
+    password : {
+        type: String,
+        required: true,
     },
     regDate: {
         type: Date,
@@ -32,5 +33,31 @@ const schema = new Schema<User>({
     articles: [String]
 })
 
-// 3. Create a Model.
-export const UserModel = models.User || model<User>('User', schema)
+UserSchema.pre("save", function (next) {
+    const user = this
+  
+    if (this.isModified("password") || this.isNew) {
+      bcrypt.genSalt(10, function (saltError, salt) {
+        if (saltError) {
+          return next(saltError)
+        } else {
+          bcrypt.hash(user.password, salt, function(hashError, hash) {
+            if (hashError) {
+              return next(hashError)
+            }
+  
+            user.password = hash
+            next()
+          })
+        }
+      })
+    } else {
+      return next()
+    }
+  })
+  
+  UserSchema.methods.comparePassword = async function(password) {
+    return bcrypt.compare(password, this.password)
+  }
+
+export const UserModel = models.User || model<User>('User', UserSchema)
