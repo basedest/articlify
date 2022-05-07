@@ -1,6 +1,5 @@
 @import url('http://fonts.cdnfonts.com/css/gotham-bold');
 @import "./header";
-@import "./home";
 @import "./articleList";
 @import "./articlePage";
 @import "./tags";
@@ -55,6 +54,13 @@ hr {
   }
 }
 
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+  text-align: center;
+}
+
 .btn {
   padding: 10px;
   border: none;
@@ -74,7 +80,6 @@ hr {
 main {
   margin-top: 20px;
   min-height: 100vh;
-  padding: 4rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;

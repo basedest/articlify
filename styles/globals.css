@@ -20,7 +20,7 @@
   -webkit-backdrop-filter: blur(15px) brightness(75%) saturate(70%);
           backdrop-filter: blur(15px) brightness(75%) saturate(70%);
   font-family: 'Gotham Bold', sans-serif;
-  padding-top: 10px;
+  padding: 8px 20px 0 20px;
 }
 
 .navbar-container {
@@ -191,80 +191,6 @@
   .navbar-container input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
     -webkit-transform: rotate(-35deg);
             transform: rotate(-35deg);
-  }
-}
-
-.container {
-  padding: 0 2rem;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
-}
-
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title a {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-.title a:hover, .title a:focus, .title a:active {
-  text-decoration: underline;
-}
-
-.title,
-.description {
-  text-align: center;
-}
-
-.description {
-  margin: 4rem 0;
-  line-height: 1.5;
-  font-size: 1.5rem;
-}
-
-.code {
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-}
-
-.grid {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  max-width: 800px;
-}
-
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
-}
-
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
   }
 }
 
@@ -490,6 +416,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  min-width: 600px;
   max-width: 1000px;
   margin: auto;
 }
@@ -893,6 +820,13 @@ hr {
   text-decoration: underline;
 }
 
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+  text-align: center;
+}
+
 .btn {
   padding: 10px;
   border: none;
@@ -912,7 +846,6 @@ hr {
 main {
   margin-top: 20px;
   min-height: 100vh;
-  padding: 4rem 0;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;

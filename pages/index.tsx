@@ -14,14 +14,12 @@ const Home: NextPage<any, any> = ({articles, version}) => {
           <meta name="description" content="Course Project" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main>
           <h1 className='title'>
             Articlify {version}
           </h1>
           <h2>The best digital media platform on the internet</h2>
           <hr />
           <ArticleList articles={articles} />
-        </main>
       </>
   )
 }
