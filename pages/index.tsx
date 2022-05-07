@@ -1,26 +1,28 @@
 import mongoose from 'mongoose'
 import type { GetServerSideProps, NextPage } from 'next'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import ArticleList from '../components/ArticleList'
 import { ArticleModel } from '../lib/ArticleTypes'
 
 const Home: NextPage<any, any> = ({articles, version}) => {
   return (
-    <div className='container'>
-      <Head>
-        <title>Articlify</title>
-        <meta name="description" content="Course Project" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className='main'>
-        <h1 className='title'>
-          Articlify {version}
-        </h1>
-        <h2>The best digital media platform on the internet</h2>
-        <hr />
-        <ArticleList articles={articles} />
-      </main>
-    </div>
+      <>
+        <Head>
+          <title>Articlify</title>
+          <meta name="description" content="Course Project" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+          <h1 className='title'>
+            Articlify {version}
+          </h1>
+          <h2>The best digital media platform on the internet</h2>
+          <hr />
+          <ArticleList articles={articles} />
+        </main>
+      </>
   )
 }
 

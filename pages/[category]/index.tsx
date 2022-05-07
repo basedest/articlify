@@ -4,11 +4,13 @@ import { ParsedUrlQuery } from 'querystring'
 import ArticleList from '../../components/ArticleList'
 import { ArticleModel } from '../../lib/ArticleTypes'
 
-const Category = ({articles}) => {
+const Category = ({articles, category}) => {
+  
   return (
-    <main className="main">
-      <ArticleList articles={articles} />
-    </main>
+  <>
+    <h1 className='accented'>{category}</h1>
+    <ArticleList articles={articles} />
+  </>
   )
 }
 
@@ -25,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   articles = JSON.parse(JSON.stringify(articles))
   return {
       props: {
-          articles
+          articles, category
       }
   }
 }

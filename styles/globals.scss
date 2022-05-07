@@ -1,3 +1,4 @@
+@import url('http://fonts.cdnfonts.com/css/gotham-bold');
 @import "./header";
 @import "./home";
 @import "./articleList";
@@ -7,6 +8,9 @@
 @import "./colors";
 @import "./register";
 @import "./fileUpload";
+@import "./dashboard";
+@import "./userMenu";
+@import "./dropdown";
 
 html,
 body {
@@ -20,6 +24,7 @@ a {
   color: inherit;
   text-decoration: none;
   animation-duration: 75ms;
+  cursor: pointer;
   &:hover {
     color: $accent-color;
   }
@@ -51,7 +56,6 @@ hr {
 }
 
 .btn {
-  //height: 50px;
   padding: 10px;
   border: none;
   background-color: $accent-color;
@@ -65,4 +69,19 @@ hr {
   &:hover {
       background-color: adjust-color($color: $accent-color, $lightness: -20%);
   }
+}
+
+main {
+  margin-top: 20px;
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.accented {
+  color: $accent-color;
 }

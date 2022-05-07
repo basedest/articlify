@@ -4,7 +4,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     form {
         background-color: white;
         padding: 30px 60px;
@@ -18,7 +17,7 @@
         a {
             color: $accent-color;
             &:hover {
-                text-decoration: underline;
+                color: adjust-color($color: $accent-color, $lightness: -15%);;
             }
         }
     }
@@ -42,7 +41,7 @@
         margin-top: 15px;
         
         &:hover {
-            background-color: adjust-color($color: $accent-color, $lightness: -20%);
+            background-color: adjust-color($color: $accent-color, $lightness: -15%);
         }
     }
 }

@@ -6,7 +6,6 @@ import TagsList from "../TagsList"
 const ArticleItem:React.FC<Article> = props => {
     const img = props.img ?? `/img/${props.category}.png`
     return (
-        <div className='articleList'>
             <article className='articleItem'>
                 <Image
                     alt='Image for article'
@@ -31,7 +30,6 @@ const ArticleItem:React.FC<Article> = props => {
                     <TagsList tags={props.tags} />
                 </div>
             </article>
-        </div>
     )
 }
 

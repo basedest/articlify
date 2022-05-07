@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url("http://fonts.cdnfonts.com/css/gotham-bold");
 .navbar input[type="checkbox"],
 .navbar .hamburger-lines {
   display: none;
@@ -14,9 +15,12 @@
   width: 100%;
   background: #fff;
   color: #000;
-  opacity: 0.85;
-  height: 50px;
+  height: 60px;
   z-index: 12;
+  -webkit-backdrop-filter: blur(15px) brightness(75%) saturate(70%);
+          backdrop-filter: blur(15px) brightness(75%) saturate(70%);
+  font-family: 'Gotham Bold', sans-serif;
+  padding-top: 10px;
 }
 
 .navbar-container {
@@ -26,7 +30,6 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  height: 64px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -39,12 +42,14 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .menu-items li {
   list-style: none;
   margin-left: 1.5rem;
-  margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
 
@@ -52,22 +57,18 @@
   text-decoration: none;
   color: #444;
   font-weight: 500;
-  -webkit-transition: color 0.3s ease-in-out;
-  transition: color 0.3s ease-in-out;
 }
 
 .menu-items a:hover {
-  color: #e74c3c;
-  -webkit-transition: color 0.3s ease-in-out;
-  transition: color 0.3s ease-in-out;
+  color: #1db954;
 }
 
 .logo {
   -webkit-box-ordinal-group: 2;
       -ms-flex-order: 1;
           order: 1;
-  font-size: 2.3rem;
-  margin-bottom: 1.75rem;
+  font-size: 2.5em;
+  color: #1db954;
 }
 
 @media (max-width: 768px) {
@@ -197,28 +198,6 @@
   padding: 0 2rem;
 }
 
-.main {
-  margin-top: 20px;
-  min-height: 100vh;
-  padding: 4rem 0;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
 .title a:hover,
 .title a:focus,
 .title a:active {
@@ -293,7 +272,6 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  min-width: 600px;
   max-width: 1000px;
   width: 100%;
   place-items: center;
@@ -301,8 +279,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding: 1.5rem 1rem 1.5rem 1rem;
   gap: 2rem;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
@@ -393,6 +370,15 @@
   border-style: none;
 }
 
+@media (min-width: 800px) {
+  .articleList {
+    min-width: 600px;
+    width: 100%;
+    margin-left: 5rem;
+    margin-right: 5rem;
+  }
+}
+
 .article {
   font-size: 1.1rem;
   display: -webkit-box;
@@ -410,7 +396,7 @@
 }
 
 .article article a {
-  color: #e74c3c;
+  color: #1db954;
 }
 
 .article article a:hover {
@@ -475,7 +461,7 @@
   display: block;
   text-align: right;
   font-weight: 500;
-  color: #e74c3c;
+  color: #1db954;
 }
 
 .article article figure {
@@ -544,7 +530,7 @@
 
 .article__category {
   font-weight: 600;
-  color: #e74c3c;
+  color: #1db954;
 }
 
 .article__description {
@@ -617,7 +603,6 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: 100vh;
 }
 
 .register form {
@@ -634,15 +619,15 @@
 }
 
 .register p a {
-  color: #e74c3c;
+  color: #1db954;
 }
 
 .register p a:hover {
-  text-decoration: underline;
+  color: #137736;
 }
 
 .register h1 {
-  color: #d62c1a;
+  color: #168d40;
   text-align: center;
 }
 
@@ -651,7 +636,7 @@
   height: 50px;
   padding: 10px;
   border: none;
-  background-color: #e74c3c;
+  background-color: #1db954;
   color: white;
   border-radius: 5px;
   font-weight: bold;
@@ -661,7 +646,7 @@
 }
 
 .register button:hover {
-  background-color: #a82315;
+  background-color: #137736;
 }
 
 .formInput {
@@ -714,6 +699,153 @@
   color: #00C851;
 }
 
+.dashboard {
+  min-height: 100vh;
+}
+
+.user-menu {
+  background-color: #fff;
+}
+
+.user-menu__btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: transparent;
+  border: none;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+}
+
+.user-menu__btn .avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.user-menu__btn .avatar img {
+  width: 100%;
+  height: 100%;
+}
+
+.user-menu__btn .avatar img:hover {
+  -webkit-filter: none !important;
+          filter: none !important;
+}
+
+.user-menu__btn .arrow {
+  height: 0.9rem;
+  margin: 1px 0 0 1px;
+}
+
+.user-menu__btn:hover {
+  -webkit-filter: invert(54%) sepia(98%) saturate(368%) hue-rotate(89deg) brightness(87%) contrast(96%);
+          filter: invert(54%) sepia(98%) saturate(368%) hue-rotate(89deg) brightness(87%) contrast(96%);
+}
+
+.user-menu__content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 120px;
+  overflow: auto;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  text-align: center;
+}
+
+.user-menu__content li {
+  margin: 0;
+  color: black;
+  padding: 12px 16px;
+  display: block;
+}
+
+.user-menu__content li a {
+  cursor: pointer;
+}
+
+.show {
+  display: block;
+}
+
+.show .user-menu__content {
+  display: block;
+}
+
+.show .arrow {
+  -webkit-transform: scaleY(-1);
+          transform: scaleY(-1);
+}
+
+.dropdown {
+  background-color: #fff;
+}
+
+.dropdown__btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+}
+
+.dropdown__btn .arrow {
+  height: 0.9rem;
+  margin: 1px 0 0 1px;
+}
+
+.dropdown__btn:hover {
+  -webkit-filter: invert(54%) sepia(98%) saturate(368%) hue-rotate(89deg) brightness(87%) contrast(96%);
+          filter: invert(54%) sepia(98%) saturate(368%) hue-rotate(89deg) brightness(87%) contrast(96%);
+}
+
+.dropdown__content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 120px;
+  overflow: auto;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  text-align: center;
+}
+
+.dropdown__content li {
+  margin: 0;
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+}
+
+.show {
+  display: block;
+}
+
+.show .dropdown__content {
+  display: block;
+}
+
+.show .arrow {
+  -webkit-transform: scaleY(-1);
+          transform: scaleY(-1);
+}
+
 html,
 body {
   padding: 0;
@@ -726,10 +858,11 @@ a {
   text-decoration: none;
   -webkit-animation-duration: 75ms;
           animation-duration: 75ms;
+  cursor: pointer;
 }
 
 a:hover {
-  color: #e74c3c;
+  color: #1db954;
 }
 
 * {
@@ -753,7 +886,7 @@ hr {
 }
 
 .access-denied a {
-  color: #e74c3c;
+  color: #1db954;
 }
 
 .access-denied a:hover {
@@ -763,7 +896,7 @@ hr {
 .btn {
   padding: 10px;
   border: none;
-  background-color: #e74c3c;
+  background-color: #1db954;
   color: white;
   border-radius: 5px;
   font-weight: bold;
@@ -773,6 +906,32 @@ hr {
 }
 
 .btn:hover {
-  background-color: #a82315;
+  background-color: #0f612c;
+}
+
+main {
+  margin-top: 20px;
+  min-height: 100vh;
+  padding: 4rem 0;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.accented {
+  color: #1db954;
 }
 /*# sourceMappingURL=globals.css.map */

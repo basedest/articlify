@@ -1,6 +1,6 @@
 import { MongoClient, MongoClientOptions } from "mongodb"
 
-const uri = process.env.MONGODB_URI
+const uri = 'mongodb://localhost:27017/articlify2'
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,

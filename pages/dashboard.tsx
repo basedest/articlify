@@ -1,27 +1,39 @@
 import { useState, useEffect } from 'react'
-import { getSession, signIn } from 'next-auth/react'
+import { getSession, signOut, useSession } from 'next-auth/react'
 
-function Dashboard() {
-  const [loading, setLoading] = useState(true)
+function Dashboard({ data }) {
+  const { data: session } = useSession()
 
-  useEffect(() => {
-    const securePage = async () => {
-      const session = await getSession()
-      console.log({ session })
-      if (!session) {
-        signIn()
-      } else {
-        setLoading(false)
+  return <div style={{
+    textAlign: 'center'
+  }}>
+    <h1>You signed in as {session.user.name}</h1>
+    <h2>
+      <a onClick={e => {
+        e.preventDefault()
+        signOut()
+      }}>Sign Out</a>
+    </h2>
+  </div>
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/login?callbackUrl=${process.env.NEXTAUTH_URL}/dashboard`,
+        permanent: false
       }
     }
-
-    securePage()
-  }, [])
-
-  if (loading) {
-    return <h2>Loading...</h2>
   }
-  return <h1>Dashboard page</h1>
+  
+  return {
+    props: {
+      data: 'List of 100 personalized blogs',
+      session
+    }
+  }
 }
 
 export default Dashboard

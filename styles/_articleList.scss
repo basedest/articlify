@@ -1,12 +1,10 @@
 .articleList {
     display: flex;
-    min-width: 600px;
     max-width: 1000px;
     width: 100%;
     place-items: center;
     flex-direction: column;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding: 1.5rem 1rem 1.5rem 1rem;
     gap: 2rem;
     flex-wrap: wrap;
 }
@@ -22,52 +20,60 @@
     a:hover {
         text-decoration: none;
     }
+    &__info {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    &__title {
+        transition: all 0.15s ease-out 0s;
+        cursor: pointer;
+        text-decoration: none;
+        outline: none;
+        color: rgb(16, 16, 16);
+        font-size: 36px;
+        letter-spacing: -0.03em;
+        text-align: start;
+        font-weight: 600;
+    }
+    
+    &__text {
+        margin-top: 10px;
+        margin-inline: 0px;
+        margin-bottom: 0px;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        color: rgb(111, 111, 111);
+        font-size: 16px;
+        line-height: 30px;
+        font-weight: 300;
+        text-align: start;
+        display: block;
+    }
+    
+    &__etc {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+    }
+    
+    &__pic {
+        object-fit: cover;
+        width: 100%;
+        border-radius: 15px;
+        display: block;
+        border-style: none;
+    }
 }
 
-.articleItem__info {
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-}
-
-.articleItem__title {
-    transition: all 0.15s ease-out 0s;
-    cursor: pointer;
-    text-decoration: none;
-    outline: none;
-    color: rgb(16, 16, 16);
-    font-size: 36px;
-    letter-spacing: -0.03em;
-    text-align: start;
-    font-weight: 600;
-}
-
-.articleItem__text {
-    margin-top: 10px;
-    margin-inline: 0px;
-    margin-bottom: 0px;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    color: rgb(111, 111, 111);
-    font-size: 16px;
-    line-height: 30px;
-    font-weight: 300;
-    text-align: start;
-    display: block;
-}
-
-.articleItem__etc {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5em;
-}
-
-.articleItem__pic {
-    object-fit: cover;
-    width: 100%;
-    border-radius: 15px;
-    display: block;
-    border-style: none;
+@media (min-width: 800px) {
+    .articleList {
+        min-width: 600px;
+        width: 100%;
+        margin-left: 5rem;
+        margin-right: 5rem;
+    }
 }

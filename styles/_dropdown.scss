@@ -1,0 +1,51 @@
+@import "./colors";
+
+.dropdown {
+    background-color: #fff;
+    &__btn {
+        display: flex;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        align-items: center;
+        text-decoration: none;
+        font: inherit;
+        font-weight: 700;
+        outline: none;
+
+        .arrow {
+            height: 0.9rem;
+            margin: 1px 0 0 1px;
+        }
+        &:hover {
+            filter: invert(54%) sepia(98%) saturate(368%) hue-rotate(89deg) brightness(87%) contrast(96%);
+        }
+    }
+    &__content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 120px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        text-align: center;
+        li {
+            margin: 0;
+            color: black;
+            padding: 12px 16px;
+            display: block;
+            cursor: pointer;
+        }
+    }
+}
+
+.show {
+    display: block;
+    .dropdown__content {
+        display: block;
+    }
+    .arrow {
+        transform: scaleY(-1);
+    }
+}

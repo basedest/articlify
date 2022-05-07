@@ -1,8 +1,18 @@
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react"
 import FormInput from "../../components/FormInput"
 
 const Register = () => {
+  const router = useRouter()
+
+  const { data: session } = useSession()
+
+  if (session) {
+    router.push('/')
+  }
+
   const [message, setMessage] = useState('')
   const [values, setValues] = useState({
     username: "",
@@ -69,7 +79,12 @@ const Register = () => {
       if (response.status === 400)
         setMessage('User with provided credentials already exists')
         return response.json()
-    }).then(data => console.log(data))
+    }).then(data => {
+      if (message) return
+      console.log(data)
+      signIn("credentials", {username, password})
+      router.push('/')
+    })
     .catch(console.error)
   }
 

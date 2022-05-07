@@ -1,3 +1,4 @@
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react"
@@ -5,6 +6,12 @@ import FormInput from "../../components/FormInput"
 
 const Login = () => {
   const router = useRouter()
+  const { data: session } = useSession()
+
+  if (session) {
+    router.push('/')
+  }
+
   const [message, setMessage] = useState('')
   const [values, setValues] = useState({
     username: "",
@@ -40,8 +47,11 @@ const Login = () => {
     })
     .then(response => response.json())
     .then(data => {
-      setMessage(data.message)
-      if (!message) router.push('/')
+      if (data.error) {
+        setMessage(data.message)
+        return
+      }
+      signIn("credentials", {username, password})
     })
     .catch(console.error)
   }

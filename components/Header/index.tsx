@@ -1,9 +1,24 @@
 import Link from "next/link"
 import { signIn, signOut, useSession } from 'next-auth/react'
+import UserMenu from "../UserMenu"
+import DropDown from "../DropDown"
+
+const options = [
+    { href: '/art',     label: 'art'     },
+    { href: '/games',   label: 'games'   },
+    { href: '/it',      label: 'it'      },
+    { href: '/movies',  label: 'movies'  },
+    { href: '/music',   label: 'music'   },
+    { href: '/science', label: 'science' },
+    { href: '/sports',  label: 'sports'  },
+    { href: '/travel',  label: 'travel'  },
+    { href: '/other',   label: 'other'   },
+]
 
 const Header:React.FC = () => {
     const { data: session, status } = useSession()
     const loading = status === "loading"
+
     return (
         <nav className="navbar">
             <div className="navbar-container container">
@@ -20,9 +35,7 @@ const Header:React.FC = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href='/category'>
-                            <a>Categories</a>
-                        </Link>
+                        <DropDown label='Categories' options={options} />
                     </li>
                     <li>
                         <Link href='/editor'>
@@ -31,12 +44,8 @@ const Header:React.FC = () => {
                     </li>
                     {!loading && !session && (
                         <li>
-                            <Link href='/api/auth/signin'>
-                            <a
-                                onClick={e => {
-                                e.preventDefault()
-                                signIn()
-                                }}>
+                            <Link href='/login'>
+                            <a>
                                 Sign In
                             </a>
                             </Link>
@@ -44,15 +53,7 @@ const Header:React.FC = () => {
                     )}
                     {session && (
                         <li>
-                            <Link href='/api/auth/signout'>
-                            <a
-                                onClick={e => {
-                                e.preventDefault()
-                                signOut()
-                                }}>
-                                Sign Out
-                            </a>
-                            </Link>
+                            <UserMenu />
                         </li>
                     )}
                 </ul>

@@ -13,27 +13,28 @@
   width: 100%;
   background: #fff;
   color: #000;
-  opacity: 0.85;
-  height: 50px;
+  height: 60px;
   z-index: 12;
+  backdrop-filter: blur(15px) brightness(75%) saturate(70%);
+  font-family: 'Gotham Bold', sans-serif;
+  padding-top: 10px;
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
-  height: 64px;
   align-items: center;
 }
 
 .menu-items {
   order: 2;
   display: flex;
+  align-items: center;
 }
 
 .menu-items li {
   list-style: none;
   margin-left: 1.5rem;
-  margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
 
@@ -41,18 +42,18 @@
   text-decoration: none;
   color: #444;
   font-weight: 500;
-  transition: color 0.3s ease-in-out;
+  //transition: color 0.3s ease-in-out;
 }
 
 .menu-items a:hover {
   color: $accent-color;
-  transition: color 0.3s ease-in-out;
+  //transition: color 0.3s ease-in-out;
 }
 
 .logo {
   order: 1;
-  font-size: 2.3rem;
-  margin-bottom: 1.75rem;
+  font-size: 2.5em;
+  color: $accent-color;
 }
 
 @media (max-width: 768px) {

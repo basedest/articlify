@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const user = await UserModel.findOne({name})
         
         if (!user) {
-          res.status(400).json({message: 'invalid username'})
+          res.status(400).json({error: true, message: 'invalid username'})
           return
         }
         const isMatch = await user.comparePassword(password)
@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           res.status(200).json(user)
         }
         else {
-          res.status(400).json({message: 'invalid password'})
+          res.status(400).json({error: true, message: 'invalid password'})
         }
       }
       catch (e) {

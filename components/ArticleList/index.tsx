@@ -6,6 +6,7 @@ export interface ListProps {
 }
 
 const ArticleList:React.FC<ListProps> = ({articles}) => {
+  if (!articles || articles.length == 0) return <h2>No articles?</h2>
   return (
     <div className="articleList">
         {
