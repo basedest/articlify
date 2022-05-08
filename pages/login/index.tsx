@@ -48,12 +48,12 @@ const Login = () => {
     .then(response => response.json())
     .then(data => {
       if (data.error) {
-        setMessage(data.message)
+        setMessage(data.error)
         return
       }
       signIn("credentials", {username, password})
     })
-    .catch(console.error)
+    .catch(e => setMessage(e))
   }
 
   const onChange = (e) => {

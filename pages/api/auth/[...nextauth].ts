@@ -1,17 +1,17 @@
 // import NextAuth from "next-auth"
-import Auth0Provider from "next-auth/providers/auth0"
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
+//import Auth0Provider from "next-auth/providers/auth0"
+//import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import CredentialProvider from "next-auth/providers/credentials"
-import clientPromise from "../../../lib/mongodb"
+//import clientPromise from "../../../lib/mongodb"
 import NextAuth from "next-auth"
 
 export default NextAuth({
   providers: [
-    Auth0Provider({
-            clientId: process.env.AUTH0_ID,
-            clientSecret: process.env.AUTH0_SECRET,
-            issuer: process.env.AUTH0_ISSUER,
-    }),
+    // Auth0Provider({
+    //         clientId: process.env.AUTH0_ID,
+    //         clientSecret: process.env.AUTH0_SECRET,
+    //         issuer: process.env.AUTH0_ISSUER,
+    // }),
     CredentialProvider({
       name: "credentials",
       credentials: {
@@ -31,7 +31,6 @@ export default NextAuth({
           }
         })
         if (response.status === 200) {
-          
           return response.json()
         }
         return null
@@ -43,21 +42,12 @@ export default NextAuth({
   },
   callbacks: {
     jwt: ({ token, user }) => {
-      // first time jwt callback is run, user object is available
-      if (user) {
-        console.log('cringe')
-        token.id = user.id
-      }
-
-      return token;
+      user && (token.user = user)
+      return token
     },
     session: ({ session, token }) => {
-      if (token) {
-        
-        session.id = token.id
-      }
-
+      session.user = token.user
       return session
     },
   },
-});
+})

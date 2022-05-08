@@ -29,6 +29,13 @@ a {
   }
 }
 
+a.colored {
+  color: $accent-color;
+  &:hover {
+    color: adjust-color($color: $accent-color, $lightness: -15%);
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

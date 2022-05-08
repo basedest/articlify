@@ -1,10 +1,8 @@
-import mongoose from 'mongoose'
 import type { GetServerSideProps, NextPage } from 'next'
-import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import ArticleList from '../components/ArticleList'
 import { ArticleModel } from '../lib/ArticleTypes'
+import { connectDB } from '../lib/connection'
 
 const Home: NextPage<any, any> = ({articles, version}) => {
   return (
@@ -27,7 +25,7 @@ const Home: NextPage<any, any> = ({articles, version}) => {
 export default Home
 
 export const getServerSideProps: GetServerSideProps = async ({req}) => {
-  await mongoose.connect(process.env.MONGODB_URI)
+  await connectDB()
   let articles = await ArticleModel.find().exec()
   articles = JSON.parse(JSON.stringify(articles))
   const protocol = req.headers['x-forwarded-proto'] || 'http'

@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url("http://fonts.cdnfonts.com/css/gotham-bold");
+@import url("http://fonts.cdnfonts.com/css/gotham-bold");
 .navbar input[type="checkbox"],
 .navbar .hamburger-lines {
   display: none;
@@ -20,7 +21,9 @@
   -webkit-backdrop-filter: blur(15px) brightness(75%) saturate(70%);
           backdrop-filter: blur(15px) brightness(75%) saturate(70%);
   font-family: 'Gotham Bold', sans-serif;
-  padding: 8px 20px 0 20px;
+  padding: 0 20px 0 20px;
+  display: -ms-grid;
+  display: grid;
 }
 
 .navbar-container {
@@ -33,6 +36,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  height: 100%;
 }
 
 .menu-items {
@@ -56,7 +60,6 @@
 .menu-items a {
   text-decoration: none;
   color: #444;
-  font-weight: 500;
 }
 
 .menu-items a:hover {
@@ -315,6 +318,7 @@
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  width: 100%;
 }
 
 .article h1 {
@@ -416,9 +420,9 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  min-width: 600px;
   max-width: 1000px;
   margin: auto;
+  width: 100%;
 }
 
 .article__container .img {
@@ -627,11 +631,82 @@
 }
 
 .dashboard {
-  min-height: 100vh;
+  font-size: 24px;
+  padding: 4rem;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 5px 10px 5px #aaa;
+          box-shadow: 0px 5px 10px 5px #aaa;
+}
+
+.dashboard > div {
+  line-height: 90%;
+  padding: 10px;
+}
+
+.dashboard .avatar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1rem;
+}
+
+.dashboard .username {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 12rem;
+}
+
+.dashboard .img {
+  width: 80px;
+  height: 80px;
+}
+
+.dashboard .img img {
+  border-radius: 50%;
+}
+
+.dashboard button {
+  font: inherit;
+  padding: 5px 20px 5px 20px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  background-color: #1db954;
+}
+
+.dashboard button:hover {
+  background-color: #168d40;
+}
+
+.dashboard label {
+  margin-top: -20px;
+  font-size: 0.75rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dashboard .myArticles {
+  margin-top: 10px;
+}
+
+.dashboard .signout {
+  margin-top: 10px;
 }
 
 .user-menu {
   background-color: #fff;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  gap: 5px;
 }
 
 .user-menu__btn {
@@ -649,21 +724,6 @@
   outline: none;
 }
 
-.user-menu__btn .avatar {
-  width: 40px;
-  height: 40px;
-}
-
-.user-menu__btn .avatar img {
-  width: 100%;
-  height: 100%;
-}
-
-.user-menu__btn .avatar img:hover {
-  -webkit-filter: none !important;
-          filter: none !important;
-}
-
 .user-menu__btn .arrow {
   height: 0.9rem;
   margin: 1px 0 0 1px;
@@ -674,11 +734,23 @@
           filter: invert(54%) sepia(98%) saturate(368%) hue-rotate(89deg) brightness(87%) contrast(96%);
 }
 
+.user-menu .avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.user-menu .avatar img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+
 .user-menu__content {
   display: none;
   position: absolute;
   background-color: #f1f1f1;
   min-width: 120px;
+  margin-top: 50px;
   overflow: auto;
   -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -695,10 +767,6 @@
 
 .user-menu__content li a {
   cursor: pointer;
-}
-
-.show {
-  display: block;
 }
 
 .show .user-menu__content {
@@ -741,6 +809,7 @@
 }
 
 .dropdown__content {
+  margin-top: 10px;
   display: none;
   position: absolute;
   background-color: #f1f1f1;
@@ -790,6 +859,14 @@ a {
 
 a:hover {
   color: #1db954;
+}
+
+a.colored {
+  color: #1db954;
+}
+
+a.colored:hover {
+  color: #137736;
 }
 
 * {

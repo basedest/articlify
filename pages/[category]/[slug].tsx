@@ -1,8 +1,8 @@
 import { GetServerSideProps, GetStaticProps } from 'next'
-import mongoose from 'mongoose'
 import { ArticleModel, PageModel } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
+import { connectDB } from '../../lib/connection'
 
 const ArticlePage = ({article, page}) => {
   if (!article) return null
@@ -78,7 +78,7 @@ const ArticlePage = ({article, page}) => {
 export default ArticlePage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  await mongoose.connect(process.env.MONGODB_URI)
+  await connectDB()
   const {slug} = context.params
   let article = await ArticleModel.findOne({slug})
   

@@ -70,22 +70,23 @@ const Register = () => {
     const {username, email, password} = values
     fetch('/api/auth/register', {
       method: 'POST',
-      body: JSON.stringify({username, email, password}),
+      body: JSON.stringify({name: username, email, password}),
       headers: {
           'Content-Type': 'application/json'
       }
     })
-    .then(response => {
-      if (response.status === 400)
-        setMessage('User with provided credentials already exists')
-        return response.json()
-    }).then(data => {
-      if (message) return
-      console.log(data)
+    .then(response => response.json())
+    .then(data => {
+      if (data.error || data.code) {     
+        setMessage(data.error)
+        return
+      }
+      console.log('pre-sign in');
+      
       signIn("credentials", {username, password})
       router.push('/')
     })
-    .catch(console.error)
+    .catch((err) => setMessage(err))
   }
 
   const onChange = (e) => {

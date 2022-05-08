@@ -1,11 +1,11 @@
-import mongoose from 'mongoose'
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import ArticleList from '../../components/ArticleList'
 import { ArticleModel } from '../../lib/ArticleTypes'
+import { connectDB } from '../../lib/connection'
+import { categories } from '../../lib/lib'
 
 const Category = ({articles, category}) => {
-  
   return (
   <>
     <h1 className='accented'>{category}</h1>
@@ -22,7 +22,12 @@ interface IParams extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { category } = context.params as IParams
-  await mongoose.connect(process.env.MONGODB_URI)
+  if (!categories.includes(category)) {
+    return {
+      notFound: true
+    }
+  }
+  await connectDB()
   let articles = await ArticleModel.find({category}).exec()
   articles = JSON.parse(JSON.stringify(articles))
   return {

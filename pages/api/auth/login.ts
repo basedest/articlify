@@ -1,5 +1,5 @@
-import mongoose from "mongoose"
 import { NextApiRequest, NextApiResponse } from "next"
+import { connectDB } from "../../../lib/connection"
 import { UserModel } from "../../../lib/UserTypes"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -7,26 +7,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const name = req.body.username
         const {password} =req.body
-        await mongoose.connect(process.env.MONGODB_URI)
+        await connectDB()
         const user = await UserModel.findOne({name})
         
         if (!user) {
-          res.status(400).json({error: true, message: 'invalid username'})
+          res.status(400).json({error: 'invalid username'})
           return
         }
         const isMatch = await user.comparePassword(password)
         if (isMatch) {
-          res.status(200).json(user)
+          const {name, email, regDate, image} = user
+          
+          res.status(200).json({name, email, regDate, image, id: user._id})
         }
         else {
-          res.status(400).json({error: true, message: 'invalid password'})
+          res.status(400).json({error: 'invalid password'})
         }
       }
       catch (e) {
-        res.status(400).json(e)
+        res.status(400).json({error: 'something horrifying happened...'})
         console.log(e)
       }
-    }
+  }
 }
 
 export default handler

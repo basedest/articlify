@@ -1,4 +1,5 @@
 @import "./colors";
+@import url('http://fonts.cdnfonts.com/css/gotham-bold');
 
 .navbar input[type="checkbox"],
 .navbar .hamburger-lines {
@@ -17,13 +18,15 @@
   z-index: 12;
   backdrop-filter: blur(15px) brightness(75%) saturate(70%);
   font-family: 'Gotham Bold', sans-serif;
-  padding: 8px 20px 0 20px;
+  padding: 0 20px 0 20px;
+  display: grid;
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
 }
 
 .menu-items {
@@ -41,7 +44,7 @@
 .menu-items a {
   text-decoration: none;
   color: #444;
-  font-weight: 500;
+  //font-weight: 500;
   //transition: color 0.3s ease-in-out;
 }
 

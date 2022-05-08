@@ -6,8 +6,7 @@ export interface User {
     email:      string
     password:   string
     regDate:    Date
-    avatar?:    string
-    articles?:  Array<string>
+    image?:    string
 }
 
 const UserSchema = new Schema<User>({
@@ -29,8 +28,7 @@ const UserSchema = new Schema<User>({
         type: Date,
         required: true
     },
-    avatar: String,
-    articles: [String]
+    image: String,
 })
 
 UserSchema.pre("save", function (next) {
