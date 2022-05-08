@@ -22,11 +22,11 @@ interface IParams extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { category } = context.params as IParams
-  if (!categories.includes(category)) {
-    return {
-      notFound: true
-    }
-  }
+  // if (!categories.includes(category)) {
+  //   return {
+  //     notFound: true
+  //   }
+  // }
   await connectDB()
   let articles = await ArticleModel.find({category}).exec()
   articles = JSON.parse(JSON.stringify(articles))
