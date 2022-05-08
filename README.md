@@ -5,7 +5,7 @@
 ---
 
 It uses MongoDB for data storage.    
-In order to run server on your machine you have to define `MONGODB_URI` in `.env.local`
+In order to run server on your machine you have to define `MONGODB_URI`, `NEXTAUTH_URL` and `NEXTAUTH_SECRET` in `.env.local`
 
 ## Getting Started
 
