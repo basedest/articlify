@@ -27,7 +27,7 @@ const UserMenu = () => {
     <div ref={ref} className='user-menu'>
         <div className="avatar">
             {
-            session?.user.image
+            session?.user?.image
             ? <Image src={session.user.image} width={1} height={1} layout='responsive' alt='icon' />
             : <img src='/img/user.svg'/>
             }
