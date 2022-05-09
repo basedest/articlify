@@ -3,8 +3,6 @@ import { connectDB } from "../connection"
 
 const findArticles = async (query) => {
     await connectDB() // connect to database
-    console.log(query);
-    
     const params = {...query}
     const {tags, title} = query
     delete params.tags

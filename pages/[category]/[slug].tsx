@@ -3,6 +3,7 @@ import { ArticleModel, PageModel } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
 import { connectDB } from '../../lib/connection'
+import { categories } from '../../lib/lib'
 
 const ArticlePage = ({article, page}) => {
   if (!article) return null
@@ -79,7 +80,12 @@ export default ArticlePage
 
 export const getStaticProps: GetStaticProps = async (context) => {
   await connectDB()
-  const {slug} = context.params
+  const {slug, category} = context.params
+  if (!categories.includes(category as string)) {
+    return {
+      notFound: true
+    }
+  }
   let article = await ArticleModel.findOne({slug})
   
   article = JSON.parse(JSON.stringify(article))
