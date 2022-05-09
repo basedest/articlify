@@ -103,6 +103,34 @@ main {
   color: $accent-color;
 }
 
+.searchbar {
+  display: flex;
+  max-width: 600px;
+  width: 100%;
+  gap: 5px;
+  button {
+    margin: 5px 0 5px 0;
+    padding: 10px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .search {
+    background-color: $fuchia;
+    &:hover {
+      background-color: adjust-color($color: $fuchia, $lightness: -20%);
+    }
+  }
+  .clear {
+    background-color: #555;
+    &:hover {
+      background-color: adjust-color($color: #555, $lightness: -20%);
+    }
+  }
+}
 @media (max-width: 768px) {
   main {
     padding: 0 1rem 0 1rem;

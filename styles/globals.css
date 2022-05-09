@@ -976,6 +976,42 @@ main {
   color: #1db954;
 }
 
+.searchbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 600px;
+  width: 100%;
+  gap: 5px;
+}
+
+.searchbar button {
+  margin: 5px 0 5px 0;
+  padding: 10px;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.searchbar .search {
+  background-color: #f037a5;
+}
+
+.searchbar .search:hover {
+  background-color: #b40d70;
+}
+
+.searchbar .clear {
+  background-color: #555;
+}
+
+.searchbar .clear:hover {
+  background-color: #222222;
+}
+
 @media (max-width: 768px) {
   main {
     padding: 0 1rem 0 1rem;

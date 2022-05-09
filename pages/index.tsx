@@ -1,12 +1,36 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import ArticleList from '../components/ArticleList'
-import { ArticleModel } from '../lib/ArticleTypes'
+import { Article, ArticleModel } from '../lib/ArticleTypes'
 import { connectDB } from '../lib/connection'
-import { getSession } from 'next-auth/react'
 import { version } from '../lib/lib'
+import MyInput from '../components/input/MyInput'
+import { useState } from 'react'
 
-const Home: NextPage<any, any> = ({articles, version}) => {
+interface IProps {
+  articles: Article[],
+  version: string
+}
+
+const Home: NextPage<any, any> = (props: IProps) => {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [articles, setArticles] = useState(props.articles)
+  const [caption, setCaption] = useState('Latest articles')
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+  }
+  const handleSearch = async (e) => {
+    const response = await (await fetch(`api/articles/?title=${searchQuery}`)).json()
+    response.length === 0
+    ? setCaption('No match')
+    : setCaption('Search result')
+    setArticles(response)
+  }
+  const clearInput = (e) => {
+    setSearchQuery('')
+    setArticles(props.articles)
+    setCaption('Latest articles')
+  }
   return (
       <>
         <Head>
@@ -19,7 +43,16 @@ const Home: NextPage<any, any> = ({articles, version}) => {
           </h1>
           <h2>The best digital media platform on the internet</h2>
           <hr />
-          <h2 className='accented'>Latest articles</h2>
+          <div className="searchbar">
+            <MyInput
+                  value={searchQuery}
+                  onChange={handleChange}
+                  placeholder="Search by title..."
+              />
+            <button className='search' onClick={handleSearch}>Search</button>
+            <button className='clear' onClick={clearInput}>Clear</button>
+          </div>
+          <h2 className='accented'>{caption}</h2>
           <ArticleList articles={articles} />
       </>
   )
@@ -27,11 +60,7 @@ const Home: NextPage<any, any> = ({articles, version}) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async (context) => { 
-  const session = await getSession(context) 
-  if (session && !session.user) {
-    console.log('BROKEN SESSION')
-  }
+export const getServerSideProps: GetServerSideProps<IProps> = async (context) => { 
   await connectDB()
   let articles = await ArticleModel.find().sort({createdAt:-1})
   articles = JSON.parse(JSON.stringify(articles))
