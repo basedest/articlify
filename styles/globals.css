@@ -727,6 +727,27 @@
   margin-top: 10px;
 }
 
+@media (max-width: 600px) {
+  main {
+    -webkit-box-pack: start !important;
+        -ms-flex-pack: start !important;
+            justify-content: flex-start !important;
+  }
+  .dashboard {
+    width: 100%;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+  .dashboard .username {
+    gap: 0;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+
 .user-menu {
   background-color: #fff;
   display: -webkit-box !important;
@@ -868,6 +889,65 @@
           transform: scaleY(-1);
 }
 
+.searchbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 800px;
+  width: 100%;
+  gap: 5px;
+}
+
+.searchbar button {
+  margin: 5px 0 5px 0;
+  padding: 10px;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.searchbar .search {
+  background-color: #f037a5;
+}
+
+.searchbar .search:hover {
+  background-color: #b40d70;
+}
+
+.searchbar .clear {
+  background-color: #555;
+}
+
+.searchbar .clear:hover {
+  background-color: #222222;
+}
+
+.navigation {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+}
+
+.navigation button {
+  margin: 5px 0 5px 0;
+  padding: 10px;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-color: #777;
+}
+
+.navigation button:hover {
+  background-color: #444444;
+}
+
 html,
 body {
   padding: 0;
@@ -974,42 +1054,6 @@ main {
 
 .accented {
   color: #1db954;
-}
-
-.searchbar {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  max-width: 600px;
-  width: 100%;
-  gap: 5px;
-}
-
-.searchbar button {
-  margin: 5px 0 5px 0;
-  padding: 10px;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.searchbar .search {
-  background-color: #f037a5;
-}
-
-.searchbar .search:hover {
-  background-color: #b40d70;
-}
-
-.searchbar .clear {
-  background-color: #555;
-}
-
-.searchbar .clear:hover {
-  background-color: #222222;
 }
 
 @media (max-width: 768px) {

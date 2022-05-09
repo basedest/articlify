@@ -51,3 +51,19 @@
         margin-top: 10px;
     }
 }
+
+@media (max-width: 600px) {
+    main {
+        justify-content: flex-start !important;
+    }
+    .dashboard {
+      width: 100%;
+      box-shadow: none;
+      padding: 1rem;
+      margin-top: 2rem;
+      .username {
+          gap: 0;
+          justify-content: space-between;
+      }
+    }
+}
