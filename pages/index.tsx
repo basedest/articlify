@@ -3,13 +3,10 @@ import Head from 'next/head'
 import ArticleList from '../components/ArticleList'
 import { ArticleModel } from '../lib/ArticleTypes'
 import { connectDB } from '../lib/connection'
-import { getSession, signOut } from 'next-auth/react'
+import { getSession } from 'next-auth/react'
 import { version } from '../lib/lib'
 
-const Home: NextPage<any, any> = ({articles, version, error}) => {
-  if (error) {
-    sessionStorage.clear()
-  }
+const Home: NextPage<any, any> = ({articles, version}) => {
   return (
       <>
         <Head>
@@ -32,15 +29,13 @@ export default Home
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
   const session = await getSession(context) 
-  let error = null;
   if (session && !session.user) {
     console.log('BROKEN SESSION')
-    error = true;
   }
   await connectDB()
   let articles = await ArticleModel.find().sort({createdAt:-1})
   articles = JSON.parse(JSON.stringify(articles))
   return {
-    props: { articles, version, error },
+    props: { articles, version },
   }
 }
