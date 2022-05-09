@@ -3,6 +3,8 @@ import Head from 'next/head'
 import ArticleList from '../components/ArticleList'
 import { ArticleModel } from '../lib/ArticleTypes'
 import { connectDB } from '../lib/connection'
+import { getSession, signOut } from 'next-auth/react'
+import { version } from '../lib/lib'
 
 const Home: NextPage<any, any> = ({articles, version}) => {
   return (
@@ -17,6 +19,7 @@ const Home: NextPage<any, any> = ({articles, version}) => {
           </h1>
           <h2>The best digital media platform on the internet</h2>
           <hr />
+          <h2 className='accented'>Latest articles</h2>
           <ArticleList articles={articles} />
       </>
   )
@@ -24,14 +27,16 @@ const Home: NextPage<any, any> = ({articles, version}) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async ({req}) => {
+export const getServerSideProps: GetServerSideProps = async (context) => { 
+  const session = getSession(context)
+  //sign out of broken (no user) sessions 
+  if (session && !(await session)?.user) {
+    console.log('BROKEN SESSION')
+    signOut()
+  }
   await connectDB()
-  let articles = await ArticleModel.find().exec()
+  let articles = await ArticleModel.find().sort({createdAt:-1})
   articles = JSON.parse(JSON.stringify(articles))
-  const protocol = req.headers['x-forwarded-proto'] || 'http'
-  const baseUrl = req ? `${protocol}://${req.headers.host}` : ''
-  const response = await fetch(`${baseUrl}/api/get-app-version`)
-  const {version} = await response.json()
   return {
     props: { articles, version },
   }

@@ -37,7 +37,15 @@
         text-align: start;
         font-weight: 600;
     }
-    
+    &__category {
+        font-size: 150%;
+        a {
+            color: $fuchia;
+            &:hover {
+                color: adjust-color($color: $fuchia, $lightness: -20%);
+            }
+        }
+    }
     &__text {
         margin-top: 10px;
         margin-inline: 0px;

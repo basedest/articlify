@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import ArticleList from '../../components/ArticleList'
 import { ArticleModel } from '../../lib/ArticleTypes'
@@ -6,9 +6,11 @@ import { connectDB } from '../../lib/connection'
 import { categories } from '../../lib/lib'
 
 const Category = ({articles, category}) => {
+  if (!articles || articles.length == 0)
+    return <h1 className='title accented no-margin'>No articles</h1>
   return (
   <>
-    <h1 className='accented'>{category}</h1>
+    <h1 className='title accented'>{category}</h1>
     <ArticleList articles={articles} />
   </>
   )
@@ -36,19 +38,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
   }
 }
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   return {
-//       paths: [
-//         {params: {category: 'art'}},
-//         {params: {category: 'it'}},
-//         {params: {category: 'games'}},
-//         {params: {category: 'music'}},
-//         {params: {category: 'science'}},
-//         {params: {category: 'sports'}},
-//         {params: {category: 'travel'}},
-//         {params: {category: 'movies'}},
-//       ],
-//       fallback: false
-//   }
-// }

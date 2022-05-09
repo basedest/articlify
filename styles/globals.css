@@ -74,9 +74,6 @@
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    opacity: 0.95;
-  }
   .navbar-container input[type="checkbox"],
   .navbar-container .hamburger-lines {
     display: block;
@@ -159,13 +156,18 @@
         -ms-flex-direction: column;
             flex-direction: column;
     margin-left: -40px;
-    padding-left: 50px;
     -webkit-transition: -webkit-transform 0.5s ease-in-out;
     transition: -webkit-transform 0.5s ease-in-out;
     transition: transform 0.5s ease-in-out;
     transition: transform 0.5s ease-in-out, -webkit-transform 0.5s ease-in-out;
     -webkit-box-shadow: 5px 0px 10px 0px #aaa;
             box-shadow: 5px 0px 10px 0px #aaa;
+  }
+  .navbar .menu-items .dropdown__content, .navbar .menu-items .user-menu__content {
+    position: absolute;
+    left: 0;
+    max-width: 300px;
+    width: 100%;
   }
   .navbar .menu-items li {
     margin-bottom: 1.5rem;
@@ -177,6 +179,7 @@
     top: 5px;
     right: 15px;
     font-size: 2rem;
+    z-index: -1;
   }
   .navbar-container input[type="checkbox"]:checked ~ .menu-items {
     -webkit-transform: translateX(0);
@@ -256,6 +259,18 @@
   letter-spacing: -0.03em;
   text-align: start;
   font-weight: 600;
+}
+
+.articleItem__category {
+  font-size: 150%;
+}
+
+.articleItem__category a {
+  color: #f037a5;
+}
+
+.articleItem__category a:hover {
+  color: #b40d70;
 }
 
 .articleItem__text {
@@ -403,6 +418,10 @@
   padding: 3px 0;
 }
 
+.article article ol, .article article ul {
+  padding-left: 1rem;
+}
+
 .article__container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -507,6 +526,14 @@
   margin: 2px;
   font-size: 85%;
   padding: 3px 6px 6px 6px;
+}
+
+.tags__item:hover {
+  background-color: #b3b3b3;
+}
+
+.tags__item a:hover {
+  color: inherit;
 }
 
 .myInput {
@@ -898,9 +925,15 @@ hr {
 
 .title {
   margin: 0;
+  margin-top: 8rem;
   line-height: 1.15;
+  font-family: 'Gotham Bold', sans-serif;
   font-size: 4rem;
   text-align: center;
+}
+
+.no-margin {
+  margin-top: 0;
 }
 
 .btn {
@@ -920,7 +953,6 @@ hr {
 }
 
 main {
-  margin-top: 20px;
   min-height: 100vh;
   -webkit-box-flex: 1;
       -ms-flex: 1;
@@ -942,5 +974,11 @@ main {
 
 .accented {
   color: #1db954;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 0 1rem 0 1rem;
+  }
 }
 /*# sourceMappingURL=globals.css.map */

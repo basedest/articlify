@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { ArticleModel } from "../../../lib/ArticleTypes"
 import { connectDB } from "../../../lib/connection"
+import findArticles from "../../../lib/db/findArticles"
 import { ResponseFuncs } from "../../../lib/lib"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -14,18 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const handleCase: ResponseFuncs = {
     // RESPONSE FOR GET REQUESTS
     GET: async (req: NextApiRequest, res: NextApiResponse) => {
-        await connectDB() // connect to database
-        const params = {...req.query}
-        const {tags, title} = req.query
-        delete params.tags
-        delete params.title
-        if (tags) {
-            params.tags = {$all: tags} as any
-        }
-        if (title) {
-            params.title = new RegExp(title as string, 'i') as any
-        }
-        res.status(200).json(await ArticleModel.find(params).catch(catcher))
+        res.status(200).json(await findArticles(req.query).catch(catcher))
     },
     // RESPONSE POST REQUESTS
     // POST: async (req: NextApiRequest, res: NextApiResponse) => {

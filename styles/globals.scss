@@ -63,9 +63,15 @@ hr {
 
 .title {
   margin: 0;
+  margin-top: 8rem;
   line-height: 1.15;
+  font-family: 'Gotham Bold', sans-serif;
   font-size: 4rem;
   text-align: center;
+}
+
+.no-margin {
+  margin-top: 0;
 }
 
 .btn {
@@ -85,7 +91,6 @@ hr {
 }
 
 main {
-  margin-top: 20px;
   min-height: 100vh;
   flex: 1;
   display: flex;
@@ -96,4 +101,10 @@ main {
 
 .accented {
   color: $accent-color;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 0 1rem 0 1rem;
+  }
 }

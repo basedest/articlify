@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React, { Key } from 'react'
 
 type Props = {
@@ -9,7 +10,9 @@ const TagsList = ({tags}: Props) => {
     <div className="tags">
         {tags?.map((tag, _) => (
           <div key={tag as Key} className="tags__item">
-            {tag}
+            <Link href={`/articles/?tags=${tag}`}>
+              <a>{tag}</a>
+            </Link>
           </div>)
         )}
     </div>

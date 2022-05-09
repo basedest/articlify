@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticProps } from 'next'
+import { GetStaticProps } from 'next'
 import { ArticleModel, PageModel } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
@@ -77,7 +77,7 @@ const ArticlePage = ({article, page}) => {
 
 export default ArticlePage
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   await connectDB()
   const {slug} = context.params
   let article = await ArticleModel.findOne({slug})
@@ -92,14 +92,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-// export async function getStaticPaths() {
-//   const paths = [{params: {
-//     slug: 'lorem',
-//     category: 'it'
-//   }}]
+export async function getStaticPaths() {
+  const paths = []
 
-//   return {
-//       paths,
-//       fallback: true
-//   }
-// }
+  return {
+      paths,
+      fallback: true
+  }
+}

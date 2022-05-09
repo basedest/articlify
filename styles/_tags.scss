@@ -12,5 +12,11 @@
         margin: 2px;
         font-size: 85%;
         padding: 3px 6px 6px 6px;
+        &:hover {
+            background-color: hsl(0, 0%, 70%);
+        }
+        a:hover {
+            color: inherit;
+        }
     }
 }
