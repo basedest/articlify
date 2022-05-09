@@ -17,7 +17,8 @@ export default Articles
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const {author} = context.params
-    const articles = await findArticles(author) 
+    
+    const articles = await findArticles({author: author}) 
     return {
         props: {
             articles, author
