@@ -6,7 +6,11 @@ import { connectDB } from '../lib/connection'
 import { getSession, signOut } from 'next-auth/react'
 import { version } from '../lib/lib'
 
-const Home: NextPage<any, any> = ({articles, version}) => {
+const Home: NextPage<any, any> = ({articles, version, session}) => {
+  //sign out of broken (no user) sessions
+  if (session && !session?.user) {
+    signOut()
+  }
   return (
       <>
         <Head>
@@ -28,16 +32,11 @@ const Home: NextPage<any, any> = ({articles, version}) => {
 export default Home
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
-  const session = getSession(context)
-  //sign out of broken (no user) sessions 
-  if (session && !(await session)?.user) {
-    console.log('BROKEN SESSION')
-    signOut()
-  }
+  const session = await getSession(context) 
   await connectDB()
   let articles = await ArticleModel.find().sort({createdAt:-1})
   articles = JSON.parse(JSON.stringify(articles))
   return {
-    props: { articles, version },
+    props: { articles, version, session },
   }
 }
