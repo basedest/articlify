@@ -2,7 +2,6 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import ArticleList from '../components/ArticleList'
 import { Article } from '../lib/ArticleTypes'
-import { version } from '../lib/lib'
 import MyInput from '../components/input/MyInput'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -10,7 +9,6 @@ import findArticles from '../lib/db/findArticles'
 
 interface IProps {
   articles: Article[]
-  version: string
   page: number
   searchQuery: string
 }
@@ -51,7 +49,7 @@ const Home: NextPage<IProps> = (props: IProps) => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
           <h1 className='title'>
-            Articlify {version}
+            Articlify
           </h1>
           <h2>The best digital media platform on the internet</h2>
           <hr />
@@ -97,6 +95,6 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
   let articles = await findArticles({page, title})
   articles = JSON.parse(JSON.stringify(articles))  
   return {
-    props: { articles, version, page, searchQuery },
+    props: { articles, page, searchQuery },
   }
 }
