@@ -94,7 +94,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
         article, page
-    }
+    },
+    revalidate: 30
   }
 }
 
@@ -103,7 +104,6 @@ export async function getStaticPaths() {
 
   return {
       paths,
-      fallback: true,
-      revalidate: 60, 
+      fallback: true, 
   }
 }
