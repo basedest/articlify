@@ -1,8 +1,7 @@
 import { GetServerSideProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import ArticleList from '../../components/ArticleList'
-import { ArticleModel } from '../../lib/ArticleTypes'
-import { connectDB } from '../../lib/connection'
+import findArticles from '../../lib/db/findArticles'
 import { categories } from '../../lib/lib'
 
 const Category = ({articles, category}) => {
@@ -29,8 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true
     }
   }
-  await connectDB()
-  let articles = await ArticleModel.find({category}).exec()
+  let articles = await findArticles({category})
   articles = JSON.parse(JSON.stringify(articles))
   return {
       props: {

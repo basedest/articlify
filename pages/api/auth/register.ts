@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { connectDB } from "../../../lib/connection"
+import { connectDB } from "../../../lib/db/connection"
 import { UserModel } from "../../../lib/UserTypes"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -21,6 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           name,
           email,
           password,
+          role: 'user',
           regDate: new Date()
         })
         await user.save()

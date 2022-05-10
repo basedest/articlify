@@ -13,15 +13,22 @@
         display: flex;
         align-items: center;
         gap: 1rem;
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 10px;
+        }
+        font-size: 30px;
     }
     .username {
         display: flex;
         align-items: center;
-        gap: 12rem;
+        justify-content: space-between;
     }
     .img {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         img {
             border-radius: 50%;
         }

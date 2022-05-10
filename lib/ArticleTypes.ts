@@ -1,4 +1,4 @@
-import { OutputBlockData } from '@editorjs/editorjs';
+import { OutputData } from '@editorjs/editorjs';
 import { Schema, model, models } from 'mongoose';
 
 export interface Article {
@@ -48,7 +48,7 @@ export const ArticleModel = models.Article || model<Article>('Article', ArticleS
 
 export interface ArticlePage {
     slug: string
-    data: OutputBlockData[]
+    data: OutputData
 }
 
 const PageSchema = new Schema<ArticlePage>({

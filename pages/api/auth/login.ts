@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { connectDB } from "../../../lib/connection"
+import { connectDB } from "../../../lib/db/connection"
 import { UserModel } from "../../../lib/UserTypes"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,9 +16,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         const isMatch = await user.comparePassword(password)
         if (isMatch) {
-          const {name, email, regDate, image} = user
+          const {name, email, regDate, image, role} = user
           
-          res.status(200).json({name, email, regDate, image, id: user._id})
+          res.status(200).json({name, email, regDate, image, role, id: user._id})
         }
         else {
           res.status(400).json({error: 'invalid password'})

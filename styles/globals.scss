@@ -75,9 +75,13 @@ hr {
   margin-top: 0;
 }
 
+button {
+  outline: none;
+  border: none;
+}
+
 .btn {
   padding: 10px;
-  border: none;
   background-color: $accent-color;
   color: white;
   border-radius: 5px;

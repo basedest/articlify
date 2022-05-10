@@ -2,23 +2,53 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSaveCallback, useLoadData, options, useSetData, useClearDataCallback } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
-import { Article } from '../lib/ArticleTypes'
+import { Article, ArticleModel, ArticlePage, PageModel } from '../lib/ArticleTypes'
 import Select from 'react-select'
 import TagsPicker from '../components/TagsPicker'
 import { useSession } from "next-auth/react"
 import AccessDenied from '../components/access-denied'
 import FileUpload from '../components/FileUpload'
+import { GetServerSideProps, NextPage } from 'next'
+import { connectDB } from '../lib/db/connection'
+import { OutputData } from '@editorjs/editorjs'
+
+interface PageProps {
+  article?: Article
+  data?: OutputData
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
+  const slug = context.query.edit as string
+  if (slug) {
+    await connectDB()
+    const article = JSON.parse(JSON.stringify(
+      (await ArticleModel.findOne({slug}))
+    )) as Article
+    const {data} = await PageModel.findOne({slug}) as ArticlePage
+    return {
+      props: {
+        article, data
+      }
+    }
+  } 
+  return {
+    props: {}
+  } 
+}
 
 const Editor: any = dynamic(
   () => import('../components/Editor/editor').then(mod => mod.EditorContainer),
   { ssr: false }
 )
 
-export default function EditorPage() {
+const EditorPage: NextPage<PageProps> = (props) => {
   const [editor, setEditor] = useState(null)
-  
+  const edit = props.article ? true : false
   // load data
-  const { data, loading } = useLoadData()
+  const { data, loading } = edit
+  ? {data: props.data, loading: false}
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  : useLoadData()
   
   const { data: session, status } = useSession()
   const authLoading = status === "loading"
@@ -31,9 +61,9 @@ export default function EditorPage() {
   
   const disabled = editor === null || loading || authLoading
   
-  const [article, setArticle] = useState<Article>()
+  const [article, setArticle] = useState<Article>(props.article)
   
-  const [img, setImg] = useState<string | null>(null)
+  const [img, setImg] = useState<string | null>(article?.img)
   
   const onSave = useSaveCallback(editor, 
     {...article, 
@@ -42,6 +72,7 @@ export default function EditorPage() {
       createdAt: new Date,
       author: session?.user.name
     },
+    edit
     )
 
   // When rendering client side don't display anything until loading is complete
@@ -56,25 +87,31 @@ export default function EditorPage() {
     <div className="container">
       <main>
         <div className="inputs">
-          <MyInput 
-            value={article?.title}
-            onChange={e => setArticle({...article, title: e.target.value})}
-            type="text" 
-            placeholder="Title..."
-          />
+          {
+            edit
+            ? <h1>{article.title}</h1>
+            : <MyInput 
+                value={article?.title}
+                onChange={e => setArticle({...article, title: e.target.value})}
+                type="text" 
+                placeholder="Title..."
+                disabled={edit}
+              />
+          }
           <textarea
+            value={article?.description}
             className='myInput' 
             style={{
                 marginBottom: -1,
                 marginTop: -1,
                 font: "inherit",
             }}
-            name="desc"
             placeholder="Description..."
             onChange={e => setArticle({...article, description: e.target.value})}
           >
           </textarea>
           <Select
+            defaultValue={ edit && {value: article.category, label: article.category}}
             placeholder={'Category...'}
             onChange={selected => setArticle({...article, category: selected.value})}
             options={[
@@ -90,12 +127,16 @@ export default function EditorPage() {
             ]}
           />
           <TagsPicker 
+            defaultValue={ edit && article.tags.map(tag => {return {value: tag, label: tag}})}
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
           />
-          <div className="image">
-            Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
-            <FileUpload filenameCB={setImg} />
-          </div>
+          {
+            !edit &&
+            <div className="image">
+              Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
+              <FileUpload width={2} height={1} callback={setImg} disabled={edit} preview />
+            </div>
+          }
         </div>
         <div className="editorContainer">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
@@ -112,7 +153,6 @@ export default function EditorPage() {
           justify-content: center;
           align-items: center;
         }
-
         main {
           padding: 5rem 0;
           flex: 1;
@@ -128,6 +168,11 @@ export default function EditorPage() {
           width: 100%;
           margin-bottom: 10px;
           z-index: 0;
+        }
+
+        h1 {
+          margin-bottom: 10px;
+          font-size: 38px;
         }
 
         .hint {
@@ -173,3 +218,5 @@ export default function EditorPage() {
     </div>
   )
 }
+
+export default EditorPage

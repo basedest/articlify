@@ -1,7 +1,15 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import Image from 'next/image'
 
-const FileUpload = ({filenameCB}) => {
+interface Props {
+  callback: Function
+  width: number
+  height: number
+  disabled?: boolean
+  preview?: boolean
+}
+
+const FileUpload = ({callback, disabled, preview, height, width}: Props) => {
   const [createObjectURL, setCreateObjectURL] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -29,33 +37,35 @@ const FileUpload = ({filenameCB}) => {
 
       const body = new FormData()
       body.append('file', i)
-      //console.log('hehe')
       uploadToServer(body)
       .then(([err, filename]) => {
-        //console.log('here!!!')
         setError(err?.error)
-        //console.log('hehe: ', filename)
         setFilepath(filename)
-        filenameCB(filename)
+        callback(filename)
       })
       .catch(err => {
-        //console.log(err)
         setError(err.error)
       })
     }
     setLoading(false)
   }
-  const test = () => {
-    console.log('loading: ', loading)
-    console.log('error: ', error)
-    console.log('filepath: ', filepath)
-  }
   return (
     <div className='file-upload'>
-        {createObjectURL && 
-        <Image src={createObjectURL} alt='image' height={1} width={2} layout='responsive' />
+        {preview && createObjectURL && 
+        <Image 
+          src={createObjectURL} 
+          alt='image' 
+          height={height} 
+          width={width} 
+          layout='responsive'
+        />
         }
-        <input type="file" name="myImage" onChange={upload} />
+        <input 
+          type="file" 
+          name="myImage"
+          onChange={upload}
+          disabled={disabled ?? false}
+        />
         {
           loading && <p className='loading'>loading...</p>
         }
@@ -66,9 +76,6 @@ const FileUpload = ({filenameCB}) => {
           !loading && !error && filepath && 
           <p className='success'>successfuly uploaded</p>
         }
-        {/* <button onClick={test}>
-          test
-        </button> */}
     </div>
   )
 }

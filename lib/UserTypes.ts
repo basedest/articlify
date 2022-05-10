@@ -1,12 +1,15 @@
 import { Schema, model, models } from 'mongoose'
 import bcrypt from "bcryptjs"
+import mongoose from 'mongoose'
 
 export interface User {
     name:       string
     email:      string
     password:   string
     regDate:    Date
-    image?:    string
+    role?:      string
+    image?:     string
+    id?:        mongoose.Types.ObjectId
 }
 
 const UserSchema = new Schema<User>({
@@ -28,6 +31,7 @@ const UserSchema = new Schema<User>({
         type: Date,
         required: true
     },
+    role: String,
     image: String,
 })
 
@@ -52,10 +56,10 @@ UserSchema.pre("save", function (next) {
     } else {
       return next()
     }
-  })
+})
   
-  UserSchema.methods.comparePassword = async function(password) {
-    return bcrypt.compare(password, this.password)
-  }
+UserSchema.methods.comparePassword = async function(password) {
+  return bcrypt.compare(password, this.password)
+}
 
 export const UserModel = models.User || model<User>('User', UserSchema)

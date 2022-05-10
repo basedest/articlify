@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next'
 import { ArticleModel, PageModel } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
-import { connectDB } from '../../lib/connection'
+import { connectDB } from '../../lib/db/connection'
 import { categories } from '../../lib/lib'
 
 const ArticlePage = ({article, page}) => {

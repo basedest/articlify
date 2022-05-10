@@ -56,6 +56,10 @@
   order: 1;
   font-size: 2.5em;
   color: $accent-color;
+  letter-spacing: -1px;
+  a:hover {
+    color: $accent-color-bright;
+  }
 }
 
 @media (max-width: 768px) {
@@ -146,7 +150,7 @@
 
   .logo {
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 15px;
     font-size: 2rem;
     z-index: -1;

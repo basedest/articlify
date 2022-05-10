@@ -1,11 +1,11 @@
 import { Article } from "../../lib/ArticleTypes"
 import ArticleItem from "../ArticleItem"
 
-export interface ListProps {
-    articles: Article[]
+export interface ArticleListProps {
+  articles: Article[]
 }
 
-const ArticleList:React.FC<ListProps> = ({articles}) => {
+const ArticleList:React.FC<ArticleListProps> = ({articles}) => {
   return (
     <div className="articleList">
         {

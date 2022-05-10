@@ -27,9 +27,11 @@ const UserMenu = () => {
     <div ref={ref} className='user-menu'>
         <div className="avatar">
             {
-            session?.user.image
-            ? <Image src={session.user.image} width={1} height={1} layout='responsive' alt='icon' />
-            : <img src='/img/user.svg'/>
+                session?.user.image
+            ?   <Image src={session.user.image} width={1} height={1} layout='responsive' alt='icon' />
+            :   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+                </svg>
             }
         </div>
         <button className='user-menu__btn' onClick={handleClick}>
@@ -37,7 +39,9 @@ const UserMenu = () => {
             >
                 {session.user?.name}
             </a>
-            <svg className='arrow' viewBox="0 0 1024 1024"><path d="M476.455 806.696L95.291 425.532Q80.67 410.911 80.67 390.239t14.621-34.789 35.293-14.117 34.789 14.117L508.219 698.8l349.4-349.4q14.621-14.117 35.293-14.117t34.789 14.117 14.117 34.789-14.117 34.789L546.537 800.142q-19.159 19.159-38.318 19.159t-31.764-12.605z"></path></svg>
+            <svg className='arrow' fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
         </button>
         <ul className="user-menu__content">
             <li>

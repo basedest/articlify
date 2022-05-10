@@ -2,7 +2,6 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import ArticleList from '../components/ArticleList'
 import { Article } from '../lib/ArticleTypes'
-import { connectDB } from '../lib/connection'
 import { version } from '../lib/lib'
 import MyInput from '../components/input/MyInput'
 import { useEffect, useState } from 'react'
@@ -16,7 +15,7 @@ interface IProps {
   searchQuery: string
 }
 
-const Home: NextPage<any, any> = (props: IProps) => {
+const Home: NextPage<IProps> = (props: IProps) => {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [caption, setCaption] = useState('Latest articles')
@@ -32,7 +31,6 @@ const Home: NextPage<any, any> = (props: IProps) => {
     router.push('/')
     setCaption('Latest articles')
   }
-
   useEffect(() => {
     if (props.articles.length === 0) {
       setCaption('No articles')
@@ -73,13 +71,17 @@ const Home: NextPage<any, any> = (props: IProps) => {
               onClick={() => router.push(`/?title=${searchQuery}&page=${props.page - 1}`)}
               disabled={props.page <= 1}
             >
-              prev
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
             </button>
             <button
               onClick={() => router.push(`/?title=${searchQuery}&page=${props.page + 1}`)}
               disabled={props.articles.length < 5}
             >
-              next
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </button>
           </div>
       </>
@@ -88,13 +90,12 @@ const Home: NextPage<any, any> = (props: IProps) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (context) => { 
-  await connectDB()
+export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {   
   const page = context.query.page ? parseInt(context.query.page as string) : 1
   const {title} = context.query
   const searchQuery = title ? title as string : ''
   let articles = await findArticles({page, title})
-  articles = JSON.parse(JSON.stringify(articles))
+  articles = JSON.parse(JSON.stringify(articles))  
   return {
     props: { articles, version, page, searchQuery },
   }

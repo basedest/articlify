@@ -81,7 +81,6 @@ const Register = () => {
         setMessage(data.error)
         return
       }
-      console.log('pre-sign in');
       
       signIn("credentials", {username, password})
       router.push('/')

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 interface Props {
     options: {
@@ -31,7 +31,9 @@ const DropDown = ({options, label}: Props) => {
         <div ref={ref} className='dropdown'>
         <button className='dropdown__btn' onClick={handleClick}>
             {label}
-            <svg className='arrow' viewBox="0 0 1024 1024"><path d="M476.455 806.696L95.291 425.532Q80.67 410.911 80.67 390.239t14.621-34.789 35.293-14.117 34.789 14.117L508.219 698.8l349.4-349.4q14.621-14.117 35.293-14.117t34.789 14.117 14.117 34.789-14.117 34.789L546.537 800.142q-19.159 19.159-38.318 19.159t-31.764-12.605z"></path></svg>
+            <svg className='arrow' fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
         </button>
 
         <ul className="dropdown__content">

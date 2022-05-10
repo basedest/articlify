@@ -3,7 +3,7 @@ import initialData from './data.json'
 import { useRouter } from 'next/router'
 import { Article } from "../../lib/ArticleTypes"
 
-export const useSaveCallback = (editor, article: Article) => {
+export const useSaveCallback = (editor, article: Article, edit: boolean) => {
   const router = useRouter()
   return useCallback(async () => {
     if (!editor) return
@@ -15,21 +15,27 @@ export const useSaveCallback = (editor, article: Article) => {
       console.info('Saved in localStorage')
       console.groupEnd()
 
-      const response = await fetch('/api/save-article', {
-        method: 'POST',
+      const response = await fetch(
+        `/api/articles/${edit ? article.slug : ''}`, 
+      {
+        method: edit ? 'PUT' : 'POST',
         body: JSON.stringify({article, data}),
         headers: {
             'Content-Type': 'application/json'
           }
       })
-      response.status === 201
-      ? router.push(`/${article.category}/${article.slug}`)
-      : alert("check your inputs. something's just not right...")
+      if (response.status <= 201) {
+        localStorage.removeItem(dataKey)
+        router.push(`/${article.category}/${article.slug}`)
+      }
+      else {
+        alert("check your inputs. something's just not right...")
+      }
     } 
     catch (e) {
       console.error('SAVE RESULT failed', e);
     }
-  }, [editor, article, router])
+  }, [editor, article, router, edit])
 }
 
 // Set editor data after initializing
@@ -67,8 +73,6 @@ export const useClearDataCallback = (editor) => {
 export const useLoadData = () => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
-  
-  // Mimic async data load
   useEffect(() => {
     setLoading(true)
     const id = setTimeout(() => {
@@ -94,6 +98,6 @@ export const useLoadData = () => {
   }, [])
   
   return { data, loading }
-};
+}
 
 export const dataKey = 'editorData'

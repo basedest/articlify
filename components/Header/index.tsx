@@ -1,19 +1,15 @@
 import Link from "next/link"
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import UserMenu from "../UserMenu"
 import DropDown from "../DropDown"
+import { categories } from "../../lib/lib"
 
-const options = [
-    { href: '/art',     label: 'art'     },
-    { href: '/games',   label: 'games'   },
-    { href: '/it',      label: 'it'      },
-    { href: '/movies',  label: 'movies'  },
-    { href: '/music',   label: 'music'   },
-    { href: '/science', label: 'science' },
-    { href: '/sports',  label: 'sports'  },
-    { href: '/travel',  label: 'travel'  },
-    { href: '/other',   label: 'other'   },
-]
+const options = categories.map(item => {
+    return {
+        href: `/${item}`,
+        label: item
+    }
+})
 
 const Header:React.FC = () => {
     const { data: session, status } = useSession()
@@ -57,7 +53,11 @@ const Header:React.FC = () => {
                         </li>
                     )}
                 </ul>
-                <h1 className="logo">Articlify</h1>
+                <h1 className="logo">
+                    <Link href='/'>
+                        <a>Articlify</a>
+                    </Link>
+                </h1>
             </div>
         </nav>
     )

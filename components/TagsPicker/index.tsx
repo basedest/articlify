@@ -20,6 +20,7 @@ const tagOptions: Array<tagOption> = [
 type Props = {
     onChange: (newValue: OnChangeValue<tagOption, true>,
       actionMeta: ActionMeta<tagOption>) => void
+    defaultValue: Array<tagOption>
 }
   
 class TagsPicker extends Component<Props> {
@@ -32,6 +33,7 @@ class TagsPicker extends Component<Props> {
             isClearable
             onChange={this.props.onChange}
             options={tagOptions}
+            defaultValue={this.props.defaultValue}
         />
         )
     }

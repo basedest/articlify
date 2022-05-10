@@ -71,6 +71,11 @@
           order: 1;
   font-size: 2.5em;
   color: #1db954;
+  letter-spacing: -1px;
+}
+
+.logo a:hover {
+  color: #1ed760;
 }
 
 @media (max-width: 768px) {
@@ -176,7 +181,7 @@
   }
   .logo {
     position: absolute;
-    top: 5px;
+    top: 10px;
     right: 15px;
     font-size: 2rem;
     z-index: -1;
@@ -311,6 +316,91 @@
   border-radius: 15px;
   display: block;
   border-style: none;
+}
+
+.articleItem .wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.articleItem__actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 5px;
+}
+
+.articleItem__actions button {
+  border-radius: 15px;
+  background-color: #eee;
+  color: #555;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 15px 5px 15px;
+}
+
+.articleItem__actions button.edit:hover {
+  background-color: #bbb;
+  color: #000;
+}
+
+.articleItem__actions button.delete:hover {
+  background-color: #f44;
+  color: #fff;
+}
+
+.articleItem__confirm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  place-content: center;
+  gap: 15px;
+  font-size: 24px;
+}
+
+.articleItem__confirm_text {
+  text-align: center;
+}
+
+.articleItem__confirm_buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  place-content: center;
+  gap: 15px;
+}
+
+.articleItem__confirm_buttons button {
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 5px 15px 5px 15px;
+}
+
+.articleItem__confirm_buttons button:first-of-type {
+  background-color: #f037a5;
+  color: #fff;
+}
+
+.articleItem__confirm_buttons button:first-of-type:hover {
+  background-color: #b40d70;
+}
+
+.articleItem__confirm_buttons button:last-of-type {
+  background-color: #cdf564;
+  color: #000;
+}
+
+.articleItem__confirm_buttons button:last-of-type:hover {
+  background-color: #a9e40f;
 }
 
 @media (min-width: 800px) {
@@ -677,6 +767,19 @@
       -ms-flex-align: center;
           align-items: center;
   gap: 1rem;
+  font-size: 30px;
+}
+
+.dashboard .avatar .wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 5px;
+  font-size: 10px;
 }
 
 .dashboard .username {
@@ -686,12 +789,14 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  gap: 12rem;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .dashboard .img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
 }
 
 .dashboard .img img {
@@ -772,8 +877,8 @@
 }
 
 .user-menu__btn .arrow {
-  height: 0.9rem;
-  margin: 1px 0 0 1px;
+  height: 15px;
+  width: 15px;
 }
 
 .user-menu__btn:hover {
@@ -846,8 +951,8 @@
 }
 
 .dropdown__btn .arrow {
-  height: 0.9rem;
-  margin: 1px 0 0 1px;
+  height: 15px;
+  width: 15px;
 }
 
 .dropdown__btn:hover {
@@ -929,12 +1034,12 @@
   display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  padding: 15px;
+  padding: 10px;
 }
 
 .navigation button {
   margin: 5px 0 5px 0;
-  padding: 10px;
+  padding: 5px;
   border: none;
   color: white;
   border-radius: 5px;
@@ -946,6 +1051,16 @@
 
 .navigation button:hover {
   background-color: #444444;
+}
+
+.navigation button[disabled] {
+  background-color: #bbb;
+  cursor: default;
+}
+
+.navigation button svg {
+  height: 25px;
+  width: 50px;
 }
 
 html,
@@ -1016,9 +1131,13 @@ hr {
   margin-top: 0;
 }
 
+button {
+  outline: none;
+  border: none;
+}
+
 .btn {
   padding: 10px;
-  border: none;
   background-color: #1db954;
   color: white;
   border-radius: 5px;

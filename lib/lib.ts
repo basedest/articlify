@@ -1,9 +1,10 @@
 const pjson = require('../package.json')
 
 export interface ResponseFuncs {
-    GET?: Function
-    POST?: Function
-    PATCH?: Function
+    GET?:    Function
+    POST?:   Function
+    PATCH?:  Function
+    PUT?:    Function
     DELETE?: Function
 }
 

@@ -75,6 +75,65 @@
         display: block;
         border-style: none;
     }
+    .wrapper {
+        display: flex;
+    }
+    &__actions {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        button {
+            border-radius: 15px;
+            background-color: #eee;
+            color: #555;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px 15px 5px 15px;
+            &.edit:hover {
+                background-color: #bbb;
+                color: #000;
+            }
+            &.delete:hover {
+                background-color: $error-color;
+                color: #fff;
+            }
+        }
+    }
+    &__confirm {
+        display: flex;
+        flex-direction: column;
+        place-content: center;
+        gap: 15px;
+        font-size: 24px;
+        &_text {
+            text-align: center;
+        }
+        &_buttons {
+            display: flex;
+            place-content: center;
+            gap: 15px;
+            button {
+                border-radius: 15px;
+                cursor: pointer;
+                font-size: inherit;
+                padding: 5px 15px 5px 15px;
+                &:first-of-type {
+                    background-color: $fuchia;
+                    color: #fff;
+                    &:hover {
+                        background-color: adjust-color($color: $fuchia, $lightness: -20%);
+                    }
+                }
+                &:last-of-type {
+                    background-color: $citric;
+                    color: #000;
+                    &:hover {
+                        background-color: adjust-color($color: $citric, $lightness: -20%);
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media (min-width: 800px) {

@@ -1,5 +1,5 @@
 import { ArticleModel } from "../ArticleTypes"
-import { connectDB } from "../connection"
+import { connectDB } from "./connection"
 
 const findArticles = async (query) => {
     await connectDB() // connect to database
