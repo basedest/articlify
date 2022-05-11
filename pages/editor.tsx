@@ -6,7 +6,7 @@ import { Article, ArticleModel, ArticlePage, PageModel } from '../lib/ArticleTyp
 import Select from 'react-select'
 import TagsPicker from '../components/TagsPicker'
 import { useSession } from "next-auth/react"
-import AccessDenied from '../components/access-denied'
+import AccessDenied from '../components/AccessDenied'
 import FileUpload from '../components/FileUpload'
 import { GetServerSideProps, NextPage } from 'next'
 import { connectDB } from '../lib/db/connection'
