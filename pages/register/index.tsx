@@ -31,7 +31,7 @@ const Register = ({callbackUrl}) => {
       errorMessage:
         "Username should be 3-16 characters and shouldn't include any special character!",
       label: "Username",
-      pattern: "^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$",
+      pattern: "^[a-zA-Z\-_]{3,20}$",
       required: true,
     },
     {
@@ -49,7 +49,7 @@ const Register = ({callbackUrl}) => {
       type: "password",
       placeholder: "Password",
       errorMessage:
-        "Password should be 8-32 characters and include at least 1 letter, 1 number and 1 special character!",
+        "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
       label: "Password",
       pattern: '^(?:(?:(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]))|(?:(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]))|(?:(?=.*[0-9])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]))|(?:(?=.*[0-9])(?=.*[a-z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]))).{8,32}$',
       required: true,
