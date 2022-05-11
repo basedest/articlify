@@ -27,7 +27,7 @@ const handler = async (req, res) => {
       return res.status(400).json({error: 'file extension not allowed'})
     }
     
-    const filename = `/img/${file.newFilename}.${fileExtension}`
+    const filename = `/img/uploads/${file.newFilename}.${fileExtension}`
     await fs.writeFile(`./public${filename}`, data)
     await fs.unlink(file.filepath)
 

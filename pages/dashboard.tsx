@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getSession, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { User } from '../lib/UserTypes'
@@ -7,12 +7,17 @@ import Link from 'next/link'
 import FileUpload from '../components/FileUpload'
 import { useRouter } from 'next/router'
 
-function Dashboard({ data }) {
-  const { data: session } = useSession()
+function Dashboard() {
+  const {data: session, status} = useSession()
   const router = useRouter()
   const [modal, setModal] = useState(false)
-  const user: User = session.user as User
-  const [avatar, setAvatar] = useState(user?.image ?? '/img/user.svg')
+  const [avatar, setAvatar] = useState<string | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  useEffect(() => {
+    if (status === 'authenticated') {
+      setUser(session.user as User)
+    }
+  }, [status, session])
   const changeUsername = async () => {
     setModal(true)
   }
@@ -27,13 +32,13 @@ function Dashboard({ data }) {
     }).then(res => res.json())
     .then(data => {
       const {image} = data
-      setAvatar(image as string)
       session.user.image = image
+      setAvatar(image)
       router.replace(router.asPath)
     })
     .catch(console.error)
   } 
-
+  if (status === 'loading' || !user) return null
   return (
     <div className='dashboard'>
       <Modal visible={modal} setVisible={setModal}>
@@ -42,13 +47,19 @@ function Dashboard({ data }) {
       <div className='avatar'>
           <div className="wrapper">
             <div className="img">
-              <Image
-                width={1}
-                height={1}
-                src={avatar}
-                alt='avatar'
-                layout='responsive'
-              />
+              {
+                avatar
+                ? <Image
+                    width={1}
+                    height={1}
+                    src={avatar}
+                    alt='avatar'
+                    layout='responsive'
+                  />
+                : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+                  </svg>
+              }
             </div>
             <FileUpload width={1} height={1} callback={changeAvatar} />
           </div>
@@ -99,7 +110,7 @@ export async function getServerSideProps(context) {
   
   return {
     props: {
-      data: null,
+      data: null
     }
   }
 }

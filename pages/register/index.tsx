@@ -1,16 +1,17 @@
-import { signIn, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next"
+import { signIn, useSession } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import FormInput from "../../components/FormInput"
 
-const Register = () => {
+const Register = ({callbackUrl}) => {
   const router = useRouter()
 
   const { data: session } = useSession()
 
   if (session) {
-    router.push('/')
+    router.push(callbackUrl ?? '/')
   }
 
   const [message, setMessage] = useState('')
@@ -83,7 +84,7 @@ const Register = () => {
       }
       
       signIn("credentials", {username, password})
-      router.push('/')
+      router.push(callbackUrl ?? '/')
     })
     .catch((err) => setMessage(err))
   }
@@ -122,3 +123,10 @@ const Register = () => {
 }
 
 export default Register
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const callbackUrl = context.query.callbackUrl as string ?? null
+  return {
+    props: {callbackUrl}
+  }
+}

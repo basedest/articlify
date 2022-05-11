@@ -16,7 +16,7 @@ const ArticlePage = ({article, page}) => {
           <div className="article__authordate">
               <p>{article.author}</p>
               <p>•</p>
-              <p>{new Date(article.createdAt).toDateString()}</p>
+              <p>{new Date(article.createdAt).toLocaleDateString()}</p>
           </div>
           <div className="article__category">{article.category}</div>
           <div className="article__description">{article.description}</div>

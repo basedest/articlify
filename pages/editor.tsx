@@ -70,7 +70,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
       img,
       slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
       createdAt: new Date,
-      author: session?.user.name
+      author: article?.author ?? session?.user.name
     },
     edit
     )
@@ -80,7 +80,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
 
   // If no session exists, display access denied message
   if (!session) {
-    return <AccessDenied />
+    return <AccessDenied callbackUrl={'/editor'} />
   }
 
   return (

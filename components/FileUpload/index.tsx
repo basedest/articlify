@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 
 interface Props {
@@ -18,7 +18,7 @@ const FileUpload = ({callback, disabled, preview, height, width}: Props) => {
   const uploadToServer = async (body) => {
     const response = await fetch("/api/image/upload", {
       method: "POST",
-      body
+      body,
     })
     if (response.status !== 201) {
       return [await response.json(), null]

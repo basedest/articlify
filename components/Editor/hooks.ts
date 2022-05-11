@@ -29,11 +29,11 @@ export const useSaveCallback = (editor, article: Article, edit: boolean) => {
         router.push(`/${article.category}/${article.slug}`)
       }
       else {
-        alert("check your inputs. something's just not right...")
+        alert("Check your inputs. Title must be specified and unique.")
       }
     } 
     catch (e) {
-      console.error('SAVE RESULT failed', e);
+      console.error('SAVE RESULT failed', e)
     }
   }, [editor, article, router, edit])
 }
@@ -48,7 +48,7 @@ export const useSetData = (editor, data) => {
     editor.isReady.then(() => {
       // fixing an annoying warning in Chrome `addRange(): The given range isn't in document.`
       setTimeout(() => {
-        editor.render(data);
+        editor.render(data)
       }, 100)
     })
   }, [editor, data])
@@ -63,7 +63,7 @@ export const useClearDataCallback = (editor) => {
     editor.isReady.then(() => {
       // fixing an annoying warning in Chrome `addRange(): The given range isn't in document.`
       setTimeout(() => {
-        editor.clear();
+        editor.clear()
       }, 100)
     })
   }, [editor])
@@ -89,7 +89,7 @@ export const useLoadData = () => {
       }
       console.groupEnd()
       setLoading(false)
-    }, 200);
+    }, 200)
     
     return () => {
       setLoading(false)

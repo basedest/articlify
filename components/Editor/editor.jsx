@@ -30,7 +30,7 @@ export const useEditor = (toolsList, { data, editorRef }, options = {}) => {
 
       // Override editor options
       ...editorOptions,
-    });
+    })
 
     setEditor(editor)
 
@@ -47,7 +47,7 @@ export const useEditor = (toolsList, { data, editorRef }, options = {}) => {
   // set reference
   useEffect(() => {
     if (!editorInstance) {
-      return;
+      return
     }
     // Send instance to the parent
     if (editorRef) {

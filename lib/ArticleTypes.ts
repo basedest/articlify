@@ -1,5 +1,5 @@
-import { OutputData } from '@editorjs/editorjs';
-import { Schema, model, models } from 'mongoose';
+import { OutputData } from '@editorjs/editorjs'
+import { Schema, model, models } from 'mongoose'
 
 export interface Article {
     slug: string

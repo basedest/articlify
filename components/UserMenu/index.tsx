@@ -17,9 +17,9 @@ const UserMenu = () => {
                 ref.current.classList.remove('show')
             }
         }
-        document.addEventListener('click', handleClickOutside, true);
+        document.addEventListener('click', handleClickOutside, true)
         return () => {
-        document.removeEventListener('click', handleClickOutside, true);
+        document.removeEventListener('click', handleClickOutside, true)
         }
     })
 

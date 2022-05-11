@@ -19,6 +19,9 @@
 #page for testing features
 /pages/test.tsx
 
+#image uploads
+/public/img/uploads
+
 # misc
 .DS_Store
 *.pem
