@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import findArticles from '../lib/db/findArticles'
 
+//пропсы страницы
 interface IProps {
   articles: Article[]
   page: number
@@ -18,17 +19,24 @@ const Home: NextPage<IProps> = (props: IProps) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [caption, setCaption] = useState('Latest articles')
   
+  //устанавливаем запрос для поиска при вводе
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
   }
+
+  //устанавливаем строку поиска как параметр запроса
   const handleSearch = async (e) => {
     router.push(`/?title=${searchQuery}`)
   }
+
+  //очищаем ввод
   const clearInput = (e) => {
     setSearchQuery('')
     router.push('/')
     setCaption('Latest articles')
   }
+
+  //устанавливаем надпись в зависимости от состояния списка
   useEffect(() => {
     if (props.articles.length === 0) {
       setCaption('No articles')
@@ -88,11 +96,14 @@ const Home: NextPage<IProps> = (props: IProps) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {   
+export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {  
+  // собираем параметры запроса 
   const page = context.query.page ? parseInt(context.query.page as string) : 1
   const {title} = context.query
   const searchQuery = title ? title as string : ''
+  //ищем статьи в БД по запросу и странице
   let articles = await findArticles({page, title})
+  //фиксим сериализацию (ну вот приходится так)
   articles = JSON.parse(JSON.stringify(articles))  
   return {
     props: { articles, page, searchQuery },

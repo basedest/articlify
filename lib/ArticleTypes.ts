@@ -1,6 +1,7 @@
 import { OutputData } from '@editorjs/editorjs'
 import { Schema, model, models } from 'mongoose'
 
+//описание типа статьи
 export interface Article {
     slug: string
     title: string
@@ -12,6 +13,7 @@ export interface Article {
     tags?: Array<string>
 }
 
+//схема для БД
 const ArticleSchema = new Schema<Article>({
     slug: {
         type: String,
@@ -42,13 +44,14 @@ const ArticleSchema = new Schema<Article>({
     tags: [String]
 })
 
+//экспортируем модель данных
 export const ArticleModel = models.Article || model<Article>('Article', ArticleSchema)
 
-//------------------------------------------------------------------------------------
+//-----------------------типы данных для страниц статей-----------------------
 
 export interface ArticlePage {
     slug: string
-    data: OutputData
+    data: OutputData //данные из редактора
 }
 
 const PageSchema = new Schema<ArticlePage>({

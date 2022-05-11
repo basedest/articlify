@@ -11,19 +11,19 @@ interface PostParams {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  //capture request method, we type it as a key of ResponseFunc to reduce typing later
+  //определяем метод запроса
   const method: keyof ResponseFuncs = req.method as keyof ResponseFuncs
 
-  //function for catch errors
+  //функция для перехвата ошибок
   const catcher = (error: Error) => res.status(400).json({ error })
 
-  // Potential Responses
+  // возможные ответы сервера
   const handleCase: ResponseFuncs = {
-    // RESPONSE FOR GET REQUESTS
+    // ответ на GET-запрос
     GET: async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(200).json(await findArticles(req.query).catch(catcher))
     },
-    // RESPONSE POST REQUESTS
+    // ответ на POST-запрос
     POST: async (req: NextApiRequest, res: NextApiResponse) => {
       const {article, data} = req.body as PostParams
       const {slug} = article
@@ -33,10 +33,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   }
 
-  // Check if there is a response for the particular method, if so invoke it, if not response with an error
+  // Проверка, есть ли ответ на текущий метод
   const response = handleCase[method]
+  // если есть, вызвать его
   if (response) return response(req, res)
-  else return res.status(400).json({ error: "No Response for This Request" })
+  //иначе, отправить ответ с сообщением об ошибке
+  return res.status(400).json({ error: "No Response for This Request" })
 }
 
 export default handler

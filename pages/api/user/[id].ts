@@ -1,4 +1,3 @@
-import mongoose from "mongoose"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/react"
 import { connectDB } from "../../../lib/db/connection"
@@ -19,11 +18,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const handleCase: ResponseFuncs = {
+    //изменение аватарки
     PATCH: async (req: NextApiRequest, res: NextApiResponse) => {
-      
       await connectDB()
       const {image} = req.body
-      await UserModel.findByIdAndUpdate(id, {image})
+      await UserModel.findByIdAndUpdate(id, {image}).catch(catcher)
       return res.status(200).json({image})
     },
   }

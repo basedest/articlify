@@ -22,8 +22,8 @@ const Footer:React.FC = () => {
           Ivan Scherbakov
           </a>
         </span>
-        <span>Copyright © 2022 Articlify Inc. All rights reserved.</span>
         <span>Version {version}</span>
+        <span>Copyright © 2022 Articlify Inc. All rights reserved.</span>
     </footer>
   )
 }

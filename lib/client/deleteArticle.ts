@@ -1,9 +1,9 @@
+//удаление статьи
 export default function
 deleteArticle(slug: string, callback: Function) {
-    let trigger = false
     fetch(`/api/articles/${slug}`, {
         method: 'DELETE',
     })
-    .then(res => callback()) 
+    .then(_ => callback()) 
     .catch(console.error)
 }

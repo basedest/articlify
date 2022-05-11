@@ -6,10 +6,17 @@
     border-top: 1px solid #ddd;
     justify-content: center;
     align-items: center;
+    background-color: #f0f0f0;
   }
   
   .footer span {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .footer span:last-of-type {
+    color: #6a6a6a;
+    font-size: 0.9rem;
+    margin-top: 10px;
   }

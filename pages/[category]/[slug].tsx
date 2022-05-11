@@ -5,8 +5,10 @@ import TagsList from '../../components/TagsList'
 import { connectDB } from '../../lib/db/connection'
 import { categories } from '../../lib/lib'
 
+//страница статьи
 const ArticlePage = ({article, page}) => {
   if (!article) return null
+  //если картинки нет, отображаем заглушку по категории
   const img = article.img ?? `/img/${article.category}.png`
   return (
     <>
@@ -26,10 +28,12 @@ const ArticlePage = ({article, page}) => {
         <div className="article">
           <article>
             {
+              //разбираем каждый блок на HTML-документы
               page.data.blocks.map(item => {
                 const {id} = item
                 switch (item.type) {
                   case 'paragraph':
+                    //в параграфах могут содержаться inline-теги, поэтому устанавливаем данные через dangerouslySetInnerHTML
                     return <p key={id} dangerouslySetInnerHTML={{__html:item.data.text}}></p>
                   case 'header':
                     return item.data.level === 2
@@ -78,6 +82,7 @@ const ArticlePage = ({article, page}) => {
 
 export default ArticlePage
 
+//статически генерируем страницу
 export const getStaticProps: GetStaticProps = async (context) => {
   await connectDB()
   const {slug, category} = context.params
@@ -95,15 +100,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
         article, page
     },
-    revalidate: 30
+    //ревалидация страницы раз в 30 секунд
+    revalidate: 30 
   }
 }
 
+//страницы по умолчанию
 export async function getStaticPaths() {
-  const paths = []
+  const paths = [] //пусто
 
   return {
       paths,
-      fallback: true, 
+      fallback: true,
   }
 }

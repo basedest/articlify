@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { signOut, useSession } from "next-auth/react"
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 const UserMenu = () => {

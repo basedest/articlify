@@ -4,7 +4,9 @@ import { SessionProvider } from "next-auth/react"
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 
+//общая структура каждой страницы
 function MyApp({ Component, pageProps }: AppProps) {
+  //Если у компонента определена собственная структура
   if (Component.getLayout) {
     return (
       <SessionProvider  session={pageProps.session} refetchInterval={0}>
@@ -12,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </SessionProvider>
     )
   }
+  //Иначе оборачиваем всё в main и добавляем Header и Footer
   return (
       <SessionProvider  session={pageProps.session} refetchInterval={0}>
         <Header />

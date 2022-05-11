@@ -1,5 +1,6 @@
 const pjson = require('../package.json')
 
+//функции ответа от сервера для API
 export interface ResponseFuncs {
     GET?:    Function
     POST?:   Function
@@ -8,8 +9,10 @@ export interface ResponseFuncs {
     DELETE?: Function
 }
 
+//версия приложения
 export const {version} = pjson
 
+//категории статей
 export const categories = [
     'art',
     'it',

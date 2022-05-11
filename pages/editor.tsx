@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useSaveCallback, useLoadData, options, useSetData, useClearDataCallback } from '../components/Editor'
+import { useSaveCallback, useLoadData, options, useSetData } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
 import { Article, ArticleModel, ArticlePage, PageModel } from '../lib/ArticleTypes'
 import Select from 'react-select'
@@ -11,6 +11,7 @@ import FileUpload from '../components/FileUpload'
 import { GetServerSideProps, NextPage } from 'next'
 import { connectDB } from '../lib/db/connection'
 import { OutputData } from '@editorjs/editorjs'
+import { categories } from '../lib/lib'
 
 interface PageProps {
   article?: Article
@@ -44,30 +45,39 @@ const Editor: any = dynamic(
 const EditorPage: NextPage<PageProps> = (props) => {
   const [editor, setEditor] = useState(null)
   const edit = props.article ? true : false
-  // load data
+  
+  //Загрузить данные либо из пропсов при редактировании
+  // либо из localStorage, в обратном случае
   const { data, loading } = edit
   ? {data: props.data, loading: false}
+  /*
+    следующий комментарий нужен для того, чтобы не возникало предупреждение
+    о том, что нельзя использовать хуки в условных операторах.
+    Я же считаю, что можно, если осторожно
+  */
   // eslint-disable-next-line react-hooks/rules-of-hooks
   : useLoadData()
   
   const { data: session, status } = useSession()
   const authLoading = status === "loading"
   
-  // set saved data
+  // установить загруженные [выше] данные
   useSetData(editor, data)
   
-  // clear data callback
-  const clearData = useClearDataCallback(editor)
-  
+  // выключаем кнопку сохранения если идёт загрузка
   const disabled = editor === null || loading || authLoading
   
+  // устанавливаем данные о статье в начальное значение
   const [article, setArticle] = useState<Article>(props.article)
   
+  //картинка статьи
   const [img, setImg] = useState<string | null>(article?.img)
   
+  //сохранение статьи при нажатии кнопки
   const onSave = useSaveCallback(editor, 
     {...article, 
       img,
+      //формируем ссылку на статью по названию
       slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
       createdAt: new Date,
       author: article?.author ?? session?.user.name
@@ -75,10 +85,10 @@ const EditorPage: NextPage<PageProps> = (props) => {
     edit
     )
 
-  // When rendering client side don't display anything until loading is complete
+  // ничего не выводим пока не закончится загрузка
   if (typeof window !== "undefined" && loading && authLoading) return null
 
-  // If no session exists, display access denied message
+  // если пользователь не авторизован, выводим компонент AccessDenied
   if (!session) {
     return <AccessDenied callbackUrl={'/editor'} />
   }
@@ -88,6 +98,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
       <main>
         <div className="inputs">
           {
+            // при редактировании название статьи изменить нельзя, но отобразить надо
             edit
             ? <h1>{article.title}</h1>
             : <MyInput 
@@ -114,23 +125,14 @@ const EditorPage: NextPage<PageProps> = (props) => {
             defaultValue={ edit && {value: article.category, label: article.category}}
             placeholder={'Category...'}
             onChange={selected => setArticle({...article, category: selected.value})}
-            options={[
-              { value: 'art',     label: 'art'     },
-              { value: 'games',   label: 'games'   },
-              { value: 'it',      label: 'it'      },
-              { value: 'movies',  label: 'movies'  },
-              { value: 'music',   label: 'music'   },
-              { value: 'science', label: 'science' },
-              { value: 'sports',  label: 'sports'  },
-              { value: 'travel',  label: 'travel'  },
-              { value: 'other',   label: 'other'   },
-            ]}
+            options={categories.map(item => {return {value: item, label: item}})}
           />
           <TagsPicker 
             defaultValue={ edit && article.tags.map(tag => {return {value: tag, label: tag}})}
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
           />
           {
+            // при редактировании не разрешаем изменять картинку
             !edit &&
             <div className="image">
               Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
@@ -203,12 +205,6 @@ const EditorPage: NextPage<PageProps> = (props) => {
           transition: all 0.4s ease 0s;
         }
 
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
         .inputs {
           margin-bottom: 1rem;
           width: 100%;

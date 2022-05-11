@@ -7,21 +7,26 @@ import Link from 'next/link'
 import FileUpload from '../components/FileUpload'
 import { useRouter } from 'next/router'
 
-function Dashboard() {
+//Меню пользователя
+export default function Dashboard() {
   const {data: session, status} = useSession()
   const router = useRouter()
   const [modal, setModal] = useState(false)
   const [avatar, setAvatar] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  
+  //устанавливаем значение user после загрузки сессии
   useEffect(() => {
     if (status === 'authenticated') {
       setUser(session.user as User)
     }
   }, [status, session])
+  //выводим модальное окно при нажатии кнопки Edit
   const changeUsername = async () => {
     setModal(true)
   }
 
+  //изменение аватарки
   const changeAvatar = (image: string) => {
     fetch(`/api/user/${user.id}`, {
       method: 'PATCH',
@@ -38,16 +43,24 @@ function Dashboard() {
     })
     .catch(console.error)
   } 
+  //пока загружается сессия, ничего не выводим
   if (status === 'loading' || !user) return null
   return (
     <div className='dashboard'>
+      {
+      //модальное окно с сообщением о том,
+      //что возножность изменения имени появится когда-нибудь, но не сейчас
+      }
       <Modal visible={modal} setVisible={setModal}>
-        <div style={{padding: '2rem'}}>This feature will be available in the next updates</div>
+        <div style={{padding: '2rem'}}>
+          This feature will be available in the next updates
+        </div>
       </Modal>
       <div className='avatar'>
           <div className="wrapper">
             <div className="img">
               {
+                //если есть аватарка, то показываем её, иначе - иконку 
                 avatar
                 ? <Image
                     width={1}
@@ -99,6 +112,7 @@ function Dashboard() {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
+  //если нет сессии, перенаправляем на логин
   if (!session) {
     return {
       redirect: {
@@ -107,12 +121,8 @@ export async function getServerSideProps(context) {
       }
     }
   }
-  
+
   return {
-    props: {
-      data: null
-    }
+    props: {}
   }
 }
-
-export default Dashboard
