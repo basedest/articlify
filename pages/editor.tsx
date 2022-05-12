@@ -12,6 +12,8 @@ import { GetServerSideProps, NextPage } from 'next'
 import { connectDB } from '../lib/db/connection'
 import { OutputData } from '@editorjs/editorjs'
 import { categories } from '../lib/lib'
+import checkPriveleges from "../lib/client/checkPriveleges"
+import { User } from '../lib/UserTypes'
 
 interface PageProps {
   article?: Article
@@ -93,6 +95,9 @@ const EditorPage: NextPage<PageProps> = (props) => {
     return <AccessDenied callbackUrl={'/editor'} />
   }
 
+  //если поступил запрос на редактирование, но пользователь не является ни админом, ни автором
+  if (edit && session && !checkPriveleges(session.user as User, article.author))
+    return <div>You don&apos;t have permission to edit this article</div>
   return (
     <div className="container">
       <main>

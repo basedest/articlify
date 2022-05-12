@@ -1,7 +1,6 @@
 @import "./colors";
 
 .dropdown {
-    background-color: #fff;
     &__btn {
         display: flex;
         background-color: transparent;
@@ -10,7 +9,6 @@
         align-items: center;
         text-decoration: none;
         font: inherit;
-        font-weight: 700;
         outline: none;
 
         .arrow {
@@ -33,7 +31,6 @@
         text-align: center;
         li {
             margin: 0;
-            color: black;
             padding: 12px 16px;
             display: block;
             cursor: pointer;

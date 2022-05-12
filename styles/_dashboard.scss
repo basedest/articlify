@@ -19,7 +19,8 @@
             gap: 5px;
             font-size: 10px;
         }
-        font-size: 30px;
+        font-size: 32px;
+        font-family: 'Gotham Bold', sans-serif;
     }
     .username {
         display: flex;
@@ -68,9 +69,5 @@
       box-shadow: none;
       padding: 1rem;
       margin-top: 2rem;
-      .username {
-          gap: 0;
-          justify-content: space-between;
-      }
     }
 }
