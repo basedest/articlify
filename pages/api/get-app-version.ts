@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { version } from "../../lib/lib"
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export default function handler (req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
       return res.status(200).json({version})
     }
+    return res.status(400).json({ error: "No Response for This Request" })
 }
-
-export default handler
