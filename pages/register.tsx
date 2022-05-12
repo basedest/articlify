@@ -3,7 +3,7 @@ import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import FormInput from "../../components/FormInput"
+import FormInput from "../components/FormInput"
 
 const Register = ({callbackUrl}) => {
   const router = useRouter()
