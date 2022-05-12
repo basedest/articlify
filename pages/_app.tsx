@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 //общая структура каждой страницы
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   //Если у компонента определена собственная структура
   if (Component.getLayout) {
     return (
@@ -25,6 +25,3 @@ function MyApp({ Component, pageProps }: AppProps) {
       </SessionProvider>
   )
 }
-
-
-export default MyApp
