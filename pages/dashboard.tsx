@@ -19,6 +19,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (status === 'authenticated') {
       setUser(session.user as User)
+      setAvatar(session.user?.image)
     }
   }, [status, session])
   //выводим модальное окно при нажатии кнопки Edit
@@ -36,7 +37,9 @@ export default function Dashboard() {
         }
     }).then(res => res.json())
     .then(data => {
+      
       const {image} = data
+      console.log('fun', image)
       session.user.image = image
       setAvatar(image)
       router.replace(router.asPath)
