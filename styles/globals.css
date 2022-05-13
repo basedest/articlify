@@ -527,12 +527,12 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 1.25rem;
+  padding: 2rem 4rem 2rem 4rem;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: auto;
   width: 100%;
   background-color: #fff;
@@ -594,6 +594,12 @@
   line-height: 65px;
   height: 30px;
   letter-spacing: 0.2em;
+}
+
+@media (max-width: 768px) {
+  .article__container {
+    padding: 2rem 0rem 2rem 0rem;
+  }
 }
 
 .tags {
