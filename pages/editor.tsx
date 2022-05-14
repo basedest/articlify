@@ -81,7 +81,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
       img,
       //формируем ссылку на статью по названию
       slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
-      createdAt: new Date,
+      createdAt: article?.createdAt ?? new Date,
       author: article?.author ?? session?.user.name
     },
     edit
