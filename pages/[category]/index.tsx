@@ -1,16 +1,18 @@
 import { GetServerSideProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
-import ArticleList from '../../components/ArticleList'
-import findArticles from '../../lib/db/findArticles'
+import findArticles from '../../lib/server/findArticles'
 import { categories } from '../../lib/lib'
+import SmartList from '../../components/SmartList'
 
-const Category = ({articles, category}) => {
-  if (!articles || articles.length == 0)
-    return <h1 className='title accented no-margin'>No articles</h1>
+const Category = ({articles, category, page, searchQuery}) => {
   return (
   <>
     <h1 className='title accented'>{category}</h1>
-    <ArticleList articles={articles} />
+    <SmartList 
+      articles={articles}
+      page={page}
+      searchQuery={searchQuery}
+    />
   </>
   )
 }
@@ -28,11 +30,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true
     }
   }
-  let articles = await findArticles({category})
+
+  const page = context.query.page ? parseInt(context.query.page as string) : 1
+  const {title} = context.query
+  const searchQuery = title ? title as string : ''
+
+  let articles = await findArticles({category, page, title})
   articles = JSON.parse(JSON.stringify(articles))
   return {
       props: {
-          articles, category
+          articles, page, searchQuery, category
       }
   }
 }
+

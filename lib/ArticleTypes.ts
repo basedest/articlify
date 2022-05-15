@@ -9,8 +9,10 @@ export interface Article {
     category: string
     author: string
     createdAt: Date
+    editedAt?: Date
     img?: string
     tags?: Array<string>
+    content?: OutputData
 }
 
 //схема для БД
@@ -41,13 +43,13 @@ const ArticleSchema = new Schema<Article>({
         required: true
     },
     img: String,
-    tags: [String]
+    tags: [String],
+    content: Object,
+    editedAt: Date
 })
 
 //экспортируем модель данных
 export const ArticleModel = models.Article || model<Article>('Article', ArticleSchema)
-
-//-----------------------типы данных для страниц статей-----------------------
 
 export interface ArticlePage {
     slug: string

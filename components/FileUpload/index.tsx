@@ -16,15 +16,16 @@ const FileUpload = ({callback, disabled, preview, height, width}: Props) => {
   const [filepath, setFilepath] = useState<string | null>(null)
 
   const uploadToServer = async (body) => {
-    const response = await fetch("/api/image/upload", {
-      method: "POST",
-      body,
+    const response = await fetch('https://api.cloudinary.com/v1_1/basedest/image/upload/', {
+      method: 'POST',
+      body
     })
-    if (response.status !== 201) {
-      return [await response.json(), null]
+    if (response.status > 201) {
+      return ['error', null]
     }
-    const {filename} = await response.json()
-    return [null, filename]
+    const {secure_url} = await response.json()
+    
+    return [null, secure_url]
   }
 
   const upload = (event) => {
@@ -37,6 +38,7 @@ const FileUpload = ({callback, disabled, preview, height, width}: Props) => {
 
       const body = new FormData()
       body.append('file', i)
+      body.append('upload_preset', 'articlify')
       uploadToServer(body)
       .then(([err, filename]) => {
         setError(err?.error)

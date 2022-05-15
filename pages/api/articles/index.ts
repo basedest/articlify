@@ -1,13 +1,11 @@
-import { OutputData } from "@editorjs/editorjs"
 import { NextApiRequest, NextApiResponse } from "next"
-import { Article, ArticleModel, PageModel } from "../../../lib/ArticleTypes"
-import { connectDB } from "../../../lib/db/connection"
-import findArticles from "../../../lib/db/findArticles"
+import { Article, ArticleModel } from "../../../lib/ArticleTypes"
+import { connectDB } from "../../../lib/server/connection"
+import findArticles from "../../../lib/server/findArticles"
 import { ResponseFuncs } from "../../../lib/lib"
 
 interface PostParams {
   article: Article,
-  data: OutputData
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -25,10 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     },
     // ответ на POST-запрос
     POST: async (req: NextApiRequest, res: NextApiResponse) => {
-      const {article, data} = req.body as PostParams
-      const {slug} = article
+      const {article} = req.body as PostParams
+      
       await connectDB().catch(catcher)
-      await PageModel.create({slug, data}).catch(catcher)
       res.status(201).json(await ArticleModel.create(article).catch(catcher))
     },
   }

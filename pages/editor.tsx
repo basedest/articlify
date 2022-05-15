@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSaveCallback, useLoadData, options, useSetData } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
-import { Article, ArticleModel, ArticlePage, PageModel } from '../lib/ArticleTypes'
+import { Article, ArticleModel } from '../lib/ArticleTypes'
 import Select from 'react-select'
 import TagsPicker from '../components/TagsPicker'
 import { useSession } from "next-auth/react"
 import AccessDenied from '../components/AccessDenied'
 import FileUpload from '../components/FileUpload'
 import { GetServerSideProps, NextPage } from 'next'
-import { connectDB } from '../lib/db/connection'
-import { OutputData } from '@editorjs/editorjs'
+import { connectDB } from '../lib/server/connection'
 import { categories } from '../lib/lib'
 import checkPriveleges from "../lib/client/checkPriveleges"
 import { User } from '../lib/UserTypes'
+import ImageUpload from '../components/ImageUpload'
 
 interface PageProps {
   article?: Article
-  data?: OutputData
 }
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
@@ -27,10 +26,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context)
     const article = JSON.parse(JSON.stringify(
       (await ArticleModel.findOne({slug}))
     )) as Article
-    const {data} = await PageModel.findOne({slug}) as ArticlePage
     return {
       props: {
-        article, data
+        article
       }
     }
   } 
@@ -45,47 +43,58 @@ const Editor: any = dynamic(
 )
 
 const EditorPage: NextPage<PageProps> = (props) => {
+  const formRef = useRef()
+  const [uploadData, setUploadData] = useState(null)
+  const [ready, setReady] = useState(true)
   const [editor, setEditor] = useState(null)
   const edit = props.article ? true : false
-  
+  const [onSubmitClicked, setOnSubmitClicked] = useState(false)
   //Загрузить данные либо из пропсов при редактировании
   // либо из localStorage, в обратном случае
   const { data, loading } = edit
-  ? {data: props.data, loading: false}
+  ? {data: props.article.content, loading: false}
   /*
-    следующий комментарий нужен для того, чтобы не возникало предупреждение
-    о том, что нельзя использовать хуки в условных операторах.
-    Я же считаю, что можно, если осторожно
+  следующий комментарий нужен для того, чтобы не возникало предупреждение
+  о том, что нельзя использовать хуки в условных операторах.
+  Я же считаю, что можно, если осторожно
   */
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  : useLoadData()
-  
-  const { data: session, status } = useSession()
-  const authLoading = status === "loading"
-  
-  // установить загруженные [выше] данные
-  useSetData(editor, data)
-  
-  // выключаем кнопку сохранения если идёт загрузка
-  const disabled = editor === null || loading || authLoading
-  
-  // устанавливаем данные о статье в начальное значение
-  const [article, setArticle] = useState<Article>(props.article)
-  
-  //картинка статьи
-  const [img, setImg] = useState<string | null>(article?.img)
-  
+ // eslint-disable-next-line react-hooks/rules-of-hooks
+ : useLoadData()
+ 
+ const { data: session, status } = useSession()
+ const authLoading = status === "loading"
+ 
+ // установить загруженные [выше] данные
+ useSetData(editor, data)
+ 
+ // выключаем кнопку сохранения если идёт загрузка
+ const disabled = editor === null || loading || authLoading
+ 
+ // устанавливаем данные о статье в начальное значение
+ const [article, setArticle] = useState<Article>(props.article)
+ 
   //сохранение статьи при нажатии кнопки
   const onSave = useSaveCallback(editor, 
     {...article, 
-      img,
       //формируем ссылку на статью по названию
       slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
       createdAt: article?.createdAt ?? new Date,
       author: article?.author ?? session?.user.name
     },
-    edit
+    edit,
+    uploadData
     )
+    const onSubmit = () => {
+      //@ts-ignore
+      formRef.current.requestSubmit()
+      setOnSubmitClicked(true)
+    }
+    useEffect(() => {
+      setReady(uploadData !== undefined)
+      if (ready && onSubmitClicked) {        
+        onSave()
+      }
+    }, [uploadData, ready, onSubmitClicked, onSave])
 
   // ничего не выводим пока не закончится загрузка
   if (typeof window !== "undefined" && loading && authLoading) return null
@@ -98,6 +107,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   //если поступил запрос на редактирование, но пользователь не является ни админом, ни автором
   if (edit && session && !checkPriveleges(session.user as User, article.author))
     return <div>You don&apos;t have permission to edit this article</div>
+  
   return (
     <div className="container">
       <main>
@@ -141,14 +151,15 @@ const EditorPage: NextPage<PageProps> = (props) => {
             !edit &&
             <div className="image">
               Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
-              <FileUpload width={2} height={1} callback={setImg} disabled={edit} preview />
+              {/* <FileUpload width={2} height={1} callback={setImg} disabled={edit} preview /> */}
+              <ImageUpload formRef={formRef} setUploadData={setUploadData} />
             </div>
           }
         </div>
         <div className="editorContainer">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
         </div>
-        <button disabled={disabled} type="button" onClick={onSave}>save article</button>{' '}
+        <button disabled={disabled} type="button" onClick={onSubmit}>save article</button>{' '}
       </main>
 
       <style jsx>{`
@@ -169,12 +180,6 @@ const EditorPage: NextPage<PageProps> = (props) => {
           align-items: center;
           max-width: 1000px;
           width: 90vw;
-        }
-
-        .editorContainer {
-          width: 100%;
-          margin-bottom: 10px;
-          z-index: 0;
         }
 
         h1 {

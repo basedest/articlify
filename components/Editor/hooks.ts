@@ -3,23 +3,24 @@ import initialData from './data.json'
 import { useRouter } from 'next/router'
 import { Article } from "../../lib/ArticleTypes"
 
-export const useSaveCallback = (editor, article: Article, edit: boolean) => {
+export const useSaveCallback = (editor, initialArticle: Article, edit: boolean, uploadData) => {
   const router = useRouter()
   return useCallback(async () => {
     if (!editor) return
-    try {
+    try {      
       const data = await editor.save()
       console.group('EDITOR onSave')
       console.dir(data)
       localStorage.setItem(dataKey, JSON.stringify(data))
       console.info('Saved in localStorage')
       console.groupEnd()
-
+      const img = uploadData ? uploadData.secure_url : undefined
+      const article = {...initialArticle, img, content: data}
       const response = await fetch(
         `/api/articles/${edit ? article.slug : ''}`, 
       {
         method: edit ? 'PUT' : 'POST',
-        body: JSON.stringify({article, data}),
+        body: JSON.stringify({article}),
         headers: {
             'Content-Type': 'application/json'
           }
@@ -35,7 +36,7 @@ export const useSaveCallback = (editor, article: Article, edit: boolean) => {
     catch (e) {
       console.error('SAVE RESULT failed', e)
     }
-  }, [editor, article, router, edit])
+  }, [editor, initialArticle, router, edit])
 }
 
 // Set editor data after initializing

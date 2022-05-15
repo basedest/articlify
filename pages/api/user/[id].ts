@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/react"
-import { connectDB } from "../../../lib/db/connection"
+import { connectDB } from "../../../lib/server/connection"
 import { ResponseFuncs } from "../../../lib/lib"
 import { User, UserModel } from "../../../lib/UserTypes"
 

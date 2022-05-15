@@ -69,7 +69,6 @@ export const EditorContainer = ({ editorRef, children, data, options }) => {
         .container {
           width: 100%;
           padding: 2px 0;
-          box-shadow: 0 4px 8px 0 #11111122;
         }
       `}</style>
     </React.Fragment>

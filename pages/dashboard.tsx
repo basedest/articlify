@@ -29,6 +29,7 @@ export default function Dashboard() {
 
   //изменение аватарки
   const changeAvatar = (image: string) => {
+    
     fetch(`/api/user/${user.id}`, {
       method: 'PATCH',
       body: JSON.stringify({image}),
@@ -39,7 +40,6 @@ export default function Dashboard() {
     .then(data => {
       
       const {image} = data
-      console.log('fun', image)
       session.user.image = image
       setAvatar(image)
       router.replace(router.asPath)

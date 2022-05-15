@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { connectDB } from "../../../lib/db/connection"
+import { connectDB } from "../../../lib/server/connection"
 import { UserModel } from "../../../lib/UserTypes"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

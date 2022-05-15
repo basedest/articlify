@@ -29,7 +29,7 @@ const findArticles = async (query) => {
         //сколько записей нужно пропустить, чтобы дойти до нужной страницы
         const skips = pagesize * (params.page - 1)
         res = await ArticleModel
-            .find(params)
+            .find(params, {content: 0})
             .skip(skips)
             .limit(pagesize)
             .sort({createdAt:-1})
@@ -37,7 +37,7 @@ const findArticles = async (query) => {
     //иначе выводим всё
     else {
         res = await ArticleModel
-        .find(params)
+        .find(params, {content: 0})
         .sort({createdAt:-1})
     }
     return JSON.parse(JSON.stringify(res))

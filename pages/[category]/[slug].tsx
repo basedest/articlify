@@ -1,12 +1,16 @@
 import { GetStaticProps } from 'next'
-import { ArticleModel, PageModel } from '../../lib/ArticleTypes'
+import { Article, ArticleModel } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
-import { connectDB } from '../../lib/db/connection'
-import { categories } from '../../lib/lib'
+import { connectDB } from '../../lib/server/connection'
+import findArticles from '../../lib/server/findArticles'
+
+interface PageProps {
+  article: Article
+}
 
 //страница статьи
-const ArticlePage = ({article, page}) => {
+const ArticlePage = ({article}: PageProps) => {
   if (!article) return null
   //если картинки нет, отображаем заглушку по категории
   const img = article.img ?? `/img/${article.category}.png`
@@ -29,7 +33,7 @@ const ArticlePage = ({article, page}) => {
           <article>
             {
               //разбираем каждый блок на HTML-документы
-              page.data.blocks.map(item => {
+              article.content.blocks.map(item => {
                 const {id} = item
                 switch (item.type) {
                   case 'paragraph':
@@ -85,20 +89,17 @@ export default ArticlePage
 //статически генерируем страницу
 export const getStaticProps: GetStaticProps = async (context) => {
   await connectDB()
-  const {slug, category} = context.params
-  if (!categories.includes(category as string)) {
+  const {slug} = context.params
+  let article = await ArticleModel.findOne({slug}) as Article
+  if (!article) {
     return {
       notFound: true
     }
   }
-  let article = await ArticleModel.findOne({slug})
-  
   article = JSON.parse(JSON.stringify(article))
-  let page = await PageModel.findOne({slug})
-  page = JSON.parse(JSON.stringify(page))
   return {
     props: {
-        article, page
+        article
     },
     //ревалидация страницы раз в 30 секунд
     revalidate: 30 
@@ -107,7 +108,18 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 //страницы по умолчанию
 export async function getStaticPaths() {
-  const paths = [] //пусто
+  
+  const articles = await findArticles({})
+  
+  const paths = articles.map(article => {
+    const {category, slug} = article
+    return {
+      params: {
+        category,
+        slug
+      }
+    }
+  })
 
   return {
       paths,
