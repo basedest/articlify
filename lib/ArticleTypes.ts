@@ -50,19 +50,3 @@ const ArticleSchema = new Schema<Article>({
 
 //экспортируем модель данных
 export const ArticleModel = models.Article || model<Article>('Article', ArticleSchema)
-
-export interface ArticlePage {
-    slug: string
-    data: OutputData //данные из редактора
-}
-
-const PageSchema = new Schema<ArticlePage>({
-    slug: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    data: Object,
-})
-
-export const PageModel = models.Page || model<ArticlePage>('Page', PageSchema)

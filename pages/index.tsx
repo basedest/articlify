@@ -2,7 +2,6 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { Article } from '../lib/ArticleTypes'
 import findArticles from '../lib/server/findArticles'
-import renewArticles from '../lib/renewArticles'
 import SmartList from '../components/SmartList'
 
 //пропсы страницы
@@ -38,8 +37,6 @@ const Home: NextPage<IProps> = (props: IProps) => {
 export default Home
 
 export const getServerSideProps: GetServerSideProps<IProps> = async (context) => { 
-  await renewArticles() 
-  
   // собираем параметры запроса 
   const page = context.query.page ? parseInt(context.query.page as string) : 1
   const {title} = context.query
