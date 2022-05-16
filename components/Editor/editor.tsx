@@ -4,6 +4,7 @@ import { tools } from './tools'
 
 export const useEditor = (toolsList, { data, editorRef }, options = {}) => {
   const [editorInstance, setEditor] = useState(null)
+  //@ts-ignore
   const { data: ignoreData, tools: ignoreTools, holder: ignoreHolder, ...editorOptions } = options
  
   // initialize

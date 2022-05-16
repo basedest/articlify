@@ -3,19 +3,18 @@ import initialData from './data.json'
 import { useRouter } from 'next/router'
 import { Article } from "../../lib/ArticleTypes"
 
-export const useSaveCallback = (editor, initialArticle: Article, edit: boolean, uploadData) => {
+export const useSaveCallback = (editor, initialArticle: Article, edit: boolean) => {
   const router = useRouter()
   return useCallback(async () => {
     if (!editor) return
-    try {      
+    try {            
       const data = await editor.save()
       console.group('EDITOR onSave')
       console.dir(data)
       localStorage.setItem(dataKey, JSON.stringify(data))
       console.info('Saved in localStorage')
       console.groupEnd()
-      const img = uploadData ? uploadData.secure_url : undefined
-      const article = {...initialArticle, img, content: data}
+      const article = {...initialArticle, content: data}
       const response = await fetch(
         `/api/articles/${edit ? article.slug : ''}`, 
       {
@@ -31,11 +30,14 @@ export const useSaveCallback = (editor, initialArticle: Article, edit: boolean, 
       }
       else {
         alert("Check your inputs. Title must be specified and unique.")
+        router.reload()
       }
+      return false
     } 
     catch (e) {
       console.error('SAVE RESULT failed', e)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor, initialArticle, router, edit])
 }
 

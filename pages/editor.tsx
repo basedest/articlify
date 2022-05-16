@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSaveCallback, useLoadData, options, useSetData } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
@@ -13,7 +13,7 @@ import { connectDB } from '../lib/server/connection'
 import { categories } from '../lib/lib'
 import checkPriveleges from "../lib/client/checkPriveleges"
 import { User } from '../lib/UserTypes'
-import ImageUpload from '../components/ImageUpload'
+import uploadImage from '../lib/client/uploadImage'
 
 interface PageProps {
   article?: Article
@@ -43,12 +43,13 @@ const Editor: any = dynamic(
 )
 
 const EditorPage: NextPage<PageProps> = (props) => {
-  const formRef = useRef()
-  const [uploadData, setUploadData] = useState(null)
-  const [ready, setReady] = useState(true)
+  const [file, setFile] = useState<File | null>(null)
+  const [img, setImg] = useState<string | null>(props?.article?.img ?? null)
+  const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [editor, setEditor] = useState(null)
-  const edit = props.article ? true : false
+  const [error, setError] = useState<string | null>(null)
   const [onSubmitClicked, setOnSubmitClicked] = useState(false)
+  const edit = props.article ? true : false
   //Загрузить данные либо из пропсов при редактировании
   // либо из localStorage, в обратном случае
   const { data, loading } = edit
@@ -58,43 +59,54 @@ const EditorPage: NextPage<PageProps> = (props) => {
   о том, что нельзя использовать хуки в условных операторах.
   Я же считаю, что можно, если осторожно
   */
- // eslint-disable-next-line react-hooks/rules-of-hooks
- : useLoadData()
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  : useLoadData()
  
- const { data: session, status } = useSession()
- const authLoading = status === "loading"
- 
- // установить загруженные [выше] данные
- useSetData(editor, data)
- 
- // выключаем кнопку сохранения если идёт загрузка
- const disabled = editor === null || loading || authLoading
- 
- // устанавливаем данные о статье в начальное значение
- const [article, setArticle] = useState<Article>(props.article)
- 
+  const { data: session, status } = useSession()
+  const authLoading = status === "loading"
+  
+  // установить загруженные [выше] данные
+  useSetData(editor, data)
+  
+  // выключаем кнопку сохранения если идёт загрузка
+  const disabled = editor === null || loading || authLoading
+
+  const readyToSave = onSubmitClicked && (!imageSrc || img)
+
+  // устанавливаем данные о статье в начальное значение
+  const [article, setArticle] = useState<Article>(props.article)
+  const [uploading, setUploading] = useState(false)
   //сохранение статьи при нажатии кнопки
   const onSave = useSaveCallback(editor, 
-    {...article, 
-      //формируем ссылку на статью по названию
+    {...article,
+      img,
       slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
       createdAt: article?.createdAt ?? new Date,
       author: article?.author ?? session?.user.name
     },
     edit,
-    uploadData
-    )
+  )
     const onSubmit = () => {
-      //@ts-ignore
-      formRef.current.requestSubmit()
       setOnSubmitClicked(true)
+      if (imageSrc)
+      uploadImage(file)
+      .then(([err, data]) => {
+        if (err) {
+          setError(err)
+          return
+        }
+        if (data) {
+          setImg(data.secure_url)
+        }
+      })
     }
     useEffect(() => {
-      setReady(uploadData !== undefined)
-      if (ready && onSubmitClicked) {        
+      if (readyToSave && !uploading) {
+        setUploading(true)
         onSave()
+        .then(res => setUploading(res))
       }
-    }, [uploadData, ready, onSubmitClicked, onSave])
+    }, [readyToSave, onSave, uploading])
 
   // ничего не выводим пока не закончится загрузка
   if (typeof window !== "undefined" && loading && authLoading) return null
@@ -110,7 +122,12 @@ const EditorPage: NextPage<PageProps> = (props) => {
   
   return (
     <div className="container">
-      <main>
+      { 
+        uploading
+        ? 
+        <div>Loading...</div>
+        :
+        <main>
         <div className="inputs">
           {
             // при редактировании название статьи изменить нельзя, но отобразить надо
@@ -146,21 +163,25 @@ const EditorPage: NextPage<PageProps> = (props) => {
             defaultValue={ edit && article.tags.map(tag => {return {value: tag, label: tag}})}
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
           />
-          {
-            // при редактировании не разрешаем изменять картинку
-            !edit &&
-            <div className="image">
-              Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
-              {/* <FileUpload width={2} height={1} callback={setImg} disabled={edit} preview /> */}
-              <ImageUpload formRef={formRef} setUploadData={setUploadData} />
+          <div>
+            Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
+            <div>
+              <FileUpload setImageSrc={setImageSrc} setFile={setFile} />
+              {
+                (imageSrc || img) && <img style={{width: '100%'}} src={img ?? imageSrc} alt='preview' />
+              }
+              {
+                error && <p>{error}</p>
+              }
             </div>
-          }
+          </div>
         </div>
         <div className="editorContainer">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
         </div>
         <button disabled={disabled} type="button" onClick={onSubmit}>save article</button>{' '}
       </main>
+      }
 
       <style jsx>{`
         .container {
@@ -220,7 +241,6 @@ const EditorPage: NextPage<PageProps> = (props) => {
           width: 100%;
         }
       `}</style>
-
     </div>
   )
 }

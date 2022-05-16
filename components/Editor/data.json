@@ -2,17 +2,10 @@
   "time": 0,
   "blocks": [
     {
-      "type": "header",
-      "data": {
-        "text": "Header...",
-        "level": 2
-      }
-    },
-    {
       "id": "B5cJREo-NG",
       "type": "paragraph",
       "data": {
-          "text": "Start editing"
+          "text": "Start editing..."
       }
     }
   ],

@@ -6,6 +6,7 @@ import Modal from '../components/Modal'
 import Link from 'next/link'
 import FileUpload from '../components/FileUpload'
 import { useRouter } from 'next/router'
+import uploadImage from '../lib/client/uploadImage'
 
 //Меню пользователя
 export default function Dashboard() {
@@ -14,6 +15,8 @@ export default function Dashboard() {
   const [modal, setModal] = useState(false)
   const [avatar, setAvatar] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  const [file, setFile] = useState<File | null>(null)
+  
   
   //устанавливаем значение user после загрузки сессии
   useEffect(() => {
@@ -29,16 +32,15 @@ export default function Dashboard() {
 
   //изменение аватарки
   const changeAvatar = (image: string) => {
-    
     fetch(`/api/user/${user.id}`, {
       method: 'PATCH',
       body: JSON.stringify({image}),
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json())
+    })
+    .then(res => res.json())
     .then(data => {
-      
       const {image} = data
       session.user.image = image
       setAvatar(image)
@@ -46,6 +48,14 @@ export default function Dashboard() {
     })
     .catch(console.error)
   } 
+  useEffect(() => {
+    if (file) {
+      uploadImage(file)
+      .then(([error, data]) => {
+        changeAvatar(data.secure_url)
+      })
+    }
+  }, [file])
   //пока загружается сессия, ничего не выводим
   if (status === 'loading' || !user) return null
   return (
@@ -77,7 +87,7 @@ export default function Dashboard() {
                   </svg>
               }
             </div>
-            <FileUpload width={1} height={1} callback={changeAvatar} />
+            <FileUpload setFile={setFile} />
           </div>
           <div>{user.name}</div>
       </div>

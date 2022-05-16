@@ -1,84 +1,34 @@
-import React, { useState } from 'react'
-import Image from 'next/image'
+import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction } from 'react'
+import styles from './FileUpload.module.scss'
 
-interface Props {
-  callback: Function
-  width: number
-  height: number
-  disabled?: boolean
-  preview?: boolean
+type FileUploadProps = {
+  setImageSrc?: Dispatch<SetStateAction<null | string>>,
+  setFile: Dispatch<SetStateAction<null | File>>
 }
 
-const FileUpload = ({callback, disabled, preview, height, width}: Props) => {
-  const [createObjectURL, setCreateObjectURL] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [filepath, setFilepath] = useState<string | null>(null)
+const FileUpload: FunctionComponent<FileUploadProps> = ({setImageSrc, setFile}) => {
 
-  const uploadToServer = async (body) => {
-    const response = await fetch('https://api.cloudinary.com/v1_1/basedest/image/upload/', {
-      method: 'POST',
-      body
-    })
-    if (response.status > 201) {
-      return ['error', null]
+  function handleOnChange(changeEvent: ChangeEvent<HTMLInputElement>) {
+    const reader = new FileReader()
+    const file = changeEvent.target.files[0]
+
+    reader.onload = function(onLoadEvent) {
+      if (setImageSrc)
+      setImageSrc(onLoadEvent.target.result as string)
     }
-    const {secure_url} = await response.json()
-    
-    return [null, secure_url]
+
+    if (file) {
+      reader.readAsDataURL(file)
+      setFile(file)
+    }
   }
 
-  const upload = (event) => {
-    setLoading(true)
-    
-    if (event.target.files && event.target.files[0]) {
-      const i = event.target.files[0]
-
-      setCreateObjectURL(URL.createObjectURL(i))
-
-      const body = new FormData()
-      body.append('file', i)
-      body.append('upload_preset', 'articlify')
-      uploadToServer(body)
-      .then(([err, filename]) => {
-        setError(err?.error)
-        setFilepath(filename)
-        callback(filename)
-      })
-      .catch(err => {
-        setError(err.error)
-      })
-    }
-    setLoading(false)
-  }
   return (
-    <div className='file-upload'>
-        {preview && createObjectURL && 
-        <Image 
-          src={createObjectURL} 
-          alt='image' 
-          height={height} 
-          width={width} 
-          layout='responsive'
-        />
-        }
-        <input 
-          type="file" 
-          name="myImage"
-          onChange={upload}
-          disabled={disabled ?? false}
-        />
-        {
-          loading && <p className='loading'>loading...</p>
-        }
-        {
-          error && <p className='error'>{error}</p>
-        }
-        {
-          !loading && !error && filepath && 
-          <p className='success'>successfuly uploaded</p>
-        }
-    </div>
+    <input 
+      onChange={handleOnChange}
+      type="file" 
+      className={styles.input}
+    />
   )
 }
 
