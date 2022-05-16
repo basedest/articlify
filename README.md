@@ -20,14 +20,20 @@ It uses MongoDB for data storage.
 
 ## Getting app running on your machine
 
-In order to run server on your machine you have to define 
+In order to run server on your machine you have to define these environment variables:
 - `MONGODB_URI` - URI to mongodb database
 - `NEXTAUTH_URL` - root path of your app (e.g. http://localhost:3000)
-- `NEXTAUTH_SECRET` - a random string is used to hash tokens, sign/encrypt cookies and generate cryptographic keys
-in environment variables file (e.g. `.env.local`)    
+- `NEXTAUTH_SECRET` - a random string used to hash tokens, sign/encrypt cookies and generate cryptographic keys      
 
+First, install dependencies:
 
-First, run the development server:
+```bash
+npm install
+# or
+yarn
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
