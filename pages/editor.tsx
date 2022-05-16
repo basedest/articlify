@@ -77,7 +77,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   const [uploading, setUploading] = useState(false)
   //сохранение статьи при нажатии кнопки
   const onSave = useSaveCallback(editor)
-  const saveLogic = (img) => {
+  const saveLogic = (img_url?) => {
     onSave()
     .then(data => fetch(`/api/articles/${edit ? article.slug : ''}`, 
       {
@@ -86,7 +86,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
           {
             article: {
             ...article,
-            img,
+            img: img_url ? img_url : img,
             slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
             createdAt: article?.createdAt ?? new Date,
             author: article?.author ?? session?.user.name,
@@ -126,7 +126,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
       })
     }
     else {
-      saveLogic(null)
+      saveLogic()
     }
     setUploading(false)
   }
