@@ -75,7 +75,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   // устанавливаем данные о статье в начальное значение
   const [article, setArticle] = useState<Article>(props.article)
   const [uploading, setUploading] = useState(false)
-  //сохранение статьи при нажатии кнопки
+  const getSlug = (t) => t.toLocaleLowerCase().split(' ').join('-')
   const onSave = useSaveCallback(editor)
   const saveLogic = (img_url?) => {
     onSave()
@@ -87,7 +87,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
             article: {
             ...article,
             img: img_url ? img_url : img,
-            slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
+            slug: getSlug(article?.title),
             createdAt: article?.createdAt ?? new Date,
             author: article?.author ?? session?.user.name,
             content: data
@@ -102,7 +102,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
     .then(response => {
         if (response.status <= 201) {
           localStorage.removeItem(dataKey)
-          router.push(`/${article.category}/${article.slug}`)
+          router.push(`/${article.category}/${getSlug(article.title)}`)
         }
         else {
           alert("Check your inputs. Title must be specified and unique.")
