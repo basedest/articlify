@@ -88,23 +88,23 @@ const EditorPage: NextPage<PageProps> = (props) => {
   )
     const onSubmit = () => {
       setOnSubmitClicked(true)
-      if (imageSrc)
-      uploadImage(file)
-      .then(([err, data]) => {
-        if (err) {
-          setError(err)
-          return
-        }
-        if (data) {
-          setImg(data.secure_url)
-        }
-      })
+      if (imageSrc) {
+        setUploading(true)
+        uploadImage(file)
+        .then(([err, data]) => {
+          if (err) {
+            setError(err)
+          }
+          if (data) {
+            setImg(data.secure_url)
+          }
+          setUploading(false)
+        })
+      }
     }
     useEffect(() => {
       if (readyToSave && !uploading) {
-        setUploading(true)
         onSave()
-        .then(res => setUploading(res))
       }
     }, [readyToSave, onSave, uploading])
 
@@ -168,7 +168,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
             <div>
               <FileUpload setImageSrc={setImageSrc} setFile={setFile} />
               {
-                (imageSrc || img) && <img style={{width: '100%'}} src={img ?? imageSrc} alt='preview' />
+                (imageSrc || img) && <img style={{width: '100%'}} src={imageSrc ?? img} alt='preview' />
               }
               {
                 error && <p>{error}</p>

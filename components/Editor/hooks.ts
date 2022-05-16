@@ -6,7 +6,9 @@ import { Article } from "../../lib/ArticleTypes"
 export const useSaveCallback = (editor, initialArticle: Article, edit: boolean) => {
   const router = useRouter()
   return useCallback(async () => {
-    if (!editor) return
+    if (!editor) {
+      return
+    }
     try {            
       const data = await editor.save()
       console.group('EDITOR onSave')
