@@ -1,10 +1,7 @@
 import { useCallback, useState, useEffect } from "react"
 import initialData from './data.json'
-import { useRouter } from 'next/router'
-import { Article } from "../../lib/ArticleTypes"
 
-export const useSaveCallback = (editor, initialArticle: Article, edit: boolean) => {
-  const router = useRouter()
+export const useSaveCallback = (editor) => {
   return useCallback(async () => {
     if (!editor) {
       return
@@ -16,31 +13,12 @@ export const useSaveCallback = (editor, initialArticle: Article, edit: boolean) 
       localStorage.setItem(dataKey, JSON.stringify(data))
       console.info('Saved in localStorage')
       console.groupEnd()
-      const article = {...initialArticle, content: data}
-      const response = await fetch(
-        `/api/articles/${edit ? article.slug : ''}`, 
-      {
-        method: edit ? 'PUT' : 'POST',
-        body: JSON.stringify({article}),
-        headers: {
-            'Content-Type': 'application/json'
-          }
-      })
-      if (response.status <= 201) {
-        localStorage.removeItem(dataKey)
-        router.push(`/${article.category}/${article.slug}`)
-      }
-      else {
-        alert("Check your inputs. Title must be specified and unique.")
-        router.reload()
-      }
-      return false
+      return data
     } 
     catch (e) {
       console.error('SAVE RESULT failed', e)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor, initialArticle, router, edit])
+  }, [editor])
 }
 
 // Set editor data after initializing

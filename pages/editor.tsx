@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useSaveCallback, useLoadData, options, useSetData } from '../components/Editor'
+import { useSaveCallback, useLoadData, options, useSetData, dataKey } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
 import { Article, ArticleModel } from '../lib/ArticleTypes'
 import Select from 'react-select'
@@ -14,6 +14,7 @@ import { categories } from '../lib/lib'
 import checkPriveleges from "../lib/client/checkPriveleges"
 import { User } from '../lib/UserTypes'
 import uploadImage from '../lib/client/uploadImage'
+import { useRouter } from 'next/router'
 
 interface PageProps {
   article?: Article
@@ -43,12 +44,12 @@ const Editor: any = dynamic(
 )
 
 const EditorPage: NextPage<PageProps> = (props) => {
+  const router = useRouter()
   const [file, setFile] = useState<File | null>(null)
   const [img, setImg] = useState<string | null>(props?.article?.img ?? null)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [editor, setEditor] = useState(null)
   const [error, setError] = useState<string | null>(null)
-  const [onSubmitClicked, setOnSubmitClicked] = useState(false)
   const edit = props.article ? true : false
   //Загрузить данные либо из пропсов при редактировании
   // либо из localStorage, в обратном случае
@@ -71,42 +72,64 @@ const EditorPage: NextPage<PageProps> = (props) => {
   // выключаем кнопку сохранения если идёт загрузка
   const disabled = editor === null || loading || authLoading
 
-  const readyToSave = onSubmitClicked && (!imageSrc || img)
-
   // устанавливаем данные о статье в начальное значение
   const [article, setArticle] = useState<Article>(props.article)
   const [uploading, setUploading] = useState(false)
   //сохранение статьи при нажатии кнопки
-  const onSave = useSaveCallback(editor, 
-    {...article,
-      img,
-      slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
-      createdAt: article?.createdAt ?? new Date,
-      author: article?.author ?? session?.user.name
-    },
-    edit,
-  )
-    const onSubmit = () => {
-      setOnSubmitClicked(true)
-      if (imageSrc) {
-        setUploading(true)
-        uploadImage(file)
-        .then(([err, data]) => {
-          if (err) {
-            setError(err)
+  const onSave = useSaveCallback(editor)
+  const saveLogic = (img) => {
+    onSave()
+    .then(data => fetch(`/api/articles/${edit ? article.slug : ''}`, 
+      {
+        method: edit ? 'PUT' : 'POST',
+        body: JSON.stringify(
+          {
+            article: {
+            ...article,
+            img,
+            slug: article?.title.toLocaleLowerCase().split(' ').join('-'),
+            createdAt: article?.createdAt ?? new Date,
+            author: article?.author ?? session?.user.name,
+            content: data
+            }
+          },
+        ),
+        headers: {
+            'Content-Type': 'application/json'
           }
-          if (data) {
-            setImg(data.secure_url)
-          }
-          setUploading(false)
-        })
-      }
+      })
+    )
+    .then(response => {
+        if (response.status <= 201) {
+          localStorage.removeItem(dataKey)
+          router.push(`/${article.category}/${article.slug}`)
+        }
+        else {
+          alert("Check your inputs. Title must be specified and unique.")
+          router.reload()
+        }
+    })
+    .catch(error => console.log(error))
+  }
+
+  const onSubmit = () => {
+    setUploading(true)
+    if (imageSrc) {
+      uploadImage(file)
+      .then(([err, data]) => {
+        if (err) {
+          setError(err)
+        }
+        if (data) {
+          saveLogic(data.secure_url)
+        }
+      })
     }
-    useEffect(() => {
-      if (readyToSave && !uploading) {
-        onSave()
-      }
-    }, [readyToSave, onSave, uploading])
+    else {
+      saveLogic(null)
+    }
+    setUploading(false)
+  }
 
   // ничего не выводим пока не закончится загрузка
   if (typeof window !== "undefined" && loading && authLoading) return null
