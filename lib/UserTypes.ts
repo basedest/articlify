@@ -1,6 +1,5 @@
-import { Schema, model, models } from 'mongoose'
+import { Schema, model, models, Types } from 'mongoose'
 import bcrypt from "bcryptjs"
-import mongoose from 'mongoose'
 
 //тип данных: пользователь
 export interface User {
@@ -10,7 +9,7 @@ export interface User {
     regDate:    Date
     role?:      string
     image?:     string
-    id?:        mongoose.Types.ObjectId
+    id?:        Types.ObjectId
 }
 
 //схема данных для БД

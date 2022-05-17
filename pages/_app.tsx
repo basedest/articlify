@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '../styles/globals.scss'
 import { SessionProvider } from "next-auth/react"
 import Footer from '../components/Footer'
 import Header from '../components/Header'

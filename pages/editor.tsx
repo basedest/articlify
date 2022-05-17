@@ -45,21 +45,18 @@ const Editor: any = dynamic(
 
 const EditorPage: NextPage<PageProps> = (props) => {
   const router = useRouter()
+
   const [file, setFile] = useState<File | null>(null)
-  const [img, setImg] = useState<string | null>(props?.article?.img ?? null)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [editor, setEditor] = useState(null)
   const [error, setError] = useState<string | null>(null)
+
+  const img = props?.article?.img ?? null
   const edit = props.article ? true : false
   //Загрузить данные либо из пропсов при редактировании
   // либо из localStorage, в обратном случае
   const { data, loading } = edit
   ? {data: props.article.content, loading: false}
-  /*
-  следующий комментарий нужен для того, чтобы не возникало предупреждение
-  о том, что нельзя использовать хуки в условных операторах.
-  Я же считаю, что можно, если осторожно
-  */
   // eslint-disable-next-line react-hooks/rules-of-hooks
   : useLoadData()
  
@@ -84,14 +81,12 @@ const EditorPage: NextPage<PageProps> = (props) => {
         method: edit ? 'PUT' : 'POST',
         body: JSON.stringify(
           {
-            article: {
             ...article,
             img: img_url ? img_url : img,
             slug: getSlug(article?.title),
             createdAt: article?.createdAt ?? new Date,
             author: article?.author ?? session?.user.name,
             content: data
-            }
           },
         ),
         headers: {
@@ -113,6 +108,14 @@ const EditorPage: NextPage<PageProps> = (props) => {
   }
 
   const onSubmit = () => {
+    if (
+      !article?.title ||
+      !article?.category ||
+      !article?.description 
+    ) {
+      alert("some of required fields are not specified")
+      return
+    }
     setUploading(true)
     if (imageSrc) {
       uploadImage(file)

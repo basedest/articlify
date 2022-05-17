@@ -5,9 +5,8 @@
     border: 1px solid #0004;
     border-radius: 4px;
     font-size: 1rem;
-}
-
-.myInput:focus {
-    outline: none !important;
-    border: 2px solid #28f;
+    &:focus {
+        outline: none !important;
+        border: 2px solid #28f;
+    }
 }

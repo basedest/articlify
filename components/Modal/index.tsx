@@ -1,5 +1,5 @@
 import React from 'react'
-import cl from './Modal.module.css'
+import cl from './Modal.module.scss'
 
 const Modal = ({children, visible, setVisible}) => {
 

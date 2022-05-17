@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ActionMeta, OnChangeValue } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import classes from './TagsPicker.module.css'
+import classes from './TagsPicker.module.scss'
 
 interface tagOption {
     value: string

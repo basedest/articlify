@@ -1,5 +1,5 @@
 import { OutputData } from '@editorjs/editorjs'
-import { Schema, model, models } from 'mongoose'
+import { Schema, model, models, Types } from 'mongoose'
 
 //описание типа статьи
 export interface Article {
@@ -13,6 +13,7 @@ export interface Article {
     img?: string
     tags?: Array<string>
     content?: OutputData
+    _id?: Types.ObjectId
 }
 
 //схема для БД

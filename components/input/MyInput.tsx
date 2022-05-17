@@ -1,5 +1,5 @@
 import React, { RefObject } from 'react'
-import classes from './MyInput.module.css'
+import classes from './MyInput.module.scss'
 
 const MyInput = React.forwardRef((props:any, ref:RefObject<HTMLInputElement>) => {
   return (
