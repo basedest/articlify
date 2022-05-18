@@ -82,6 +82,7 @@
     ol, ul {
         align-self: flex-start;
         padding-left: 1rem;
+        margin-bottom: 1rem;
     }
 
     &__container {
@@ -89,12 +90,10 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        max-width: 1100px;
-        margin: auto;
+        max-width: 1000px;
         width: 100%;
         background-color: #fff;
         .img {
-            border-radius: 10px;
             width: 100%;
         }
         hr {
@@ -153,13 +152,13 @@
             width: 1rem;
             margin-bottom: -2px;
         }
-        li[data-checked=false]::before {
-            content: '○';
-        }
     }
     .image-block {
         display: flex;
         flex-direction: column;
+        img {
+            width: 100%;
+        }
         caption {
             font-size: 1rem;
             color: #555;
@@ -172,4 +171,12 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .article__container {
+        .img {
+            width: 100vw;
+        }
+    }
 }
