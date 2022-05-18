@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/react"
-import { connectDB } from "../../../lib/server/connection"
 import { ResponseFuncs } from "../../../lib/lib"
 import { User } from "../../../lib/UserTypes"
 import checkPrivileges from "../../../lib/server/article/checkPrivileges"
@@ -13,7 +12,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const slug = req.query.slug as string
   const session = await getSession({ req })
   const user = session.user as User
-  await connectDB()
   if (!(await checkPrivileges(user, slug))) {
     return res.status(403).json({error: 'forbidden action'})
   }

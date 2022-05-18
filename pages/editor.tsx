@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSaveCallback, useLoadData, options, useSetData, dataKey } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
-import { Article, ArticleModel } from '../lib/ArticleTypes'
+import { Article } from '../lib/ArticleTypes'
 import Select from 'react-select'
 import TagsPicker from '../components/TagsPicker'
 import { useSession } from "next-auth/react"
 import AccessDenied from '../components/AccessDenied'
 import FileUpload from '../components/FileUpload'
 import { GetServerSideProps, NextPage } from 'next'
-import { connectDB } from '../lib/server/connection'
 import { categories } from '../lib/lib'
 import checkPriveleges from "../lib/client/checkPriveleges"
 import { User } from '../lib/UserTypes'
 import uploadImage from '../lib/client/uploadImage'
 import { useRouter } from 'next/router'
+import ArticleService from '../lib/server/article/service'
+
 
 interface PageProps {
   article?: Article
@@ -23,10 +24,7 @@ interface PageProps {
 export const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
   const slug = context.query.edit as string
   if (slug) {
-    await connectDB()
-    const article = JSON.parse(JSON.stringify(
-      (await ArticleModel.findOne({slug}))
-    )) as Article
+    const article = await ArticleService.getBySlug(slug)
     return {
       props: {
         article
@@ -51,7 +49,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   const [editor, setEditor] = useState(null)
   const [error, setError] = useState<string | null>(null)
 
-  const img = props?.article?.img ?? null
+  const img = props?.article?.img ?? undefined
   const edit = props.article ? true : false
   //Загрузить данные либо из пропсов при редактировании
   // либо из localStorage, в обратном случае
@@ -82,16 +80,17 @@ const EditorPage: NextPage<PageProps> = (props) => {
         body: JSON.stringify(
           {
             ...article,
-            img: img_url ? img_url : img,
+            img: img_url ? img_url : img ? img : undefined,
             slug: getSlug(article?.title),
             createdAt: article?.createdAt ?? new Date,
+            editedAt: edit ? new Date : undefined,
             author: article?.author ?? session?.user.name,
-            content: data
+            content: data,
           },
         ),
         headers: {
-            'Content-Type': 'application/json'
-          }
+          'Content-Type': 'application/json'
+        }
       })
     )
     .then(response => {
@@ -108,6 +107,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   }
 
   const onSubmit = () => {
+    onSave()
     if (
       !article?.title ||
       !article?.category ||

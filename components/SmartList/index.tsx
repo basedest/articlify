@@ -46,7 +46,6 @@ export default function SmartList(props: IProps) {
     }, [props.articles, props.searchQuery, props.page])
     
     const changePage = page => {
-      console.log(router.asPath.split("?")[0])
       router.push(`${basepath}/${searchQuery ? `?title=${searchQuery}&` : '?'}page=${page}`)
     }
 

@@ -1,9 +1,8 @@
 import { GetStaticProps } from 'next'
-import { Article, ArticleModel } from '../../lib/ArticleTypes'
+import { Article } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
-import { connectDB } from '../../lib/server/connection'
-import findArticles from '../../lib/server/findArticles'
+import ArticleService from '../../lib/server/article/service'
 
 interface PageProps {
   article: Article
@@ -17,68 +16,87 @@ const ArticlePage = ({article}: PageProps) => {
   return (
     <>
       <div className="article__container">
+        <div className="img">
+          <Image src={img} alt="article image" height="1" width="2" layout='responsive' />
+        </div>
         <div className="article__head">
-          <h1>{article.title}</h1>
+          <div className="flex-wrap">
+            <div className="article__category">{article.category}</div>
+            <TagsList tags={article.tags}/>
+          </div>
           <div className="article__authordate">
-              <p>{article.author}</p>
+              <p>@{article.author}</p>
               <p>•</p>
               <p>{new Date(article.createdAt).toLocaleDateString()}</p>
+              {
+                article.editedAt &&
+                <p className='upd'>(upd. {new Date(article.editedAt).toLocaleDateString()})</p>
+              }
           </div>
-          <div className="article__category">{article.category}</div>
+          <h1>{article.title}</h1>
           <div className="article__description">{article.description}</div>
-          <Image className='img' src={img} alt="article image" height="1" width="2" layout='responsive' />
-          <TagsList tags={article.tags}/>
         </div>
-        <div className="article">
-          <article>
-            {
-              //разбираем каждый блок на HTML-документы
-              article.content.blocks.map(item => {
-                const {id} = item
-                switch (item.type) {
-                  case 'paragraph':
-                    //в параграфах могут содержаться inline-теги, поэтому устанавливаем данные через dangerouslySetInnerHTML
-                    return <p key={id} dangerouslySetInnerHTML={{__html:item.data.text}}></p>
-                  case 'header':
-                    return item.data.level === 2
-                    ? <h2 key={id}>{item.data.text}</h2>
-                    : <h3 key={id}>{item.data.text}</h3>
-                  case 'list':
-                    if (item.data.style === 'ordered') {
-                      return (
-                      <ol key={id}>
+        <hr />
+        <article className="article">
+          {
+            //разбираем каждый блок на HTML-документы
+            article.content.blocks.map(item => {
+              const {id} = item
+              switch (item.type) {
+                case 'paragraph':
+                  //в параграфах могут содержаться inline-теги, поэтому устанавливаем данные через dangerouslySetInnerHTML
+                  return <p key={id} dangerouslySetInnerHTML={{__html:item.data.text}}></p>
+                case 'header':
+                  return item.data.level === 2
+                  ? <h2 key={id}>{item.data.text}</h2>
+                  : <h3 key={id}>{item.data.text}</h3>
+                case 'list':
+                  if (item.data.style === 'ordered') {
+                    return (
+                    <ol key={id}>
+                      {
+                        item.data.items.map((li, i) => <li key={i}>{li}</li>)
+                      }
+                    </ol>
+                    )
+                  }
+                  else {
+                    return (
+                      <ul key={id}>
                         {
                           item.data.items.map((li, i) => <li key={i}>{li}</li>)
                         }
-                      </ol>
-                      )
-                    }
-                    else {
-                      return (
-                        <ul key={id}>
-                          {
-                            item.data.items.map((li, i) => <li key={i}>{li}</li>)
-                          }
-                        </ul>
-                        )
-                    }
-                  case 'quote':
-                    return <blockquote key={id} cite={item.data.caption}>
-                        {item.data.text}
-                    </blockquote>
-                  case 'checklist':
-                    return (
-                      <ul key={id} className='checklist'>
-                        {item.data.items.map((li, i) => <li key={i}>{li.text}</li>)}
                       </ul>
-                    )
-                  case 'delimiter':
-                    return <div key={id} className="article__delimiter"></div>
-                }
-              })
-            }
-          </article>
-        </div>
+                      )
+                  }
+                case 'quote':
+                  return <blockquote key={id} cite={item.data.caption}>
+                      {item.data.text}
+                  </blockquote>
+                case 'checklist':
+                  return (
+                    <ul key={id} className='checklist'>
+                      {item.data.items.map((li, i) => <li data-checked={li.checked} key={i}>
+                      {li.checked && <svg xmlns="http://www.w3.org/2000/svg" className='check' viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>}
+                        {li.text}
+                        </li>)}
+                    </ul>
+                  )
+                case 'delimiter':
+                  return <div key={id} className="article__delimiter"></div>
+                case 'simpleImage':
+                  return ( 
+                    <div key={id} className="image-block">
+                      <img src={item.data.url}/>
+                      <caption>{item.data.caption}</caption>
+                    </div>
+                  )
+              }
+            })
+          }
+        </article>
       </div>
     </>
   )
@@ -88,15 +106,14 @@ export default ArticlePage
 
 //статически генерируем страницу
 export const getStaticProps: GetStaticProps = async (context) => {
-  await connectDB()
   const {slug} = context.params
-  let article = await ArticleModel.findOne({slug}) as Article
+  const article = await ArticleService.getBySlug(slug as string)
   if (!article) {
     return {
       notFound: true
     }
   }
-  article = JSON.parse(JSON.stringify(article))
+  
   return {
     props: {
         article
@@ -108,9 +125,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 //страницы по умолчанию
 export async function getStaticPaths() {
-  
-  const articles = await findArticles({})
-  
+  const articles = await ArticleService.getAll()
   const paths = articles.map(article => {
     const {category, slug} = article
     return {

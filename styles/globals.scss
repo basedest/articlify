@@ -2,7 +2,7 @@
 @import "./header";
 @import "./articleList";
 @import "./articlePage";
-@import "./tags";
+//@import "./tags";
 @import "./input";
 @import "./colors";
 @import "./register";
@@ -65,7 +65,7 @@ hr {
 
 .title {
   margin: 0;
-  margin-top: 8rem;
+  margin-top: 5rem;
   line-height: 1.15;
   font-family: 'Gotham Bold', sans-serif;
   font-size: 4rem;
@@ -119,7 +119,7 @@ main {
     padding: 0 1rem 0 1rem;
     background-color: #fff;
   }
-  .article__container {
+  .article, .article__head {
     padding: 0;
     margin: 0;
   }

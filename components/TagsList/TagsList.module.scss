@@ -1,0 +1,23 @@
+.tags {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    margin: 6px 0 0 -3px;
+    &__item {
+        background-color: hsl(0, 0%, 90%);
+        color: hsl(0, 0%, 20%);
+        border-radius: 3px;
+        display: flex;
+        margin: 2px;
+        font-size: 85%;
+        padding: 3px 6px 6px 6px;
+        &:hover {
+            background-color: hsl(0, 0%, 70%);
+            cursor: pointer;
+        }
+        a:hover {
+            color: inherit;
+        }
+    }
+}

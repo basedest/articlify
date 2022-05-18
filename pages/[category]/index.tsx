@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
-import findArticles from '../../lib/server/findArticles'
+import ArticleService from '../../lib/server/article/service'
 import { categories } from '../../lib/lib'
 import SmartList from '../../components/SmartList'
 
@@ -34,9 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const page = context.query.page ? parseInt(context.query.page as string) : 1
   const {title} = context.query
   const searchQuery = title ? title as string : ''
-
-  let articles = await findArticles({category, page, title})
-  articles = JSON.parse(JSON.stringify(articles))
+  const articles = await ArticleService.get({category, title}, page)
   return {
       props: {
           articles, page, searchQuery, category

@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import SmartList from '../../../components/SmartList'
-import findArticles from '../../../lib/server/findArticles'
+import ArticleService from '../../../lib/server/article/service'
 
 const Articles = ({articles, author, searchQuery, page}) => {
   if (!articles || articles.length == 0)
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const {title} = context.query
     const page = context.query.page ? parseInt(context.query.page as string) : 1
     const searchQuery = title ? title as string : ''
-    const articles = await findArticles({author, searchQuery, page}) 
+    const articles = await ArticleService.get({author, searchQuery}, page)
     return {
         props: {
             articles, author, searchQuery, page

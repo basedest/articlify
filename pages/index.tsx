@@ -1,8 +1,8 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { Article } from '../lib/ArticleTypes'
-import findArticles from '../lib/server/findArticles'
 import SmartList from '../components/SmartList'
+import ArticleService from '../lib/server/article/service'
 
 //пропсы страницы
 interface IProps {
@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
   const {title} = context.query
   const searchQuery = title ? title as string : ''
   //ищем статьи в БД по запросу и странице
-  let articles = await findArticles({page, title})
+  const articles = await ArticleService.get({title}, page)
   
   return {
     props: { articles, page, searchQuery },

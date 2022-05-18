@@ -57,7 +57,7 @@ const ArticleItem:React.FC<Article> = props => {
                         {props.description}
                     </p>
                     <div className='articleItem__etc'>
-                        <p>{props.author}</p>
+                        <p>@{props.author}</p>
                         <p>•</p>
                         <p>{new Date(props.createdAt).toLocaleDateString()}</p>
                     </div>

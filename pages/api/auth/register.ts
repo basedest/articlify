@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { connectDB } from "../../../lib/server/connection"
 import { UserModel } from "../../../lib/UserTypes"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
       try {
         const {name, email, password} = req.body
-        await connectDB()
         let user = await UserModel.findOne({name})
         if (user) {         
           res.status(400).json({error: `'${name}' is already taken`})
