@@ -19,7 +19,7 @@ const ArticlePage = ({article}: PageProps) => {
         <div className="img">
           <Image src={img} alt="article image" height="1" width="2" layout='responsive' />
         </div>
-        <div className="article__head">
+        <section className="article__head">
           <div className="flex-wrap">
             <div className="article__category">{article.category}</div>
             <TagsList tags={article.tags}/>
@@ -35,7 +35,7 @@ const ArticlePage = ({article}: PageProps) => {
           </div>
           <h1>{article.title}</h1>
           <div className="article__description">{article.description}</div>
-        </div>
+        </section>
         <hr />
         <article className="article">
           {
@@ -94,10 +94,10 @@ const ArticlePage = ({article}: PageProps) => {
                   return <div key={id} className="article__delimiter"></div>
                 case 'simpleImage':
                   return ( 
-                    <div key={id} className="image-block">
+                    <figure key={id} className="image-block">
                       <img src={item.data.url}/>
-                      <caption>{item.data.caption}</caption>
-                    </div>
+                      <figcaption>{item.data.caption}</figcaption>
+                    </figure>
                   )
               }
             })
