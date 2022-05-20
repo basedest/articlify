@@ -1,13 +1,4 @@
-.articleList {
-    display: flex;
-    max-width: 900px;
-    width: 100%;
-    place-items: center;
-    flex-direction: column;
-    padding: 1.5rem 1rem 1.5rem 1rem;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
+@import '../../styles/colors';
 
 .articleItem {
     width: 100%;
@@ -76,9 +67,6 @@
         display: block;
         border-style: none;
     }
-    .wrapper {
-        display: flex;
-    }
     &__actions {
         display: flex;
         justify-content: center;
@@ -137,10 +125,6 @@
     }
 }
 
-@media (min-width: 800px) {
-    .articleList {
-        width: 100%;
-        margin-left: 5rem;
-        margin-right: 5rem;
-    }
+.wrapper {
+    display: flex;
 }

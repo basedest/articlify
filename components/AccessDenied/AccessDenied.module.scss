@@ -1,0 +1,11 @@
+@import '../../styles/colors';
+
+.access_denied {
+    text-align: center;
+    a {
+      color: $accent-color;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+}

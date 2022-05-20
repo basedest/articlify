@@ -15,6 +15,7 @@ import { User } from '../lib/UserTypes'
 import uploadImage from '../lib/client/uploadImage'
 import { useRouter } from 'next/router'
 import ArticleService from '../lib/server/article/service'
+import cl from "../components/input/MyInput.module.scss"
 
 
 interface PageProps {
@@ -169,7 +170,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
           }
           <textarea
             value={article?.description}
-            className='myInput' 
+            className={cl.myInput} 
             style={{
                 marginBottom: -1,
                 marginTop: -1,

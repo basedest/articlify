@@ -9,6 +9,7 @@ import deleteArticle from "../../lib/client/deleteArticle"
 import { User } from "../../lib/UserTypes"
 import Modal from "../Modal"
 import TagsList from "../TagsList"
+import cl from "./ArticleItem.module.scss"
 
 const ArticleItem:React.FC<Article> = props => {
     const img = props.img ?? `/img/${props.category}.png`
@@ -18,11 +19,11 @@ const ArticleItem:React.FC<Article> = props => {
     return (
         <>
             <Modal visible={modal} setVisible={setModal}>
-                <div className="articleItem__confirm">
-                    <span className="articleItem__confirm_text">
+                <div className={cl.articleItem__confirm}>
+                    <span className={cl.articleItem__confirm_text}>
                         Do you really want to delete this article?
                     </span>
-                    <div className="articleItem__confirm_buttons">
+                    <div className={cl.articleItem__confirm_buttons}>
                         <button onClick={() => setModal(false)}>
                             No
                         </button>
@@ -35,44 +36,44 @@ const ArticleItem:React.FC<Article> = props => {
                     </div>
                 </div>
             </Modal>
-            <article className='articleItem'>
+            <article className={cl.articleItem}>
                 <Image
                     alt='Image for article'
-                    className='articleItem__pic'
+                    className={cl.articleItem__pic}
                     width={2} height={1}
                     layout='responsive'
                     priority={true}
                     src={img}
                 />
-                <div className='articleItem__info'>
+                <div className={cl.articleItem__info}>
                     <Link href={`/${props.category}/${props.slug}`}>
-                        <a className='articleItem__title'>{props.title}</a>
+                        <a className={cl.articleItem__title}>{props.title}</a>
                     </Link>
-                    <p className="articleItem__category">
+                    <p className={cl.articleItem__category}>
                         <Link href={`/${props.category}`}>
                             <a>{props.category}</a>
                         </Link>
                     </p>
-                    <p className='articleItem__text'>
+                    <p className={cl.articleItem__text}>
                         {props.description}
                     </p>
-                    <div className='articleItem__etc'>
+                    <div className={cl.articleItem__etc}>
                         <p>@{props.author}</p>
                         <p>•</p>
                         <p>{new Date(props.createdAt).toLocaleDateString()}</p>
                     </div>
-                    <div className="wrapper">
+                    <div className={cl.wrapper}>
                         <TagsList tags={props.tags} />
                         {
                             checkPriveleges(session?.user as User, props.author)
                             &&
-                            <div className="articleItem__actions">
-                                <button className="edit" onClick={() => {
+                            <div className={cl.articleItem__actions}>
+                                <button className={cl.edit} onClick={() => {
                                     router.push(`/editor?edit=${props.slug}`)
                                 }}>
                                     edit
                                 </button>
-                                <button className="delete" onClick={() => setModal(true)}>
+                                <button className={cl.delete} onClick={() => setModal(true)}>
                                     delete
                                 </button>
                             </div>

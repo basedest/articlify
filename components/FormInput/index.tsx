@@ -1,4 +1,5 @@
 import { useState } from "react"
+import cl from "./FormInput.module.scss"
 
 const FormInput = (props) => {
   const [focused, setFocused] = useState(false)
@@ -9,7 +10,7 @@ const FormInput = (props) => {
   }
 
   return (
-    <div className="formInput">
+    <div className={cl.formInput}>
       <label>{label}</label>
       <input
         {...inputProps}

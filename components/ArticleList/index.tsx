@@ -1,5 +1,6 @@
 import { Article } from "../../lib/ArticleTypes"
 import ArticleItem from "../ArticleItem"
+import cl from "./ArticleList.module.scss"
 
 export interface ArticleListProps {
   articles: Article[]
@@ -7,7 +8,7 @@ export interface ArticleListProps {
 
 const ArticleList:React.FC<ArticleListProps> = ({articles}) => {
   return (
-    <div className="articleList">
+    <div className={cl.articleList}>
         {
           articles.map(article => <ArticleItem key={article.slug} {...article}/>)
         }
