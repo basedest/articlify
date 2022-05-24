@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 //общая структура каждой страницы
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }:any) {
   //Если у компонента определена собственная структура
   if (Component.getLayout) {
     return (

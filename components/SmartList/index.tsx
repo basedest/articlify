@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { Article } from "../../lib/ArticleTypes";
 import ArticleList from "../ArticleList";
 import MyInput from "../input/MyInput";
@@ -16,17 +16,17 @@ export default function SmartList(props: IProps) {
     const [caption, setCaption] = useState('Latest articles')
     const basepath = router.asPath.split("?")[0]
     //устанавливаем запрос для поиска при вводе
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(e.target.value)
     }
   
     //устанавливаем строку поиска как параметр запроса
-    const handleSearch = async (e) => {
+    const handleSearch = async (e: MouseEvent<HTMLButtonElement>) => {
       router.push(`${basepath}/?title=${searchQuery}`)
     }
   
     //очищаем ввод
-    const clearInput = (e) => {
+    const clearInput = (e:MouseEvent<HTMLButtonElement>) => {
       setSearchQuery('')
       router.push(basepath)
       setCaption('Latest articles')
@@ -45,7 +45,7 @@ export default function SmartList(props: IProps) {
       }
     }, [props.articles, props.searchQuery, props.page])
     
-    const changePage = page => {
+    const changePage = (page:number) => {
       router.push(`${basepath}/${searchQuery ? `?title=${searchQuery}&` : '?'}page=${page}`)
     }
 

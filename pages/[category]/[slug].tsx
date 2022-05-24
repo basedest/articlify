@@ -1,4 +1,4 @@
-import { GetStaticProps } from 'next'
+import { GetStaticProps, GetStaticPropsContext } from 'next'
 import { Article } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
@@ -40,7 +40,7 @@ const ArticlePage = ({article}: PageProps) => {
         <article className="article">
           {
             //разбираем каждый блок на HTML-документы
-            article.content.blocks.map(item => {
+            article?.content?.blocks.map(item => {
               const {id} = item
               switch (item.type) {
                 case 'paragraph':
@@ -55,7 +55,7 @@ const ArticlePage = ({article}: PageProps) => {
                     return (
                     <ol key={id}>
                       {
-                        item.data.items.map((li, i) => <li key={i}>{li}</li>)
+                        item.data.items.map((li:any, i:number) => <li key={i}>{li}</li>)
                       }
                     </ol>
                     )
@@ -64,19 +64,22 @@ const ArticlePage = ({article}: PageProps) => {
                     return (
                       <ul key={id}>
                         {
-                          item.data.items.map((li, i) => <li key={i}>{li}</li>)
+                          item.data.items.map((li:any, i:number) => <li key={i}>{li}</li>)
                         }
                       </ul>
                       )
                   }
                 case 'quote':
-                  return <blockquote key={id} cite={item.data.caption}>
-                      {item.data.text}
+                  return <blockquote 
+                          key={id} 
+                          cite={item.data.caption}
+                          dangerouslySetInnerHTML={{__html:item.data.text}}
+                          >
                   </blockquote>
                 case 'checklist':
                   return (
                     <ul key={id} className='checklist'>
-                      {item.data.items.map((li, i) => <li data-checked={li.checked} key={i}>
+                      {item.data.items.map((li:any, i:number) => <li data-checked={li.checked} key={i}>
                       {
                       li.checked
                       ?<svg xmlns="http://www.w3.org/2000/svg" className='check' viewBox="0 0 20 20" fill="currentColor">
@@ -111,8 +114,8 @@ const ArticlePage = ({article}: PageProps) => {
 export default ArticlePage
 
 //статически генерируем страницу
-export const getStaticProps: GetStaticProps = async (context) => {
-  const {slug} = context.params
+export const getStaticProps: GetStaticProps<{article:Article}, {slug:string}> = async context => {
+  const {slug} = context.params as {slug:string}
   const article = await ArticleService.getBySlug(slug as string)
   if (!article) {
     return {

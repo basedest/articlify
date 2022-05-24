@@ -1,5 +1,5 @@
 import CredentialProvider from "next-auth/providers/credentials"
-import NextAuth from "next-auth"
+import NextAuth, { Awaitable, Session } from "next-auth"
 
 export default NextAuth({
   providers: [
@@ -32,14 +32,14 @@ export default NextAuth({
       colorScheme: "light",
   },
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user }:any) => {
       user && (token.user = user)
       return token
     },
-    session: ({ session, token }) => {
+    session: ({ session, token }:any) => {
       session.user = token.user
       if (!session.user) return null
       return session
     },
-  },
+  } as any,
 })

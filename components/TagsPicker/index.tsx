@@ -20,7 +20,7 @@ const tagOptions: Array<tagOption> = [
 type Props = {
     onChange: (newValue: OnChangeValue<tagOption, true>,
       actionMeta: ActionMeta<tagOption>) => void
-    defaultValue: Array<tagOption>
+    defaultValue: Array<tagOption> | undefined
 }
   
 class TagsPicker extends Component<Props> {

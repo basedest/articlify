@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next'
 import SmartList from '../../components/SmartList'
 import ArticleService from '../../lib/server/article/service'
 
-const Articles = ({articles, page, searchQuery}) => {
+const Articles = ({articles, page, searchQuery}:any) => {
   if (!articles || articles.length == 0)
     return <h1 className='title accented no-margin'>No articles</h1>
   return (

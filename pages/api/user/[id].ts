@@ -11,8 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const id: string = req.query.id as string
 
   const session = await getSession({ req })
-  const user = session.user as User
-  if (user.id.toString() !== id) {
+  const user = session?.user as User
+  if (user?.id?.toString() !== id) {
     return res.status(403).json({error: 'permission denied'})
   }
 

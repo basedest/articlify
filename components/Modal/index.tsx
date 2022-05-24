@@ -1,7 +1,7 @@
 import React from 'react'
 import cl from './Modal.module.scss'
 
-const Modal = ({children, visible, setVisible}) => {
+const Modal: React.FC<{visible: boolean, setVisible: Function}> = ({children, visible, setVisible}) => {
 
     const rootClasses = [cl.Modal]
 

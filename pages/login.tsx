@@ -2,10 +2,10 @@ import { GetServerSideProps } from "next"
 import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import FormInput from "../components/FormInput"
 
-const Login = ({callbackUrl}) => {
+const Login = ({callbackUrl}: {callbackUrl:string}) => {
   const router = useRouter()
   const { data: session } = useSession()
 
@@ -14,7 +14,7 @@ const Login = ({callbackUrl}) => {
   }
 
   const [message, setMessage] = useState('')
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<any>({
     username: "",
     password: "",
   })
@@ -36,7 +36,7 @@ const Login = ({callbackUrl}) => {
     },
   ]
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:Event) => {
     e.preventDefault()
     const {username, password} = values
     fetch('/api/auth/login', {
@@ -57,7 +57,7 @@ const Login = ({callbackUrl}) => {
     .catch(e => setMessage(e))
   }
 
-  const onChange = (e) => {
+  const onChange = (e:ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
 
@@ -65,7 +65,7 @@ const Login = ({callbackUrl}) => {
     <div className="register">
       { message 
         ? <div><p>{message}</p><button onClick={(e) => setMessage('')}>ok</button></div>
-        : <form onSubmit={handleSubmit}>
+        : <form onSubmit={handleSubmit as any}>
           <h1>Login</h1>
           {inputs.map((input) => (
             <FormInput

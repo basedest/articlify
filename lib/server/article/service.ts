@@ -1,3 +1,4 @@
+import {Types} from "mongoose"
 import { Article, ArticleModel } from "../../ArticleTypes"
 import { connectDB } from "../connection"
 
@@ -31,7 +32,7 @@ class ArticleService {
             .sort({createdAt:-1})
         return JSON.parse(JSON.stringify(articles)) as Article[]
     }
-    async getById(id) {
+    async getById(id: Types.ObjectId) {
         await connectDB()
         if (!id) {
             throw new Error('ID not specified')
@@ -63,7 +64,7 @@ class ArticleService {
         const updatedArticle = await ArticleModel.findOneAndUpdate({slug: article.slug}, article, {new: true})
         return JSON.parse(JSON.stringify(updatedArticle)) as Article
     }
-    async delete(id) {
+    async delete(id: Types.ObjectId) {
         await connectDB()
         if (!id) {
             throw new Error('ID not specified')

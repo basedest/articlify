@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import EditorJS from '@editorjs/editorjs'
+import EditorJS, { EditorConfig, OutputData } from '@editorjs/editorjs'
 import { tools } from './tools'
 
-export const useEditor = (toolsList, { data, editorRef }, options = {}) => {
-  const [editorInstance, setEditor] = useState(null)
-  //@ts-ignore
+type EditorRef = React.Dispatch<React.SetStateAction<EditorJS>>
+
+
+export const useEditor = 
+(
+    toolsList: EditorJS.ToolConfig,
+    { data, editorRef }: {data: OutputData, editorRef: EditorRef},
+    options: EditorConfig  = {}
+) => {
+  const [editorInstance, setEditor] = useState<EditorJS | null>(null)
+
   const { data: ignoreData, tools: ignoreTools, holder: ignoreHolder, ...editorOptions } = options
  
   // initialize
@@ -43,7 +51,7 @@ export const useEditor = (toolsList, { data, editorRef }, options = {}) => {
       })
       .catch(e => console.error('ERROR editor cleanup', e))
     }
-  }, [toolsList])
+  }, [data, editorOptions, toolsList])
 
   // set reference
   useEffect(() => {
@@ -59,7 +67,14 @@ export const useEditor = (toolsList, { data, editorRef }, options = {}) => {
   return { editor: editorInstance }
 }
 
-export const EditorContainer = ({ editorRef, children, data, options }) => {
+interface EditorContainerProps {
+  editorRef: EditorRef, 
+  data: OutputData, 
+  options: EditorConfig
+}
+
+export const EditorContainer: React.FC<EditorContainerProps> 
+  = ({ editorRef, children, data, options }) => {
   useEditor(tools, { data, editorRef }, options)
 
   return (

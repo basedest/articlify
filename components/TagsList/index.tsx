@@ -2,11 +2,7 @@ import Link from 'next/link'
 import React, { Key } from 'react'
 import cl from "./TagsList.module.scss"
 
-type Props = {
-  tags: Array<String>
-}
-
-const TagsList = ({tags}: Props) => {
+const TagsList: React.FC<{tags?: string[]}> = ({tags}) => {
   return (
     <div className={cl.tags}>
         {tags?.map((tag, _) => (

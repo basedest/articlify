@@ -3,8 +3,16 @@ import { ParsedUrlQuery } from 'querystring'
 import ArticleService from '../../lib/server/article/service'
 import { categories } from '../../lib/lib'
 import SmartList from '../../components/SmartList'
+import { Article } from '../../lib/ArticleTypes'
 
-const Category = ({articles, category, page, searchQuery}) => {
+interface CategoryProps {
+  articles: Article[],
+  category: string,
+  page: number,
+  searchQuery: string
+}
+
+const Category: React.FC<CategoryProps> = ({articles, category, page, searchQuery}) => {
   return (
   <>
     <h1 className='title accented'>{category}</h1>

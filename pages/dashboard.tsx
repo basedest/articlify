@@ -7,6 +7,7 @@ import Link from 'next/link'
 import FileUpload from '../components/FileUpload'
 import { useRouter } from 'next/router'
 import uploadImage from '../lib/client/uploadImage'
+import { GetServerSidePropsContext } from 'next'
 
 //Меню пользователя
 export default function Dashboard() {
@@ -22,7 +23,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (status === 'authenticated') {
       setUser(session.user as User)
-      setAvatar(session.user?.image)
+      setAvatar(session?.user?.image as string | null)
     }
   }, [status, session])
   //выводим модальное окно при нажатии кнопки Edit
@@ -32,7 +33,7 @@ export default function Dashboard() {
 
   //изменение аватарки
   const changeAvatar = (image: string) => {
-    fetch(`/api/user/${user.id}`, {
+    fetch(`/api/user/${user?.id}`, {
       method: 'PATCH',
       body: JSON.stringify({image}),
         headers: {
@@ -42,7 +43,7 @@ export default function Dashboard() {
     .then(res => res.json())
     .then(data => {
       const {image} = data
-      session.user.image = image
+      session!.user!.image = image
       setAvatar(image)
       router.replace(router.asPath)
     })
@@ -123,7 +124,7 @@ export default function Dashboard() {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
   //если нет сессии, перенаправляем на логин
   if (!session) {

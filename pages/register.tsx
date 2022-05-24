@@ -5,7 +5,11 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import FormInput from "../components/FormInput"
 
-const Register = ({callbackUrl}) => {
+interface PageProps {
+  callbackUrl: string
+}
+
+const Register:React.FC<PageProps> = ({callbackUrl}) => {
   const router = useRouter()
 
   const { data: session } = useSession()
@@ -15,7 +19,7 @@ const Register = ({callbackUrl}) => {
   }
 
   const [message, setMessage] = useState('')
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<any>({
     username: "",
     email: "",
     password: "",
@@ -66,7 +70,7 @@ const Register = ({callbackUrl}) => {
     },
   ]
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:Event) => {
     e.preventDefault()
     const {username, email, password} = values
     fetch('/api/auth/register', {
@@ -89,15 +93,15 @@ const Register = ({callbackUrl}) => {
     .catch((err) => setMessage(err))
   }
 
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+  const onChange = (e:any) => {
+    setValues({ ...values, [e?.target?.name]: e?.target?.value })
   }
   return (
     <div className="register">
       {
         message 
         ? <div><p>{message}</p><button onClick={(e) => setMessage('')}>ok</button></div>
-        : <form onSubmit={handleSubmit}>
+        : <form onSubmit={handleSubmit as any}>
           <h1>Register</h1>
           {
             inputs.map((input) => (

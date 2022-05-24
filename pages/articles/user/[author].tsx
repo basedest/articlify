@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next'
 import SmartList from '../../../components/SmartList'
 import ArticleService from '../../../lib/server/article/service'
 
-const Articles = ({articles, author, searchQuery, page}) => {
+const Articles = ({articles, author, searchQuery, page}:any) => {
   if (!articles || articles.length == 0)
     return <h1 className='title accented no-margin'>No articles</h1>
   return (
@@ -20,7 +20,7 @@ const Articles = ({articles, author, searchQuery, page}) => {
 export default Articles
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {author} = context.params
+    const {author} = context.params as any
     const {title} = context.query
     const page = context.query.page ? parseInt(context.query.page as string) : 1
     const searchQuery = title ? title as string : ''

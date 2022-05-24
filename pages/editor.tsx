@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import dynamic from 'next/dynamic'
+import React, { ChangeEvent, useState } from 'react'
+import dynamic, { LoaderComponent } from 'next/dynamic'
+import EditorJS, { OutputData } from '@editorjs/editorjs'
 import { useSaveCallback, useLoadData, options, useSetData, dataKey } from '../components/Editor'
 import MyInput from '../components/input/MyInput'
 import { Article } from '../lib/ArticleTypes'
@@ -37,17 +38,18 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context)
   } 
 }
 
-const Editor: any = dynamic(
-  () => import('../components/Editor/editor').then(mod => mod.EditorContainer),
+const Editor = dynamic<EditorJS>(
+  () => import('../components/Editor/editor')
+  .then(mod => mod.EditorContainer) as LoaderComponent<EditorJS>,
   { ssr: false }
-)
+) as any
 
 const EditorPage: NextPage<PageProps> = (props) => {
   const router = useRouter()
 
   const [file, setFile] = useState<File | null>(null)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [editor, setEditor] = useState(null)
+  const [editor, setEditor] = useState<EditorJS | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const img = props?.article?.img ?? undefined
@@ -55,7 +57,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   //Загрузить данные либо из пропсов при редактировании
   // либо из localStorage, в обратном случае
   const { data, loading } = edit
-  ? {data: props.article.content, loading: false}
+  ? {data: props?.article?.content, loading: false}
   // eslint-disable-next-line react-hooks/rules-of-hooks
   : useLoadData()
  
@@ -63,29 +65,29 @@ const EditorPage: NextPage<PageProps> = (props) => {
   const authLoading = status === "loading"
   
   // установить загруженные [выше] данные
-  useSetData(editor, data)
+  useSetData(editor as EditorJS, data as OutputData)
   
   // выключаем кнопку сохранения если идёт загрузка
   const disabled = editor === null || loading || authLoading
 
   // устанавливаем данные о статье в начальное значение
-  const [article, setArticle] = useState<Article>(props.article)
+  const [article, setArticle] = useState<Article | null | undefined>(props?.article)
   const [uploading, setUploading] = useState(false)
-  const getSlug = (t) => t.toLocaleLowerCase().split(' ').join('-')
-  const onSave = useSaveCallback(editor)
-  const saveLogic = (img_url?) => {
+  const getSlug = (t:string) => t.toLocaleLowerCase().split(' ').join('-')
+  const onSave = useSaveCallback(editor as EditorJS)
+  const saveLogic = (img_url?: string) => {
     onSave()
-    .then(data => fetch(`/api/articles/${edit ? article.slug : ''}`, 
+    .then(data => fetch(`/api/articles/${edit ? article?.slug : ''}`, 
       {
         method: edit ? 'PUT' : 'POST',
         body: JSON.stringify(
           {
             ...article,
             img: img_url ? img_url : img ? img : undefined,
-            slug: getSlug(article?.title),
+            slug: getSlug(article?.title as string),
             createdAt: article?.createdAt ?? new Date,
             editedAt: edit ? new Date : undefined,
-            author: article?.author ?? session?.user.name,
+            author: article?.author ?? session?.user?.name,
             content: data,
           },
         ),
@@ -97,7 +99,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
     .then(response => {
         if (response.status <= 201) {
           localStorage.removeItem(dataKey)
-          router.push(`/${article.category}/${getSlug(article.title)}`)
+          router.push(`/${article?.category}/${getSlug(article?.title as string)}`)
         }
         else {
           alert("Check your inputs. Title must be specified and unique.")
@@ -119,7 +121,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
     }
     setUploading(true)
     if (imageSrc) {
-      uploadImage(file)
+      uploadImage(file as File)
       .then(([err, data]) => {
         if (err) {
           setError(err)
@@ -144,7 +146,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
   }
 
   //если поступил запрос на редактирование, но пользователь не является ни админом, ни автором
-  if (edit && session && !checkPriveleges(session.user as User, article.author))
+  if (edit && session && !checkPriveleges(session.user as User, article?.author as string))
     return <div>You don&apos;t have permission to edit this article</div>
   
   return (
@@ -159,10 +161,13 @@ const EditorPage: NextPage<PageProps> = (props) => {
           {
             // при редактировании название статьи изменить нельзя, но отобразить надо
             edit
-            ? <h1>{article.title}</h1>
+            ? <h1>{article?.title}</h1>
             : <MyInput 
-                value={article?.title}
-                onChange={e => setArticle({...article, title: e.target.value})}
+                value={article?.title as string}
+                onChange={
+                  (e:ChangeEvent<HTMLInputElement>) => {
+                  setArticle({...article, title: e.target.value as string} as Article)
+                }}
                 type="text" 
                 placeholder="Title..."
                 disabled={edit}
@@ -177,18 +182,21 @@ const EditorPage: NextPage<PageProps> = (props) => {
                 font: "inherit",
             }}
             placeholder="Description..."
-            onChange={e => setArticle({...article, description: e.target.value})}
+            onChange={e => setArticle({...article, description: e.target.value} as Article)}
           >
           </textarea>
           <Select
-            defaultValue={ edit && {value: article.category, label: article.category}}
+            defaultValue={ edit && {value: article?.category, label: article?.category}}
             placeholder={'Category...'}
-            onChange={selected => setArticle({...article, category: selected.value})}
+            onChange={selected => {
+              const {value} = selected as { value: string, label: string}
+              setArticle({...article, category: value } as Article)
+            }}
             options={categories.map(item => {return {value: item, label: item}})}
           />
           <TagsPicker 
-            defaultValue={ edit && article.tags.map(tag => {return {value: tag, label: tag}})}
-            onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)})}
+            defaultValue={ edit ? article?.tags?.map(tag => {return {value: tag, label: tag}}) : undefined}
+            onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)} as Article)}
           />
           <div>
             Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>

@@ -63,7 +63,7 @@ UserSchema.pre("save", function (next) {
 })
 
 //сравнение паролей криптографически
-UserSchema.methods.comparePassword = async function(password) {
+UserSchema.methods.comparePassword = async function(password:string) {
   return bcrypt.compare(password, this.password)
 }
 

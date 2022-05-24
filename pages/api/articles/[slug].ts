@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //auth logic
   const slug = req.query.slug as string
   const session = await getSession({ req })
-  const user = session.user as User
+  const user = session?.user as User
   if (!(await checkPrivileges(user, slug))) {
     return res.status(403).json({error: 'forbidden action'})
   }

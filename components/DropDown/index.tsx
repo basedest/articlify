@@ -9,15 +9,15 @@ interface Props {
     label: string
 }
 
-const DropDown = ({options, label}: Props) => {
-    const ref = useRef(null)
+const DropDown: React.FC<Props> = ({options, label}) => {
+    const ref = useRef<HTMLDivElement>(null)
     const handleClick = () => {
-        ref.current.classList.toggle('show')
+        ref?.current?.classList.toggle('show')
     }
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (ref.current && !ref.current.contains(event.target)) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (ref.current && !ref.current.contains(event.target as Node)) {
                 ref.current.classList.remove('show')
             }
         }

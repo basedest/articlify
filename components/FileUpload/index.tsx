@@ -10,11 +10,11 @@ const FileUpload: FunctionComponent<FileUploadProps> = ({setImageSrc, setFile}) 
 
   function handleOnChange(changeEvent: ChangeEvent<HTMLInputElement>) {
     const reader = new FileReader()
-    const file = changeEvent.target.files[0]
+    const file = (changeEvent.target.files as FileList)[0]
 
     reader.onload = function(onLoadEvent) {
       if (setImageSrc)
-      setImageSrc(onLoadEvent.target.result as string)
+      setImageSrc(onLoadEvent.target?.result as string)
     }
 
     if (file) {

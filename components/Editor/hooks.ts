@@ -1,7 +1,8 @@
 import { useCallback, useState, useEffect } from "react"
 import initialData from './data.json'
+import EditorJS, { OutputData } from '@editorjs/editorjs'
 
-export const useSaveCallback = (editor) => {
+export const useSaveCallback = (editor: EditorJS) => {
   return useCallback(async () => {
     if (!editor) {
       return
@@ -22,7 +23,7 @@ export const useSaveCallback = (editor) => {
 }
 
 // Set editor data after initializing
-export const useSetData = (editor, data) => {
+export const useSetData = (editor: EditorJS, data: OutputData) => {
   useEffect(() => {
     if (!editor || !data) {
       return
@@ -37,7 +38,7 @@ export const useSetData = (editor, data) => {
   }, [editor, data])
 }
 
-export const useClearDataCallback = (editor) => {
+export const useClearDataCallback = (editor: EditorJS) => {
   return useCallback((ev) => {
     ev.preventDefault()
     if (!editor) {
@@ -54,7 +55,7 @@ export const useClearDataCallback = (editor) => {
 
 // load saved data
 export const useLoadData = () => {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<OutputData | null>(null)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     setLoading(true)
