@@ -51,7 +51,7 @@ export const useEditor =
       })
       .catch(e => console.error('ERROR editor cleanup', e))
     }
-  }, [data, editorOptions, toolsList])
+  }, [toolsList])
 
   // set reference
   useEffect(() => {
