@@ -52,7 +52,7 @@ const ArticlePage = ({article}: PageProps) => {
                     return (
                     <ol key={id}>
                       {
-                        item.data.items.map((li:any, i:number) => <li key={i}>{li}</li>)
+                        item.data.items.map((li:any, i:number) => <li key={i} dangerouslySetInnerHTML={{__html:li}}></li>)
                       }
                     </ol>
                     )
@@ -61,7 +61,7 @@ const ArticlePage = ({article}: PageProps) => {
                     return (
                       <ul key={id}>
                         {
-                          item.data.items.map((li:any, i:number) => <li key={i}>{li}</li>)
+                          item.data.items.map((li:any, i:number) => <li key={i} dangerouslySetInnerHTML={{__html:li}}></li>)
                         }
                       </ul>
                       )
@@ -76,7 +76,11 @@ const ArticlePage = ({article}: PageProps) => {
                 case 'checklist':
                   return (
                     <ul key={id} className='checklist'>
-                      {item.data.items.map((li:any, i:number) => <li data-checked={li.checked} key={i}>
+                      {item.data.items.map((li:any, i:number) => (
+                      <li 
+                        data-checked={li.checked}
+                        key={i}
+                      >
                       {
                       li.checked
                       ?<svg xmlns="http://www.w3.org/2000/svg" className='check' viewBox="0 0 20 20" fill="currentColor">
@@ -86,8 +90,8 @@ const ArticlePage = ({article}: PageProps) => {
                         <circle cx="8" cy="9" r="5.5" stroke="black" strokeWidth="2" fill="none" clipRule="evenodd" />
                       </svg> 
                       }
-                        {li.text}
-                        </li>)}
+                      <span dangerouslySetInnerHTML={{__html:li.text}}></span>
+                        </li>))}
                     </ul>
                   )
                 case 'delimiter':
