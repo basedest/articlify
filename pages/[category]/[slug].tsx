@@ -107,8 +107,8 @@ const ArticlePage = ({article}: PageProps) => {
           <TagsList tags={article.tags}/>
           <p className='upd'>Last updated: {
             article.editedAt 
-            ? new Date(article.editedAt).toLocaleDateString()
-            : new Date(article.createdAt).toLocaleDateString()
+            ? new Date(article.editedAt).toLocaleString()
+            : new Date(article.createdAt).toLocaleString()
           }</p>
           <Link href={`/${article.category}`}>
             <a className='colored'>Browse {article.category} category</a>

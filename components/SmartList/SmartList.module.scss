@@ -4,6 +4,8 @@
     display: flex;
     max-width: 800px;
     width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
     gap: 5px;
     button {
         margin: 5px 0 5px 0;
@@ -15,9 +17,9 @@
         cursor: pointer;
     }
     .search {
-      background-color: $fuchia;
+      background-color: $accent-color;
       &:hover {
-        background-color: adjust-color($color: $fuchia, $lightness: -20%);
+        background-color: $accent-color-bright;
       }
     }
     .clear {

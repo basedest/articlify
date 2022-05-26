@@ -1,3 +1,5 @@
+@import "./colors";
+
 .editorContainer {
     width: 100%;
     margin-bottom: 10px;
@@ -5,3 +7,59 @@
     background-color: #fff;
     box-shadow: 0 4px 8px 0 #11111122;
 }
+
+.editor-page {
+    min-height: 100vh;
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    main {
+        padding: 5rem 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 1000px;
+        width: 90vw;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+        font-size: 38px;
+    }
+
+    .hint {
+        font-size: 0.8em;
+        color: #777;
+        margin-left: 1em;
+    }
+
+    button {
+        cursor: pointer;
+        color: #fff;
+        text-transform: uppercase;
+        text-decoration: none;
+        background: $accent-color;
+        padding: 20px;
+        border-radius: 5px;
+        display: inline-block;
+        border: none;
+        transition: all 0.4s ease 0s;
+    }
+
+    button:hover, button:disabled {
+        background: #434343;
+        letter-spacing: 1px;
+        box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+        transition: all 0.4s ease 0s;
+    }
+
+    .inputs {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+  }
+ 

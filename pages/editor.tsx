@@ -17,6 +17,7 @@ import uploadImage from '../lib/client/uploadImage'
 import { useRouter } from 'next/router'
 import ArticleService from '../lib/server/article/service'
 import cl from "../components/input/MyInput.module.scss"
+import Spinner from '../components/Spinner'
 
 
 interface PageProps {
@@ -97,6 +98,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
       })
     )
     .then(response => {
+        setUploading(false)
         if (response.status <= 201) {
           localStorage.removeItem(dataKey)
           router.push(`/${article?.category}/${getSlug(article?.title as string)}`)
@@ -110,7 +112,6 @@ const EditorPage: NextPage<PageProps> = (props) => {
   }
 
   const onSubmit = () => {
-    onSave()
     if (
       !article?.title ||
       !article?.category ||
@@ -125,6 +126,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
       .then(([err, data]) => {
         if (err) {
           setError(err)
+          setUploading(false)
         }
         if (data) {
           saveLogic(data.secure_url)
@@ -134,7 +136,6 @@ const EditorPage: NextPage<PageProps> = (props) => {
     else {
       saveLogic()
     }
-    setUploading(false)
   }
 
   // ничего не выводим пока не закончится загрузка
@@ -150,11 +151,11 @@ const EditorPage: NextPage<PageProps> = (props) => {
     return <div>You don&apos;t have permission to edit this article</div>
   
   return (
-    <div className="container">
+    <div className="editor-page">
       { 
         uploading
         ? 
-        <div>Loading...</div>
+        <Spinner />
         :
         <main>
         <div className="inputs">
@@ -218,64 +219,6 @@ const EditorPage: NextPage<PageProps> = (props) => {
       </main>
       }
 
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          max-width: 1000px;
-          width: 90vw;
-        }
-
-        h1 {
-          margin-bottom: 10px;
-          font-size: 38px;
-        }
-
-        .hint {
-          font-size: 0.8em;
-          color: #777;
-          margin-left: 1em;
-        }
-
-        button {
-          cursor: pointer;
-          color: #fff !important;
-          text-transform: uppercase;
-          text-decoration: none;
-          background: #27e;
-          padding: 20px;
-          border-radius: 5px;
-          display: inline-block;
-          border: none;
-          transition: all 0.4s ease 0s;
-        }
-
-        button:hover, button:disabled {
-          background: #434343;
-          letter-spacing: 1px;
-          -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-          -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-          box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
-          transition: all 0.4s ease 0s;
-        }
-
-        .inputs {
-          margin-bottom: 1rem;
-          width: 100%;
-        }
-      `}</style>
     </div>
   )
 }
