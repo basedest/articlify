@@ -20,11 +20,14 @@ const Home: NextPage<IProps> = (props: IProps) => {
           <meta name="description" content="Course Project" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-          <h1 className='title'>
-            Articlify
-          </h1>
-          <h2>The best digital media platform on the internet</h2>
-          <hr />
+          <div className="banner">
+            <div className="container">
+              <h1 className='title'>
+                Articlify
+              </h1>
+              <h2>A place with articles and without cancel-culture.</h2>
+            </div>
+          </div>
           <SmartList 
             articles={props.articles}
             searchQuery={props.searchQuery}

@@ -1,8 +1,9 @@
-import { useRouter } from "next/router";
-import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
-import { Article } from "../../lib/ArticleTypes";
-import ArticleList from "../ArticleList";
-import MyInput from "../input/MyInput";
+import { useRouter } from "next/router"
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react"
+import { Article } from "../../lib/ArticleTypes"
+import ArticleList from "../ArticleList"
+import MyInput from "../input/MyInput"
+import cl from "./SmartList.module.scss"
 
 interface IProps {
     articles: Article[]
@@ -51,18 +52,18 @@ export default function SmartList(props: IProps) {
 
     return (
         <>
-          <div className="searchbar">
+          <div className={cl.searchbar}>
             <MyInput
                   value={searchQuery}
                   onChange={handleChange}
                   placeholder="Search by title..."
               />
-            <button className='search' onClick={handleSearch}>Search</button>
-            <button className='clear' onClick={clearInput}>Clear</button>
+            <button className={cl.search} onClick={handleSearch}>Search</button>
+            <button className={cl.clear} onClick={clearInput}>Clear</button>
           </div>
           <h2 className='accented'>{caption}</h2>
           <ArticleList articles={props.articles} />
-          <div className='navigation'>
+          <div className={cl.navigation}>
             <button
               onClick={() => changePage(props.page-1)}
               disabled={props.page <= 1}

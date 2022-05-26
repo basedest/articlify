@@ -37,14 +37,18 @@ const ArticleItem:React.FC<Article> = props => {
                 </div>
             </Modal>
             <article className={cl.articleItem}>
-                <Image
-                    alt='Image for article'
-                    className={cl.articleItem__pic}
-                    width={2} height={1}
-                    layout='responsive'
-                    priority={true}
-                    src={img}
-                />
+                <Link href={`/${props.category}/${props.slug}`}>
+                    <a>
+                        <Image
+                            alt='Image for article'
+                            className={cl.articleItem__pic}
+                            width={2} height={1}
+                            layout='responsive'
+                            priority={true}
+                            src={img}
+                        />
+                    </a>
+                </Link>
                 <div className={cl.articleItem__info}>
                     <Link href={`/${props.category}/${props.slug}`}>
                         <a className={cl.articleItem__title}>{props.title}</a>

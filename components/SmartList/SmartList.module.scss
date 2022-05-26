@@ -1,0 +1,57 @@
+@import "../../styles/colors";
+
+.searchbar {
+    display: flex;
+    max-width: 800px;
+    width: 100%;
+    gap: 5px;
+    button {
+        margin: 5px 0 5px 0;
+        padding: 10px;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    .search {
+      background-color: $fuchia;
+      &:hover {
+        background-color: adjust-color($color: $fuchia, $lightness: -20%);
+      }
+    }
+    .clear {
+      background-color: #555;
+      &:hover {
+        background-color: adjust-color($color: #555, $lightness: -20%);
+      }
+    }
+}
+
+.navigation {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    button {
+      margin: 5px 0 5px 0;
+      padding: 5px;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      background-color: #777;
+      &:hover {
+          background-color: adjust-color($color: #777, $lightness: -20%);
+      }
+      &[disabled] {
+        background-color: #bbb;
+        cursor: default;
+      }
+      svg {
+        height: 25px;
+        width: 50px;
+      }
+    }
+}

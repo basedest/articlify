@@ -120,9 +120,6 @@
         flex-direction: row;
         gap: 0.5em;
         place-items: center;
-        .upd {
-            color: #555;
-        }
     }
     &__category {
         font-weight: 600;
@@ -142,6 +139,36 @@
             line-height: 65px;
             height: 30px;
             letter-spacing: 0.2em;
+        }
+    }
+    &__end {
+        padding: 4rem;
+        place-self: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        .upd {
+            color: #555;
+        }
+        a.back {
+            width: fit-content; 
+            height: 50px;
+            padding: 10px;
+            padding-right: 20px;
+            border: none;
+            background-color: $accent-color;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 18px;
+            svg {
+                height: 100%;
+                width: 50px;
+                margin-bottom: -8px;
+            }
+            &:hover {
+                background-color: adjust-color($color: $accent-color, $lightness: -15%);
+            }
         }
     }
     .checklist {

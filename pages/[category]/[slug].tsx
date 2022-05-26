@@ -1,8 +1,9 @@
-import { GetStaticProps, GetStaticPropsContext } from 'next'
+import { GetStaticProps } from 'next'
 import { Article } from '../../lib/ArticleTypes'
 import Image from 'next/image'
 import TagsList from '../../components/TagsList'
 import ArticleService from '../../lib/server/article/service'
+import Link from 'next/link'
 
 interface PageProps {
   article: Article
@@ -21,17 +22,13 @@ const ArticlePage = ({article}: PageProps) => {
         </div>
         <section className="article__head">
           <div className="flex-wrap">
-            <div className="article__category">{article.category}</div>
-            <TagsList tags={article.tags}/>
           </div>
           <div className="article__authordate">
-              <p>@{article.author}</p>
+              <Link href={`/articles/user/${article.author}`}>
+                <a className='colored'>@{article.author}</a>
+              </Link>
               <p>•</p>
               <p>{new Date(article.createdAt).toLocaleDateString()}</p>
-              {
-                article.editedAt &&
-                <p className='upd'>(upd. {new Date(article.editedAt).toLocaleDateString()})</p>
-              }
           </div>
           <h1>{article.title}</h1>
           <div className="article__description">{article.description}</div>
@@ -106,6 +103,25 @@ const ArticlePage = ({article}: PageProps) => {
             })
           }
         </article>
+        <section className="article__end">
+          <TagsList tags={article.tags}/>
+          <p className='upd'>Last updated: {
+            article.editedAt 
+            ? new Date(article.editedAt).toLocaleDateString()
+            : new Date(article.createdAt).toLocaleDateString()
+          }</p>
+          <Link href={`/${article.category}`}>
+            <a className='colored'>Browse {article.category} category</a>
+          </Link>
+          <Link href="/">
+            <a className="back">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Return to all articles
+            </a>
+          </Link>
+        </section>
       </div>
     </>
   )

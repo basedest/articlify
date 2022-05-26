@@ -1,23 +1,29 @@
+@import "../../styles/colors";
+
 .tags {
     align-items: center;
     display: flex;
     flex: 1;
     flex-wrap: wrap;
     margin: 6px 0 0 -3px;
+    gap: 0.5rem;
     &__item {
-        background-color: hsl(0, 0%, 90%);
-        color: hsl(0, 0%, 20%);
-        border-radius: 3px;
-        display: flex;
-        margin: 2px;
-        font-size: 85%;
-        padding: 3px 6px 6px 6px;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1;
+        border-radius: 2em;
+        border: 1px solid $accent-color;
+        font-size: 90%;
+        padding: 5px 10px 7px 10px;
+        background: transparent;
+        text-decoration: none;
+        cursor: pointer;
+        appearance: none;
+        color: #000;
         &:hover {
-            background-color: hsl(0, 0%, 70%);
-            cursor: pointer;
-        }
-        a:hover {
-            color: inherit;
+            color: #fff;
+            background-color: $accent-color;
+            border-color: $accent-color;
         }
     }
 }
