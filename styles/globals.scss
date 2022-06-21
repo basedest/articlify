@@ -9,6 +9,10 @@
 @import "./home";
 @import "./editor";
 
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -99,4 +103,9 @@ main {
   .editorContainer {
     box-shadow: none;
   }
+}
+
+::selection {
+  color: #fff;
+  background: $accent-color-bright;
 }

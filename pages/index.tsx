@@ -22,7 +22,7 @@ const Home: NextPage<IProps> = (props: IProps) => {
         </Head>
           <div className="banner">
             <div className="container">
-              <h1 className='title'>
+              <h1 className="title">
                 Articlify
               </h1>
               <h2>A place with articles and without cancel-culture.</h2>

@@ -74,7 +74,13 @@ const EditorPage: NextPage<PageProps> = (props) => {
   // устанавливаем данные о статье в начальное значение
   const [article, setArticle] = useState<Article | null | undefined>(props?.article)
   const [uploading, setUploading] = useState(false)
-  const getSlug = (t:string) => t.toLocaleLowerCase().split(' ').join('-')
+
+  //make a slug from title suitable for URL
+  const getSlug = (t:string) => { 
+    const filter = /[^а-яё\w-]/g //every character that not letter, digit or '-'
+    return t.toLocaleLowerCase().split(' ').join('-').replace(filter, '')
+  }
+
   const onSave = useSaveCallback(editor as EditorJS)
   const saveLogic = (img_url?: string) => {
     onSave()
