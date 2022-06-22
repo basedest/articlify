@@ -19,7 +19,6 @@ import ArticleService from '../lib/server/article/service'
 import cl from "../components/input/MyInput.module.scss"
 import Spinner from '../components/Spinner'
 
-
 interface PageProps {
   article?: Article
 }
@@ -82,66 +81,66 @@ const EditorPage: NextPage<PageProps> = (props) => {
   }
 
   const onSave = useSaveCallback(editor as EditorJS)
-  const saveLogic = (img_url?: string) => {
-    onSave()
-    .then(data => fetch(`/api/articles/${edit ? article?.slug : ''}`, 
-      {
-        method: edit ? 'PUT' : 'POST',
-        body: JSON.stringify(
-          {
-            ...article,
-            img: img_url ? img_url : img ? img : undefined,
-            slug: getSlug(article?.title as string),
-            createdAt: article?.createdAt ?? new Date,
-            editedAt: edit ? new Date : undefined,
-            author: article?.author ?? session?.user?.name,
-            content: data,
-          },
-        ),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-    )
+  const saveLogic = (data: OutputData, img_url?: string) => {
+    fetch(`/api/articles/${edit ? article?.slug : ''}`, 
+    {
+      method: edit ? 'PUT' : 'POST',
+      body: JSON.stringify(
+        {
+          ...article,
+          img: img_url ? img_url : img ? img : undefined,
+          slug: getSlug(article?.title as string),
+          createdAt: article?.createdAt ?? new Date,
+          editedAt: edit ? new Date : undefined,
+          author: article?.author ?? session?.user?.name,
+          content: data,
+        },
+      ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     .then(response => {
-        setUploading(false)
-        if (response.status <= 201) {
-          localStorage.removeItem(dataKey)
-          router.push(`/${article?.category}/${getSlug(article?.title as string)}`)
-        }
-        else {
-          alert("Check your inputs. Title must be specified and unique.")
-          router.reload()
-        }
+      if (response.status <= 201) {
+        localStorage.removeItem(dataKey)
+        router.push(`/${article?.category}/${getSlug(article?.title as string)}`)
+      }
+      else {
+        alert("Check your inputs. Title must be specified and unique.")
+        router.reload()
+      }
+      setUploading(false)
     })
     .catch(error => console.log(error))
   }
 
   const onSubmit = () => {
-    if (
-      !article?.title ||
-      !article?.category ||
-      !article?.description 
-    ) {
-      alert("some of required fields are not specified")
-      return
-    }
-    setUploading(true)
-    if (imageSrc) {
-      uploadImage(file as File)
-      .then(([err, data]) => {
-        if (err) {
-          setError(err)
-          setUploading(false)
-        }
-        if (data) {
-          saveLogic(data.secure_url)
-        }
-      })
-    }
-    else {
-      saveLogic()
-    }
+    onSave().then(editorData => {
+      if (
+        !article?.title ||
+        !article?.category ||
+        !article?.description 
+      ) {
+        alert("some of required fields are not specified")
+        return
+      }
+      setUploading(true)
+      if (imageSrc) {
+        uploadImage(file as File)
+        .then(([err, data]) => {
+          if (err) {
+            setError(err)
+            setUploading(false)
+          }
+          if (data) {
+            saveLogic(editorData as OutputData, data.secure_url)
+          }
+        })
+      }
+      else {
+        saveLogic(editorData as OutputData)
+      }
+    })
   }
 
   // ничего не выводим пока не закончится загрузка

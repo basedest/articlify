@@ -5,9 +5,10 @@ import EditorJS, { OutputData } from '@editorjs/editorjs'
 export const useSaveCallback = (editor: EditorJS) => {
   return useCallback(async () => {
     if (!editor) {
+      console.error('no editor')
       return
     }
-    try {            
+    try {           
       const data = await editor.save()
       console.group('EDITOR onSave')
       console.dir(data)
@@ -30,10 +31,7 @@ export const useSetData = (editor: EditorJS, data: OutputData) => {
     }
     
     editor.isReady.then(() => {
-      // fixing an annoying warning in Chrome `addRange(): The given range isn't in document.`
-      setTimeout(() => {
-        editor.render(data)
-      }, 100)
+      editor.render(data)
     })
   }, [editor, data])
 }
