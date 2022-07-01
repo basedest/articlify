@@ -16,15 +16,18 @@ const Header:React.FC = () => {
     const loading = status === "loading"
 
     return (
-        <nav className="navbar">
-            <div className="navbar-container container">
+        <nav className="
+            navbar text-black bg-white shadow-xl
+            dark:text-white dark:bg-gray-900 z-[1001]
+        ">
+            <div className="navbar-container ">
                 <input type="checkbox" name="" id="" />
-                <div className="hamburger-lines">
-                    <span className="line line1"></span>
-                    <span className="line line2"></span>
-                    <span className="line line3"></span>
+                <div className="hamburger-lines ">
+                    <span className="line line1 bg-stone-700 dark:bg-stone-200"></span>
+                    <span className="line line2 bg-stone-700 dark:bg-stone-200"></span>
+                    <span className="line line3 bg-stone-700 dark:bg-stone-200"></span>
                 </div>
-                <ul className="menu-items">
+                <ul className="menu-items bg-white dark:bg-gray-900">
                     <li>
                         <Link href='/'>
                             <a>Main</a>
@@ -55,7 +58,7 @@ const Header:React.FC = () => {
                 </ul>
                 <h1 className="logo">
                     <Link href='/'>
-                        <a>Articlify</a>
+                        <a className="colored">Articlify</a>
                     </Link>
                 </h1>
             </div>

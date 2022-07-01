@@ -60,17 +60,17 @@ export default function Dashboard() {
   //пока загружается сессия, ничего не выводим
   if (status === 'loading' || !user) return null
   return (
-    <div className='dashboard'>
+    <div className="dashboard">
       {
       //модальное окно с сообщением о том,
       //что возножность изменения имени появится когда-нибудь, но не сейчас
       }
       <Modal visible={modal} setVisible={setModal}>
-        <div style={{padding: '2rem'}}>
+        <div className="p-8">
           This feature will be available in the next updates
         </div>
       </Modal>
-      <div className='avatar'>
+      <div className="avatar">
           <div className="wrapper">
             <div className="img">
               {

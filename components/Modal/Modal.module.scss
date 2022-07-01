@@ -7,12 +7,6 @@
     display: none;
     background: rgba(0,0,0, 0.5);
     z-index: 5000;
-    &Content {
-        padding: 25px;
-        background: white;
-        border-radius: 15px;
-        min-width: 250px;
-    }
     &.active {
         display: flex;
         justify-content: center;

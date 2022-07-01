@@ -11,7 +11,7 @@ const Modal: React.FC<{visible: boolean, setVisible: Function}> = ({children, vi
 
     return (
         <div className={rootClasses.join(' ')} onClick={() => setVisible(false)}>
-            <div className={cl.ModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 rounded-2xl min-w-[250px] bg-white dark:bg-gray-900" onClick={(e) => e.stopPropagation()}>
                 {children}
             </div>
         </div>

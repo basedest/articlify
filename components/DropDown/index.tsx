@@ -14,7 +14,6 @@ const DropDown: React.FC<Props> = ({options, label}) => {
     const handleClick = () => {
         ref?.current?.classList.toggle('show')
     }
-
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -36,7 +35,7 @@ const DropDown: React.FC<Props> = ({options, label}) => {
             </svg>
         </button>
 
-        <ul className="dropdown__content">
+        <ul className="dropdown__content bg-white dark:bg-gray-900">
             {
                 options.map((option, _) => (
                     <li key={option.label}>

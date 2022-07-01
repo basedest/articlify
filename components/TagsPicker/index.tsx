@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { ActionMeta, OnChangeValue } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import classes from './TagsPicker.module.scss'
 
 interface tagOption {
     value: string
@@ -28,7 +27,8 @@ class TagsPicker extends Component<Props> {
         return (
         <CreatableSelect
             placeholder='Tags...'
-            className={classes.picker}
+            className="my-react-select-container my-1"
+            classNamePrefix="my-react-select"
             isMulti
             isClearable
             onChange={this.props.onChange}

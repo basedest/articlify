@@ -16,7 +16,6 @@ import { User } from '../lib/UserTypes'
 import uploadImage from '../lib/client/uploadImage'
 import { useRouter } from 'next/router'
 import ArticleService from '../lib/server/article/service'
-import cl from "../components/input/MyInput.module.scss"
 import Spinner from '../components/Spinner'
 
 interface PageProps {
@@ -154,16 +153,14 @@ const EditorPage: NextPage<PageProps> = (props) => {
   //если поступил запрос на редактирование, но пользователь не является ни админом, ни автором
   if (edit && session && !checkPriveleges(session.user as User, article?.author as string))
     return <div>You don&apos;t have permission to edit this article</div>
-  
+
   return (
-    <div className="editor-page">
-      { 
-        uploading
-        ? 
-        <Spinner />
-        :
-        <main>
-        <div className="inputs">
+    uploading
+    ? 
+    <Spinner />
+    :
+    <div className="max-w-5xl w-[90vw] flex flex-col">
+        <div className="mb-4 z-[1000]">
           {
             // при редактировании название статьи изменить нельзя, но отобразить надо
             edit
@@ -181,7 +178,8 @@ const EditorPage: NextPage<PageProps> = (props) => {
           }
           <textarea
             value={article?.description}
-            className={cl.myInput} 
+            className="bg-white dark:bg-neutral-700 border-2 border-neutral-300 dark:border-neutral-700
+            hover:border-neutral-400 dark:hover:border-neutral-500 rounded my-1 w-full py-2 px-1" 
             style={{
                 marginBottom: -1,
                 marginTop: -1,
@@ -192,6 +190,8 @@ const EditorPage: NextPage<PageProps> = (props) => {
           >
           </textarea>
           <Select
+            className="my-react-select-container"
+            classNamePrefix="my-react-select"
             defaultValue={ edit && {value: article?.category, label: article?.category}}
             placeholder={'Category...'}
             onChange={selected => {
@@ -205,11 +205,11 @@ const EditorPage: NextPage<PageProps> = (props) => {
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)} as Article)}
           />
           <div>
-            Select an image:<span className='hint'>(image will be converted to 2x1 ratio)</span>
+            Select an image:<span className="ml-1 text-sm text-stone-500 dark:text-gray-600">(image will be converted to 2x1 ratio)</span>
             <div>
               <FileUpload setImageSrc={setImageSrc} setFile={setFile} />
               {
-                (imageSrc || img) && <img style={{width: '100%'}} src={imageSrc ?? img} alt='preview' />
+                (imageSrc || img) && <img className="mt-2 w-full" src={imageSrc ?? img} alt='preview' />
               }
               {
                 error && <p>{error}</p>
@@ -217,13 +217,10 @@ const EditorPage: NextPage<PageProps> = (props) => {
             </div>
           </div>
         </div>
-        <div className="editorContainer">
+        <div className="bg-white dark:bg-gray-900 shadow-lg border border-solid border-stone-200 dark:border-black">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
         </div>
-        <button disabled={disabled} type="button" onClick={onSubmit}>save article</button>{' '}
-      </main>
-      }
-
+        <button className="self-center my-4 px-5 rounded-xl bg-green-600 w-fit text-2xl pt-2 pb-3 text-white font-light transition-all hover:bg-green-700 dark:hover:bg-green-500 hover:scale-105" disabled={disabled} type="button" onClick={onSubmit}>save article</button>{' '}
     </div>
   )
 }

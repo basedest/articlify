@@ -1,6 +1,6 @@
 {
   "name": "articlify",
-  "version": "0.14.4",
+  "version": "0.15.0",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -28,12 +28,14 @@
     "@editorjs/table": "^2.0.1",
     "@editorjs/underline": "^1.0.0",
     "@editorjs/warning": "^1.2.0",
+    "@headlessui/react": "^1.6.5",
     "@next-auth/mongodb-adapter": "^1.0.3",
     "bcryptjs": "^2.4.3",
     "formidable": "^2.0.1",
     "mongoose": "^6.2.7",
     "next": "^12.1.0",
     "next-auth": "latest",
+    "next-themes": "^0.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-editor-js": "^2.0.6",
@@ -55,7 +57,7 @@
     "eslint-config-next": "12.1.0",
     "nodemon": "^2.0.15",
     "postcss": "^8.4.14",
-    "tailwindcss": "^3.0.24",
+    "tailwindcss": "^3.1.4",
     "typescript": "4.6.2"
   }
 }

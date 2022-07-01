@@ -8,10 +8,6 @@
     align-items: center;
     box-shadow: 0 4px 8px 0 #11111122;
     border-radius: 15px;
-    background-color: white;
-    a:hover {
-        text-decoration: none;
-    }
     &__info {
         display: flex;
         flex-direction: column;
@@ -23,7 +19,6 @@
         cursor: pointer;
         text-decoration: none;
         outline: none;
-        color: rgb(16, 16, 16);
         font-size: 36px;
         letter-spacing: -0.03em;
         text-align: start;
@@ -46,7 +41,6 @@
         margin-block-end: 1em;
         margin-inline-start: 0px;
         margin-inline-end: 0px;
-        color: #606060;
         font-size: 18px;
         line-height: 30px;
         font-weight: 300;
@@ -67,64 +61,4 @@
         display: block;
         border-style: none;
     }
-    &__actions {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        button {
-            border-radius: 15px;
-            background-color: #eee;
-            color: #555;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 5px 15px 5px 15px;
-            &.edit:hover {
-                background-color: $accent-color;
-                color: #fff;
-            }
-            &.delete:hover {
-                background-color: $error-color;
-                color: #fff;
-            }
-        }
-    }
-    &__confirm {
-        display: flex;
-        flex-direction: column;
-        place-content: center;
-        gap: 15px;
-        font-size: 24px;
-        &_text {
-            text-align: center;
-        }
-        &_buttons {
-            display: flex;
-            place-content: center;
-            gap: 15px;
-            button {
-                border-radius: 15px;
-                cursor: pointer;
-                font-size: inherit;
-                padding: 5px 15px 5px 15px;
-                color: #fff;
-                &:first-of-type {
-                    background-color: $accent-color;
-                    &:hover {
-                        background-color: adjust-color($color: $accent-color, $lightness: -20%);
-                    }
-                }
-                &:last-of-type {
-                    background-color: $error-color;
-                    &:hover { 
-                        background-color: adjust-color($color: $error-color, $lightness: -20%);
-                    }
-                }
-            }
-        }
-    }
-}
-
-.wrapper {
-    display: flex;
-    margin-top: 1rem;
 }

@@ -4,7 +4,6 @@ import { tools } from './tools'
 
 type EditorRef = React.Dispatch<React.SetStateAction<EditorJS>>
 
-
 export const useEditor = 
 (
     toolsList: EditorJS.ToolConfig,
@@ -79,14 +78,8 @@ export const EditorContainer: React.FC<EditorContainerProps>
 
   return (
     <React.Fragment>
-      {!children && <div className="container" id="editor-js"></div>}
+      {!children && <div className="w-full" id="editor-js"></div>}
       {children}
-      <style jsx>{`
-        .container {
-          width: 100%;
-          padding: 2px 0;
-        }
-      `}</style>
     </React.Fragment>
   )
 }

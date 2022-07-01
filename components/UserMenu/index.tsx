@@ -42,7 +42,7 @@ const UserMenu = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
         </button>
-        <ul className="user-menu__content">
+        <ul className="user-menu__content bg-white dark:bg-gray-900">
             <li>
                 <Link href='/dashboard'>
                     <a>Profile</a>
@@ -50,6 +50,7 @@ const UserMenu = () => {
             </li>
             <li>
                 <a onClick={(e) => { signOut()}}>Sign Out</a>
+                {/* <Link href="/auth/"><a>Sign Out</a></Link> */}
             </li>
         </ul>
     </div>
