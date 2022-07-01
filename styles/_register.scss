@@ -5,10 +5,10 @@
     align-items: center;
     justify-content: center;
     form {
-        background-color: white;
+        @apply bg-white dark:bg-gray-900 shadow-2xl;
         padding: 30px 60px;
         border-radius: 10px;
-        box-shadow: 0px 5px 10px 5px #aaa;
+        
     }
     
     p {
