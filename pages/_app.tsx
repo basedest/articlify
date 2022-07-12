@@ -21,8 +21,8 @@ export default function MyApp({ Component, pageProps }:any) {
           <Header />
           <main className="
             flex flex-col flex-1 min-h-screen justify-center items-center
-            bg-stone-100 text-black
-            dark:bg-gray-800 dark:text-white
+            bg-neutral-100 text-black
+            dark:bg-neutral-900 dark:text-white
           ">
             <Component {...pageProps} />
           </main>

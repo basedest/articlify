@@ -16,7 +16,7 @@ const ArticlePage = ({article}: PageProps) => {
   const img = article.img ?? `/img/${article.category}.png`
   return (
     <>
-      <div className="flex items-center justify-center flex-col max-w-5xl w-full bg-white dark:bg-gray-900">
+      <div className="flex items-center justify-center flex-col max-w-5xl w-full bg-white dark:bg-neutral-800">
         <div className="w-full">
           <Image src={img} alt="article image" height="1" width="2" layout='responsive' />
         </div>
@@ -99,7 +99,7 @@ const ArticlePage = ({article}: PageProps) => {
                   return ( 
                     <figure key={id} className="flex flex-col text-center w-full">
                       <img className="w-full" src={item.data.url}/>
-                      <figcaption className="text-base font-light text-stone-600 dark:text-gray-500">{item.data.caption}</figcaption>
+                      <figcaption className="text-base font-light text-neutral-600 dark:text-neutral-500">{item.data.caption}</figcaption>
                     </figure>
                   )
               }
@@ -108,7 +108,7 @@ const ArticlePage = ({article}: PageProps) => {
         </article>
         <section className="flex place-self-start flex-col gap-8 px-4 py-16 md:px-16">
           <TagsList tags={article.tags}/>
-          <p className='text-stone-500 dark:text-gray-400'>Last updated: {
+          <p className='text-neutral-500 dark:text-neutral-400'>Last updated: {
             article.editedAt 
             ? new Date(article.editedAt).toLocaleString()
             : new Date(article.createdAt).toLocaleString()

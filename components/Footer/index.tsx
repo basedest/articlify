@@ -17,9 +17,9 @@ const Footer:React.FC = () => {
   return (
     <footer className="
       flex flex-col-reverse text-center sm:flex-row-reverse sm:text-left justify-center
-      px-4 pt-4 pb-6 sm:pb-24 gap-6 bg-gray-200 text-black
-      dark:bg-gray-900 dark:text-white dark:border-black
-      border-t border-solid border-stone-300
+      px-4 pt-4 pb-6 sm:pb-24 gap-6 bg-neutral-200 text-black
+      dark:bg-neutral-800 dark:text-white dark:border-black
+      border-t border-solid border-neutral-300
     ">
         <section className="flex flex-col gap-2">
           <span>
@@ -33,7 +33,7 @@ const Footer:React.FC = () => {
             </a>
           </span>
           <span>Version {version}</span>
-          <span className="text-gray-500 dark:text-gray-400">
+          <span className="text-neutral-500 dark:text-neutral-400">
             Copyright © 2022 Articlify Inc. All rights reserved.
           </span>
         </section>

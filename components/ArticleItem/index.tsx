@@ -41,7 +41,7 @@ const ArticleItem:React.FC<Article> = props => {
                     </div>
                 </div>
             </Modal>
-            <article className={cl.articleItem + " bg-white dark:bg-gray-900"}>
+            <article className={cl.articleItem + " bg-white dark:bg-neutral-800"}>
                 <Link href={`/${props.category}/${props.slug}`}>
                     <a>
                         <Image
@@ -63,7 +63,7 @@ const ArticleItem:React.FC<Article> = props => {
                             <a>{props.category}</a>
                         </Link>
                     </p>
-                    <p className={cl.articleItem__text + " text-gray-400"}>
+                    <p className={cl.articleItem__text + " text-neutral-400"}>
                         {props.description}
                     </p>
                     <div className={cl.articleItem__etc}>
@@ -78,14 +78,14 @@ const ArticleItem:React.FC<Article> = props => {
                             &&
                             <div className="flex justify-center gap-1">
                                 <button 
-                                className="rounded-xl bg-stone-200 dark:bg-gray-800 text-black dark:text-white py-1 px-3 hover:text-white
+                                className="rounded-xl bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white py-1 px-3 hover:text-white
                                  hover:bg-green-600 dark:hover:bg-green-600"
                                 onClick={() => {
                                     router.push(`/editor?edit=${props.slug}`)
                                 }}>
                                     edit
                                 </button>
-                                <button className="rounded-xl bg-stone-200 dark:bg-gray-800 text-black dark:text-white py-1 px-3 hover:text-white
+                                <button className="rounded-xl bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white py-1 px-3 hover:text-white
                                 hover:bg-red-600 dark:hover:bg-red-600"
                                 onClick={() => setModal(true)}>
                                     delete

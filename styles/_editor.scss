@@ -1,65 +1,5 @@
 @import "./colors";
 
-// .editorContainer {
-//     width: 100%;
-//     margin-bottom: 10px;
-//     z-index: 0;
-//     box-shadow: 0 4px 8px 0 #11111122;
-// }
-
-// .editor-page {
-//     min-height: 100vh;
-//     padding: 0 0.5rem;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     main {
-//         padding: 5rem 0;
-//         flex: 1;
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: center;
-//         align-items: center;
-//         max-width: 1000px;
-//         width: 90vw;
-//     }
-
-//     h1 {
-//         margin-bottom: 10px;
-//         font-size: 38px;
-//     }
-
-//     .hint {
-//         font-size: 0.8em;
-//         color: #777;
-//         margin-left: 1em;
-//     }
-
-//     button:only-of-type {
-//         cursor: pointer;
-//         color: #fff;
-//         text-transform: uppercase;
-//         text-decoration: none;
-//         background: $accent-color;
-//         padding: 20px;
-//         border-radius: 5px;
-//         display: inline-block;
-//         border: none;
-//         transition: all 0.4s ease 0s;
-//         &:hover, &:disabled {
-//             background: #434343;
-//             letter-spacing: 1px;
-//             box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
-//             transition: all 0.4s ease 0s;
-//         }
-//     }
-
-//     .inputs {
-//         margin-bottom: 1rem;
-//         width: 100%;
-//     }
-//   }
 
 #editor-js {
     h2 {
@@ -73,11 +13,11 @@
         background: $accent-color-bright !important;
     }
     .ce-toolbox__button, .ce-settings__button, .ce-conversion-tool, .ce-inline-tool, .ce-inline-toolbar__dropdown, .cdx-input, .cdx-button, .cdx-settings-button {
-        @apply text-black dark:text-white bg-white dark:bg-gray-800 hover:bg-green-600
+        @apply text-black dark:text-white bg-white dark:bg-neutral-800 hover:bg-green-600
     }
     
     .ce-toolbox, .ce-settings, .ce-inline-toolbar, .ce-conversion-toolbar, .ce-conversion-tool__icon {
-        @apply text-black dark:text-white bg-white dark:bg-gray-800 
+        @apply text-black dark:text-white bg-white dark:bg-neutral-800 
     }
     
     .ce-toolbar__plus, .ce-toolbar__settings-btn {

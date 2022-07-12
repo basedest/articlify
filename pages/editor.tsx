@@ -205,7 +205,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
             onChange={v => setArticle({...article, tags: v.map((val, _) => val.value)} as Article)}
           />
           <div>
-            Select an image:<span className="ml-1 text-sm text-stone-500 dark:text-gray-600">(image will be converted to 2x1 ratio)</span>
+            Select an image:<span className="ml-1 text-sm text-neutral-500 dark:text-neutral-600">(image will be converted to 2x1 ratio)</span>
             <div>
               <FileUpload setImageSrc={setImageSrc} setFile={setFile} />
               {
@@ -217,7 +217,7 @@ const EditorPage: NextPage<PageProps> = (props) => {
             </div>
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-900 shadow-lg border border-solid border-stone-200 dark:border-black">
+        <div className="bg-white dark:bg-neutral-800 shadow-lg border border-solid border-neutral-200 dark:border-black">
           <Editor reInit editorRef={setEditor} options={options} data={data} />
         </div>
         <button className="self-center my-4 px-5 rounded-xl bg-green-600 w-fit text-2xl pt-2 pb-3 text-white font-light transition-all hover:bg-green-700 dark:hover:bg-green-500 hover:scale-105" disabled={disabled} type="button" onClick={onSubmit}>save article</button>{' '}

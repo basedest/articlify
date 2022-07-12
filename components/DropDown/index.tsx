@@ -35,7 +35,7 @@ const DropDown: React.FC<Props> = ({options, label}) => {
             </svg>
         </button>
 
-        <ul className="dropdown__content bg-white dark:bg-gray-900">
+        <ul className="dropdown__content bg-white dark:bg-neutral-900">
             {
                 options.map((option, _) => (
                     <li key={option.label}>

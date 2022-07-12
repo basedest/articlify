@@ -18,16 +18,16 @@ const Header:React.FC = () => {
     return (
         <nav className="
             navbar text-black bg-white shadow-xl
-            dark:text-white dark:bg-gray-900 z-[1001]
+            dark:text-white dark:bg-neutral-800 z-[1001]
         ">
             <div className="navbar-container ">
                 <input type="checkbox" name="" id="" />
                 <div className="hamburger-lines ">
-                    <span className="line line1 bg-stone-700 dark:bg-stone-200"></span>
-                    <span className="line line2 bg-stone-700 dark:bg-stone-200"></span>
-                    <span className="line line3 bg-stone-700 dark:bg-stone-200"></span>
+                    <span className="line line1 bg-neutral-700 dark:bg-neutral-200"></span>
+                    <span className="line line2 bg-neutral-700 dark:bg-neutral-200"></span>
+                    <span className="line line3 bg-neutral-700 dark:bg-neutral-200"></span>
                 </div>
-                <ul className="menu-items bg-white dark:bg-gray-900">
+                <ul className="menu-items bg-white dark:bg-neutral-800">
                     <li>
                         <Link href='/'>
                             <a>Main</a>
