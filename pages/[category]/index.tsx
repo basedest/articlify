@@ -15,7 +15,7 @@ interface CategoryProps {
 const Category: React.FC<CategoryProps> = ({articles, category, page, searchQuery}) => {
   return (
   <>
-    <h1 className='title accented'>{category}</h1>
+    <h1 className="font-['Gotham_Bold'] text-3xl mt-8 text-green-600 dark:text-green-500 uppercase">{category}</h1>
     <SmartList 
       articles={articles}
       page={page}

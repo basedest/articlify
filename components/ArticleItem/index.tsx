@@ -9,7 +9,6 @@ import deleteArticle from "../../lib/client/deleteArticle"
 import { User } from "../../lib/UserTypes"
 import Modal from "../Modal"
 import TagsList from "../TagsList"
-import cl from "./ArticleItem.module.scss"
 
 const ArticleItem:React.FC<Article> = props => {
     const img = props.img ?? `/img/${props.category}.png`
@@ -41,12 +40,12 @@ const ArticleItem:React.FC<Article> = props => {
                     </div>
                 </div>
             </Modal>
-            <article className={cl.articleItem + " bg-white dark:bg-neutral-800"}>
+            <article className="w-full h-fit items-center rounded-2xl shadow-lg bg-white dark:bg-neutral-800">
                 <Link href={`/${props.category}/${props.slug}`}>
                     <a>
                         <Image
                             alt='Image for article'
-                            className={cl.articleItem__pic}
+                            className='object-cover w-full rounded-2xl block border-none'
                             width={2} height={1}
                             layout='responsive'
                             priority={true}
@@ -54,19 +53,19 @@ const ArticleItem:React.FC<Article> = props => {
                         />
                     </a>
                 </Link>
-                <div className={cl.articleItem__info}>
+                <div className="flex flex-col p-4">
                     <Link href={`/${props.category}/${props.slug}`}>
-                        <a className={cl.articleItem__title}>{props.title}</a>
+                        <a className="transition-all font-semibold text-4xl">{props.title}</a>
                     </Link>
-                    <p className={cl.articleItem__category}>
+                    <p className="text-lg uppercase font-semibold">
                         <Link href={`/${props.category}`}>
-                            <a>{props.category}</a>
+                            <a className="text-neutral-400 tracking-wide hover:text-fuchsia-600 dark:text-neutral-500 dark:hover:text-fuchsia-500">{props.category}</a>
                         </Link>
                     </p>
-                    <p className={cl.articleItem__text + " text-neutral-400"}>
+                    <p className="mt-3 mb-6 font-light text-lg text-neutral-500 dark:text-neutral-400">
                         {props.description}
                     </p>
-                    <div className={cl.articleItem__etc}>
+                    <div className="flex gap-2">
                         <p>@{props.author}</p>
                         <p>•</p>
                         <p>{new Date(props.createdAt).toLocaleDateString()}</p>

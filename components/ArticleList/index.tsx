@@ -8,7 +8,7 @@ export interface ArticleListProps {
 
 const ArticleList:React.FC<ArticleListProps> = ({articles}) => {
   return (
-    <div className={cl.articleList}>
+    <div className={cl.articleList + " min-h-[50vh]"}>
         {
           articles.map(article => <ArticleItem key={article.slug} {...article}/>)
         }

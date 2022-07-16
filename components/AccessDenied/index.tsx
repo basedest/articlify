@@ -1,13 +1,12 @@
 import Link from "next/link"
-import cl from "./AccessDenied.module.scss"
 
 export default function AccessDenied({callbackUrl}: {callbackUrl: string}) {
   return (
-      <div className={cl.access_denied}>
+      <div className="text-center">
         <h1>Access Denied</h1>
         <p>
           <Link href={`/login/?callbackUrl=${callbackUrl}`}>
-              <a>
+              <a className="text-green-600 dark:text-green-500 hover:underline">
                 sign in
               </a>
           </Link>

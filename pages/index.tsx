@@ -22,12 +22,12 @@ const Home: NextPage<IProps> = (props: IProps) => {
       </Head>
       <div
         style={{boxShadow: "inset 0 8px 8px -8px rgb(0 0 0 / 30%), inset 0 -8px 8px -8px rgb(0 0 0 / 30%)"}}
-        className="banner text-white bg-green-500 p-10 mb-8 w-screen"
+        className="text-white bg-green-500 p-10 w-full mb-8 self-start justify-self-start place-self-start"
       >
         <div className="mx-auto px-4 text-center">
           <h1
             style={{textShadow: "0px 1px 3px rgb(0 0 0 / 30%)"}}
-            className="title font-['Gotham_Bold'] text-7xl tracking-tight drop-shadow-xl"
+            className="font-['Gotham_Bold'] text-7xl tracking-tight drop-shadow-xl"
           >
             Articlify
           </h1>

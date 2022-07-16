@@ -16,24 +16,20 @@ export default function SmartList(props: IProps) {
     const [searchQuery, setSearchQuery] = useState('')
     const [caption, setCaption] = useState('Latest articles')
     const basepath = router.asPath.split("?")[0]
-    //устанавливаем запрос для поиска при вводе
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(e.target.value)
     }
   
-    //устанавливаем строку поиска как параметр запроса
     const handleSearch = async (e: MouseEvent<HTMLButtonElement>) => {
       router.push(`${basepath}/?title=${searchQuery}`)
     }
   
-    //очищаем ввод
     const clearInput = (e:MouseEvent<HTMLButtonElement>) => {
       setSearchQuery('')
       router.push(basepath)
       setCaption('Latest articles')
     }
   
-    //устанавливаем надпись в зависимости от состояния списка
     useEffect(() => {
       if (props.articles.length === 0) {
         setCaption('No articles')

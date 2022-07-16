@@ -42,7 +42,7 @@ const UserMenu = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
         </button>
-        <ul className="user-menu__content bg-white dark:bg-neutral-900">
+        <ul className="user-menu__content bg-white dark:bg-neutral-800">
             <li>
                 <Link href='/dashboard'>
                     <a>Profile</a>
