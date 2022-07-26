@@ -65,7 +65,6 @@ I'm currently planning to add these features in future:
 - comments
 - bookmarking
 - localisation (en/ru)
-- dark theme
 - more auth providers
 - changing password
 - restoring forgotten password
