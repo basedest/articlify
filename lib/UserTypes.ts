@@ -36,7 +36,7 @@ const UserSchema = new Schema<User>({
     image: String,
 })
 
-//метод после сохранения пользователя в БЛ
+//перед сохранением пользователя в БД, хешируем пароль
 UserSchema.pre("save", function (next) {
     const user = this
     //при изменении или новом пароле
