@@ -68,3 +68,10 @@ I'm currently planning to add these features in future:
 - more auth providers
 - changing password
 - restoring forgotten password
+- email verification 
+
+I'm also planning on doing some refactoring:
+- rewrite all scss modules and files in TailwindCSS
+- refactor all components to use only Headless UI
+- refactor API routes and add more layers of abstractions to it
+- imporve overall design and make it more consistent and mobile-friendly
