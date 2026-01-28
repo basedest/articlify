@@ -37,28 +37,12 @@ const UserSchema = new Schema<User>({
 })
 
 //перед сохранением пользователя в БД, хешируем пароль
-UserSchema.pre("save", function (next) {
-    const user = this
+UserSchema.pre("save", async function () {
     //при изменении или новом пароле
     if (this.isModified("password") || this.isNew) {
-      //генерируем соль
-      bcrypt.genSalt(10, function (saltError, salt) {
-        if (saltError) {
-          return next(saltError)
-        } else {
-          //хешируем результат
-          bcrypt.hash(user.password, salt, function(hashError, hash) {
-            if (hashError) {
-              return next(hashError)
-            }
-            //устанавливаем пароль на хеш
-            user.password = hash
-            next()
-          })
-        }
-      })
-    } else {
-      return next()
+      //генерируем соль и хешируем пароль
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
     }
 })
 

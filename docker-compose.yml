@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: articlify-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: articlify
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - articlify-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: articlify-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+      - ./docker/init-minio.sh:/docker-entrypoint-initdb.d/init-minio.sh
+    command: server /data --console-address ":9001"
+    networks:
+      - articlify-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: articlify-minio-init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/articlify-images --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/articlify-images;
+      exit 0;
+      "
+    networks:
+      - articlify-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  articlify-network:
+    driver: bridge

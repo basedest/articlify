@@ -1,60 +1,61 @@
-import React, { useEffect, useRef } from 'react'
-import Image from 'next/image'
-import { signOut, useSession } from "next-auth/react"
-import Link from 'next/link'
+'use client';
+
+import React from 'react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { LogOut, User, ChevronDown } from 'lucide-react';
 
 const UserMenu = () => {
-    const ref = useRef<HTMLDivElement>(null)
-    const handleClick = () => {
-        ref?.current?.classList.toggle('show')
-    }
-    const { data: session } = useSession()
+  const { data: session } = useSession();
 
-    useEffect(() => {
-        const handleClickOutside = (event:globalThis.MouseEvent) => {
-            if (ref.current && !ref.current.contains(event.target as HTMLDivElement)) {
-                ref.current.classList.remove('show')
-            }
-        }
-        document.addEventListener('click', handleClickOutside, true)
-        return () => {
-        document.removeEventListener('click', handleClickOutside, true)
-        }
-    })
+  if (!session?.user) {
+    return null;
+  }
 
-    return (
-    <div ref={ref} className='user-menu'>
-        <div className="avatar">
-            {
-                session?.user?.image
-            ?   <Image src={session.user.image} width={1} height={1} layout='responsive' alt='icon' />
-            :   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
-                </svg>
-            }
-        </div>
-        <button className='user-menu__btn' onClick={handleClick}>
-            <a
-            >
-                {session?.user?.name}
-            </a>
-            <svg className='arrow' fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
-        <ul className="user-menu__content bg-white dark:bg-neutral-800">
-            <li>
-                <Link href='/dashboard'>
-                    <a>Profile</a>
-                </Link>
-            </li>
-            <li>
-                <a onClick={(e) => { signOut()}}>Sign Out</a>
-                {/* <Link href="/auth/"><a>Sign Out</a></Link> */}
-            </li>
-        </ul>
-    </div>
-    )
-}
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="flex items-center gap-2">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={session.user.image || undefined} />
+            <AvatarFallback>
+              {session.user.name?.[0]?.toUpperCase() || 'U'}
+            </AvatarFallback>
+          </Avatar>
+          <span className="hidden md:inline">{session.user.name}</span>
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard" className="flex cursor-pointer items-center">
+            <User className="mr-2 h-4 w-4" />
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => signOut()}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Sign Out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
-export default UserMenu
+export default UserMenu;
