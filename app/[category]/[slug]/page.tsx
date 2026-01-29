@@ -43,6 +43,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="rounded-xl bg-card p-6 md:p-8">
       <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-xl">
         <Image
           src={img}
@@ -242,6 +243,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </Link>
           </Button>
         </div>
+      </div>
       </div>
     </div>
   );

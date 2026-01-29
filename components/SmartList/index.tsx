@@ -5,8 +5,15 @@ import { useEffect, useState } from 'react';
 import { Article } from '~/lib/ArticleTypes';
 import ArticleList from '../ArticleList';
 import SearchBar from '../SearchBar';
-import { Button } from '~/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from '~/components/ui/pagination';
 
 interface SmartListProps {
   articles: Article[];
@@ -34,20 +41,34 @@ export default function SmartList(props: SmartListProps) {
     if (props.articles.length === 0) {
       setCaption('No articles');
     } else if (props.searchQuery) {
-      setCaption(`Search results [Page ${props.page}]`);
+      setCaption('Search results');
     } else {
-      setCaption(`Latest articles [Page ${props.page}]`);
+      setCaption('Latest articles');
     }
   }, [props.articles, props.searchQuery, props.page]);
 
-  const changePage = (page: number) => {
+  const buildPageUrl = (page: number) => {
     const params = new URLSearchParams();
     if (searchQuery) {
       params.set('title', searchQuery);
     }
     params.set('page', page.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    return `${pathname}?${params.toString()}`;
   };
+
+  const changePage = (page: number) => {
+    router.push(buildPageUrl(page));
+  };
+
+  const { page, totalPages } = props;
+  const pageStart = Math.max(1, page - 2);
+  const pageEnd = Math.min(totalPages, page + 2);
+  const showLeftEllipsis = pageStart > 1;
+  const showRightEllipsis = pageEnd < totalPages;
+  const pageNumbers = Array.from(
+    { length: pageEnd - pageStart + 1 },
+    (_, i) => pageStart + i
+  );
 
   return (
     <div className="space-y-6">
@@ -61,28 +82,97 @@ export default function SmartList(props: SmartListProps) {
 
       <ArticleList articles={props.articles} />
 
-      {props.totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <Button
-            onClick={() => changePage(props.page - 1)}
-            disabled={props.page <= 1}
-            variant="outline"
-            size="icon"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            Page {props.page} of {props.totalPages}
-          </span>
-          <Button
-            onClick={() => changePage(props.page + 1)}
-            disabled={props.page >= props.totalPages}
-            variant="outline"
-            size="icon"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href={page > 1 ? buildPageUrl(page - 1) : '#'}
+                onClick={(e) => {
+                  if (page <= 1) e.preventDefault();
+                  else {
+                    e.preventDefault();
+                    changePage(page - 1);
+                  }
+                }}
+                className={
+                  page <= 1
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
+                aria-disabled={page <= 1}
+              />
+            </PaginationItem>
+            {showLeftEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationLink
+                    href={buildPageUrl(1)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      changePage(1);
+                    }}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              </>
+            )}
+            {pageNumbers.map((p) => (
+              <PaginationItem key={p}>
+                <PaginationLink
+                  href={buildPageUrl(p)}
+                  isActive={p === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    changePage(p);
+                  }}
+                >
+                  {p}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            {showRightEllipsis && (
+              <>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    href={buildPageUrl(totalPages)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      changePage(totalPages);
+                    }}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+            <PaginationItem>
+              <PaginationNext
+                href={page < totalPages ? buildPageUrl(page + 1) : '#'}
+                onClick={(e) => {
+                  if (page >= totalPages) e.preventDefault();
+                  else {
+                    e.preventDefault();
+                    changePage(page + 1);
+                  }
+                }}
+                className={
+                  page >= totalPages
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
+                aria-disabled={page >= totalPages}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       )}
     </div>
   );
