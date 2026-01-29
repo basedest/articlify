@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import UserMenu from '../UserMenu';
-import { categories } from '@/lib/lib';
-import { Button } from '@/components/ui/button';
+import { categories } from '~/lib/lib';
+import { Button } from '~/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '~/components/ui/dropdown-menu';
 import { ChevronDown, Menu, PenSquare } from 'lucide-react';
 import { useState } from 'react';
 
@@ -20,21 +20,18 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="container mx-auto">
         <div className="flex h-16 items-center justify-between px-4">
-          {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-primary">
             Articlify
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden items-center gap-6 md:flex">
             <Link href="/">
               <Button variant="ghost">Home</Button>
             </Link>
 
-            {/* Categories Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost">
@@ -72,7 +69,6 @@ const Header: React.FC = () => {
             {session && <UserMenu />}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
@@ -84,7 +80,6 @@ const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="border-t pb-4 md:hidden">
             <div className="flex flex-col gap-2 px-4 pt-4">

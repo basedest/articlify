@@ -1,5 +1,5 @@
-import { appRouter } from '@/server/routers';
-import { createContext } from '@/server/context';
+import { appRouter } from '~/server/routers';
+import { createContext } from '~/server/context';
 
 export async function createServerCaller() {
   const context = await createContext();

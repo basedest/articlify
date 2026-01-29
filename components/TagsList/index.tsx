@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '~/components/ui/badge';
 
 const TagsList: React.FC<{ tags?: string[] }> = ({ tags }) => {
   if (!tags || tags.length === 0) {

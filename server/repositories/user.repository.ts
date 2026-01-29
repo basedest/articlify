@@ -1,5 +1,5 @@
-import { UserModel, type User } from '@/lib/UserTypes';
-import { connectDB } from '@/lib/server/connection';
+import { UserModel, type User } from '~/lib/UserTypes';
+import { connectDB } from '~/lib/server/connection';
 import { Types } from 'mongoose';
 
 export class UserRepository {

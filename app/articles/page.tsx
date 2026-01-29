@@ -1,5 +1,5 @@
-import { createServerCaller } from '@/lib/trpc/server';
-import SmartList from '@/components/SmartList';
+import { createServerCaller } from '~/lib/trpc/server';
+import SmartList from '~/components/SmartList';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

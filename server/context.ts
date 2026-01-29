@@ -1,5 +1,5 @@
 import { type Session } from 'next-auth';
-import { auth } from '@/auth';
+import { auth } from '~/auth';
 
 export async function createContext() {
   let session: Session | null = null;

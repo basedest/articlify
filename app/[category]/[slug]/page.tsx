@@ -1,11 +1,11 @@
-import { createServerCaller } from '@/lib/trpc/server';
+import { createServerCaller } from '~/lib/trpc/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import TagsList from '@/components/TagsList';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import TagsList from '~/components/TagsList';
+import { Button } from '~/components/ui/button';
+import { Badge } from '~/components/ui/badge';
+import { Separator } from '~/components/ui/separator';
 import { ArrowLeft, CheckCircle2, Circle } from 'lucide-react';
 
 interface PageProps {
@@ -43,7 +43,6 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
-      {/* Article Header Image */}
       <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-xl">
         <Image
           src={img}
@@ -54,7 +53,6 @@ export default async function ArticlePage({ params }: PageProps) {
         />
       </div>
 
-      {/* Article Metadata */}
       <div className="mb-8">
         <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
           <Link href={`/articles/user/${article.author}`}>
@@ -75,7 +73,6 @@ export default async function ArticlePage({ params }: PageProps) {
 
       <Separator className="mb-8" />
 
-      {/* Article Content */}
       <article className="prose prose-zinc dark:prose-invert max-w-none">
         {article?.content?.blocks.map((item: any) => {
           const { id } = item;
@@ -221,7 +218,6 @@ export default async function ArticlePage({ params }: PageProps) {
         })}
       </article>
 
-      {/* Article Footer */}
       <div className="mt-12 space-y-6 border-t pt-8">
         <TagsList tags={article.tags} />
 

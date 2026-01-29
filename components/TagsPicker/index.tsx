@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MultiSelect, type Option } from '@/components/ui/multi-select';
+import { MultiSelect, type Option } from '~/components/ui/multi-select';
 
 const tagOptions: Option[] = [
   { value: 'javascript', label: 'Javascript' },

@@ -1,6 +1,6 @@
-import { createServerCaller } from '@/lib/trpc/server';
-import SmartList from '@/components/SmartList';
-import { Badge } from '@/components/ui/badge';
+import { createServerCaller } from '~/lib/trpc/server';
+import SmartList from '~/components/SmartList';
+import { Badge } from '~/components/ui/badge';
 import { User } from 'lucide-react';
 
 interface PageProps {

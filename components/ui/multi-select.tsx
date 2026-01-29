@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import { X } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
-import { cn } from '@/lib/utils';
+import { Badge } from '~/components/ui/badge';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '~/components/ui/command';
+import { cn } from '~/lib/utils';
 
 export interface Option {
   value: string;
@@ -54,7 +54,7 @@ export function MultiSelect({
 
   return (
     <div className={cn('relative', className)}>
-      <div className="flex min-h-10 w-full flex-wrap items-center gap-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-1 focus-within:ring-ring">
+      <div className="flex min-h-10 w-full flex-wrap items-center gap-1 rounded-md border border-input bg-transparent dark:bg-input/30 px-3 py-2 text-sm ring-offset-background focus-within:ring-1 focus-within:ring-ring">
         {selected.map((item) => {
           const option = options.find((o) => o.value === item);
           return (

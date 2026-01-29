@@ -6,7 +6,7 @@ import {
   FunctionComponent,
   SetStateAction,
 } from 'react';
-import { Input } from '@/components/ui/input';
+import { Input } from '~/components/ui/input';
 
 type FileUploadProps = {
   setImageSrc?: Dispatch<SetStateAction<null | string>>;

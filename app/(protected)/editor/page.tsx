@@ -9,32 +9,32 @@ import {
   options,
   useSetData,
   dataKey,
-} from '@/components/Editor';
-import { Article } from '@/lib/ArticleTypes';
-import TagsPicker from '@/components/TagsPicker';
+} from '~/components/Editor';
+import { Article } from '~/lib/ArticleTypes';
+import TagsPicker from '~/components/TagsPicker';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { categories } from '@/lib/lib';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { categories } from '~/lib/lib';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
+import { Textarea } from '~/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+} from '~/components/ui/select';
+import { Card, CardContent } from '~/components/ui/card';
+import { Alert, AlertDescription } from '~/components/ui/alert';
 import { Loader2, Upload, Save } from 'lucide-react';
-import { trpc } from '@/lib/trpc/client';
-import { useToast } from '@/hooks/use-toast';
+import { trpc } from '~/lib/trpc/client';
+import { useToast } from '~/hooks/use-toast';
 
 const Editor = dynamic(
   () =>
-    import('@/components/Editor/editor').then((mod) => mod.EditorContainer) as any,
+    import('~/components/Editor/editor').then((mod) => mod.EditorContainer) as any,
   { ssr: false }
 ) as any;
 
@@ -233,8 +233,8 @@ export default function EditorPage() {
         {editSlug ? 'Edit Article' : 'Create New Article'}
       </h1>
 
-      <div className="space-y-6">
-        {/* Title */}
+      <Card>
+        <CardContent className="space-y-6 p-6">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
           {editSlug ? (
@@ -252,7 +252,6 @@ export default function EditorPage() {
           )}
         </div>
 
-        {/* Description */}
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -266,7 +265,6 @@ export default function EditorPage() {
           />
         </div>
 
-        {/* Category */}
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select
@@ -288,7 +286,6 @@ export default function EditorPage() {
           </Select>
         </div>
 
-        {/* Tags */}
         <div className="space-y-2">
           <Label htmlFor="tags">Tags</Label>
           <TagsPicker
@@ -298,7 +295,6 @@ export default function EditorPage() {
           />
         </div>
 
-        {/* Image Upload */}
         <div className="space-y-2">
           <Label htmlFor="image">Cover Image</Label>
           <p className="text-sm text-muted-foreground">
@@ -323,7 +319,6 @@ export default function EditorPage() {
           )}
         </div>
 
-        {/* Editor */}
         <div className="space-y-2">
           <Label>Content</Label>
           <Card>
@@ -338,7 +333,6 @@ export default function EditorPage() {
           </Card>
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-center pt-4">
           <Button
             onClick={onSubmit}
@@ -359,7 +353,8 @@ export default function EditorPage() {
             )}
           </Button>
         </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

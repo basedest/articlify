@@ -3,6 +3,7 @@
 @theme {
   /* Custom colors */
   --color-accent: #1db954;
+  --color-accent-foreground: hsl(0 0% 100%);
   --color-accent-bright: #1ed760;
   --color-based-yellow: #fb4;
   --color-based-red: #e74c3c;
@@ -14,8 +15,8 @@
   --color-error: #f44;
   --color-info: #33b5e5;
 
-  /* shadcn/ui semantic colors - Light mode */
-  --color-background: hsl(0 0% 100%);
+  /* shadcn/ui semantic colors - Light mode (background darker than content) */
+  --color-background: hsl(240 4% 94%);
   --color-foreground: hsl(240 10% 3.9%);
   --color-card: hsl(0 0% 100%);
   --color-card-foreground: hsl(240 10% 3.9%);
@@ -23,16 +24,16 @@
   --color-popover-foreground: hsl(240 10% 3.9%);
   --color-primary: hsl(142 76% 36%);
   --color-primary-foreground: hsl(355.7 100% 97.3%);
-  --color-secondary: hsl(240 4.8% 95.9%);
+  --color-secondary: hsl(240 4.8% 92%);
   --color-secondary-foreground: hsl(240 5.9% 10%);
-  --color-muted: hsl(240 4.8% 95.9%);
+  --color-muted: hsl(240 4% 91%);
   --color-muted-foreground: hsl(240 3.8% 46.1%);
-  --color-accent-ui: hsl(240 4.8% 95.9%);
+  --color-accent-ui: hsl(240 4.8% 92%);
   --color-accent-ui-foreground: hsl(240 5.9% 10%);
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(0 0% 98%);
-  --color-border: hsl(240 5.9% 90%);
-  --color-input: hsl(240 5.9% 90%);
+  --color-border: hsl(240 5.9% 88%);
+  --color-input: hsl(240 5.9% 88%);
   --color-ring: hsl(142 76% 36%);
 
   /* Border radius */
@@ -48,24 +49,26 @@
 
   .dark {
     color-scheme: dark;
-    --color-background: hsl(20 14.3% 4.1%);
+    /* Page background darkest; cards/content elevated and lighter */
+    --color-accent-foreground: hsl(0 0% 100%);
+    --color-background: hsl(220 15% 4%);
     --color-foreground: hsl(0 0% 95%);
-    --color-card: hsl(24 9.8% 10%);
+    --color-card: hsl(220 12% 10%);
     --color-card-foreground: hsl(0 0% 95%);
-    --color-popover: hsl(0 0% 9%);
+    --color-popover: hsl(220 12% 10%);
     --color-popover-foreground: hsl(0 0% 95%);
     --color-primary: hsl(142 86% 48%);
     --color-primary-foreground: hsl(144.9 80.4% 10%);
-    --color-secondary: hsl(240 3.7% 15.9%);
+    --color-secondary: hsl(220 10% 14%);
     --color-secondary-foreground: hsl(0 0% 98%);
-    --color-muted: hsl(0 0% 15%);
+    --color-muted: hsl(220 10% 8%);
     --color-muted-foreground: hsl(240 5% 64.9%);
-    --color-accent-ui: hsl(12 6.5% 15.1%);
+    --color-accent-ui: hsl(220 10% 14%);
     --color-accent-ui-foreground: hsl(0 0% 98%);
     --color-destructive: hsl(0 62.8% 30.6%);
     --color-destructive-foreground: hsl(0 85.7% 97.3%);
-    --color-border: hsl(240 3.7% 15.9%);
-    --color-input: hsl(240 3.7% 15.9%);
+    --color-border: hsl(220 10% 14%);
+    --color-input: hsl(220 10% 14%);
     --color-ring: hsl(142 86% 48%);
   }
 

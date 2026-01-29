@@ -1,9 +1,9 @@
-import NextAuth, { type DefaultSession } from 'next-auth';
+import NextAuth, { type DefaultSession, type NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from '@/lib/server/mongodb-client';
-import { UserModel } from '@/lib/UserTypes';
-import { connectDB } from '@/lib/server/connection';
+import clientPromise from '~/lib/server/mongodb-client';
+import { UserModel } from '~/lib/UserTypes';
+import { connectDB } from '~/lib/server/connection';
 
 declare module 'next-auth' {
   interface Session {
@@ -28,7 +28,7 @@ declare module 'next-auth' {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise) as NextAuthConfig['adapter'],
   providers: [
     Credentials({
       name: 'credentials',
@@ -87,9 +87,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;
-        session.user.image = token.image as string | undefined;
         session.user.role = token.role as string | undefined;
         session.user.regDate = token.regDate as Date | undefined;
+        // Load image from DB so avatar updates without re-login
+        try {
+          await connectDB();
+          const user = await UserModel.findById(token.id).select('image').lean();
+          if (user?.image !== undefined) {
+            session.user.image = user.image as string | undefined;
+          } else {
+            session.user.image = token.image as string | undefined;
+          }
+        } catch {
+          session.user.image = token.image as string | undefined;
+        }
       }
       return session;
     },

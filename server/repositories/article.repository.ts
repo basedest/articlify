@@ -1,5 +1,5 @@
-import { ArticleModel, type Article } from '@/lib/ArticleTypes';
-import { connectDB } from '@/lib/server/connection';
+import { ArticleModel, type Article } from '~/lib/ArticleTypes';
+import { connectDB } from '~/lib/server/connection';
 import { Types } from 'mongoose';
 
 export interface ArticleQuery {

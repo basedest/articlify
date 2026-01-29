@@ -1,8 +1,8 @@
-import { createServerCaller } from '@/lib/trpc/server';
+import { createServerCaller } from '~/lib/trpc/server';
 import { notFound } from 'next/navigation';
-import SmartList from '@/components/SmartList';
-import { categories } from '@/lib/lib';
-import { Badge } from '@/components/ui/badge';
+import SmartList from '~/components/SmartList';
+import { categories } from '~/lib/lib';
+import { Badge } from '~/components/ui/badge';
 
 interface PageProps {
   params: Promise<{ category: string }>;

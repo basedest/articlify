@@ -2208,7 +2208,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-label@npm:^2.1.1":
+"@radix-ui/react-label@npm:^2.1.8":
   version: 2.1.8
   resolution: "@radix-ui/react-label@npm:2.1.8"
   dependencies:
@@ -4229,7 +4229,7 @@ __metadata:
     "@radix-ui/react-avatar": "npm:^1.1.2"
     "@radix-ui/react-dialog": "npm:^1.1.4"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.4"
-    "@radix-ui/react-label": "npm:^2.1.1"
+    "@radix-ui/react-label": "npm:^2.1.8"
     "@radix-ui/react-select": "npm:^2.1.4"
     "@radix-ui/react-separator": "npm:^1.1.1"
     "@radix-ui/react-slot": "npm:^1.1.1"
@@ -4252,7 +4252,7 @@ __metadata:
     eslint: "npm:^9.17.0"
     eslint-config-next: "npm:16.1.6"
     formidable: "npm:^3.5.4"
-    lucide-react: "npm:^0.469.0"
+    lucide-react: "npm:^0.563.0"
     mongodb: "npm:^7.0.0"
     mongoose: "npm:^9.1.5"
     next: "npm:^16.1.6"
@@ -4271,6 +4271,7 @@ __metadata:
     tailwindcss: "npm:^4.1.18"
     tailwindcss-animate: "npm:^1.0.7"
     typescript: "npm:5.9.3"
+    usehooks-ts: "npm:^3.1.1"
     zod: "npm:^3.24.1"
   languageName: unknown
   linkType: soft
@@ -6389,6 +6390,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: 10c0/762998a63e095412b6099b8290903e0a8ddcb353ac6e2e0f2d7e7d03abd4275fe3c689d88960eb90b0dde4f177554d51a690f22a343932ecbc50a5d111849987
+  languageName: node
+  linkType: hard
+
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -6416,12 +6424,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.469.0":
-  version: 0.469.0
-  resolution: "lucide-react@npm:0.469.0"
+"lucide-react@npm:^0.563.0":
+  version: 0.563.0
+  resolution: "lucide-react@npm:0.563.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/0ee78d110550579b848a01446a440f733fd17e1bf1850aa01551b61f415e03e5f5ab7f26b56f1c648edc93856177f5476ff9f8f6f5d80e8fe45913d208f49961
+  checksum: 10c0/4a2027be255755d64ce18040062426dec07a5da920c000d9cd330e383fa10716a584c927dc03e91daccc6e05f6f486d4f49d1bd009e5f7763aa6fcf704806554
   languageName: node
   linkType: hard
 
@@ -8135,6 +8143,17 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10c0/35e1179f872a53227bdf8a827f7911da4c37c0f4091c29b76b1e32473d1670ebe7bcd880b808b7549ba9a5605c233350f800ffab963ee4a4ee346ee983b6019b
+  languageName: node
+  linkType: hard
+
+"usehooks-ts@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "usehooks-ts@npm:3.1.1"
+  dependencies:
+    lodash.debounce: "npm:^4.0.8"
+  peerDependencies:
+    react: ^16.8.0  || ^17 || ^18 || ^19 || ^19.0.0-rc
+  checksum: 10c0/8bbebf52b063f2e705eb27364f08ec2eff987b9e8d28d82a28248652dd89ef53cb514e1f2ee1cbc6ac6e083a8dce86310301c3e92a99902b98c32a26381202d7
   languageName: node
   linkType: hard
 

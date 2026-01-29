@@ -10,9 +10,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+} from '~/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Button } from '~/components/ui/button';
 import { LogOut, User, ChevronDown } from 'lucide-react';
 
 const UserMenu = () => {
@@ -48,7 +48,7 @@ const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => signOut()}
-          className="cursor-pointer text-destructive focus:text-destructive"
+          className="cursor-pointer text-destructive focus:bg-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground"
         >
           <LogOut className="mr-2 h-4 w-4" />
           Sign Out

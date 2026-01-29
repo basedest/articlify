@@ -1,7 +1,7 @@
-import { createServerCaller } from '@/lib/trpc/server';
-import SmartList from '@/components/SmartList';
+import { createServerCaller } from '~/lib/trpc/server';
+import SmartList from '~/components/SmartList';
 import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '~/components/ui/skeleton';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -21,7 +21,6 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <div className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg">
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-6xl font-bold tracking-tight md:text-7xl">
@@ -33,7 +32,6 @@ export default async function Home({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {/* Articles List */}
       <div className="container mx-auto px-4 py-8">
         <Suspense fallback={<ArticleListSkeleton />}>
           <SmartList

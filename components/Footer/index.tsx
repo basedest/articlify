@@ -8,8 +8,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
+} from '~/components/ui/select';
+import { Label } from '~/components/ui/label';
 
 const Footer: React.FC = () => {
   const [version, setVersion] = useState('');
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
   }
 
   return (
-    <footer className="border-t bg-muted/30 px-4 pb-6 pt-4 sm:pb-24">
+    <footer className="border-t bg-card px-4 pb-6 pt-4 sm:pb-24">
       <div className="container mx-auto">
         <div className="flex flex-col-reverse items-center justify-center gap-6 text-center sm:flex-row-reverse sm:text-left">
           <section className="flex flex-col gap-2">

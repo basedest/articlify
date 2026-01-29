@@ -5,17 +5,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Article } from '@/lib/ArticleTypes';
-import { User } from '@/lib/UserTypes';
+import { Article } from '~/lib/ArticleTypes';
+import { User } from '~/lib/UserTypes';
 import TagsList from '../TagsList';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '~/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -23,11 +23,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
+} from '~/components/ui/dialog';
+import { Badge } from '~/components/ui/badge';
 import { Edit2, Trash2 } from 'lucide-react';
-import { trpc } from '@/lib/trpc/client';
-import { useToast } from '@/hooks/use-toast';
+import { trpc } from '~/lib/trpc/client';
+import { useToast } from '~/hooks/use-toast';
 
 const ArticleItem: React.FC<Article> = (props) => {
   const img = props.img ?? `/img/${props.category}.png`;
@@ -135,6 +135,7 @@ const ArticleItem: React.FC<Article> = (props) => {
                 <Button
                   size="sm"
                   variant="outline"
+                  className="hover:bg-destructive hover:text-destructive-foreground"
                   onClick={() => setDialogOpen(true)}
                 >
                   <Trash2 className="h-3 w-3" />

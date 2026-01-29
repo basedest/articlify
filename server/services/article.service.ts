@@ -1,5 +1,5 @@
 import { articleRepository, type ArticleQuery } from '../repositories/article.repository';
-import { type Article } from '@/lib/ArticleTypes';
+import { type Article } from '~/lib/ArticleTypes';
 import { TRPCError } from '@trpc/server';
 
 export class ArticleService {

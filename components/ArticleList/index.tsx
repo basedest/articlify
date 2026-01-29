@@ -1,4 +1,4 @@
-import { Article } from '@/lib/ArticleTypes';
+import { Article } from '~/lib/ArticleTypes';
 import ArticleItem from '../ArticleItem';
 
 export interface ArticleListProps {

@@ -67,5 +67,6 @@ package-lock.json
 *.swo
 *~
 
-# Plans
+# Cursor stuff
 .cursor/plans/
+.cursor/temp_context/

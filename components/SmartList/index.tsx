@@ -2,11 +2,11 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Article } from '@/lib/ArticleTypes';
+import { Article } from '~/lib/ArticleTypes';
 import ArticleList from '../ArticleList';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import SearchBar from '../SearchBar';
+import { Button } from '~/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SmartListProps {
   articles: Article[];
@@ -30,11 +30,6 @@ export default function SmartList(props: SmartListProps) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const clearInput = () => {
-    setSearchQuery('');
-    router.push(pathname);
-  };
-
   useEffect(() => {
     if (props.articles.length === 0) {
       setCaption('No articles');
@@ -56,32 +51,16 @@ export default function SmartList(props: SmartListProps) {
 
   return (
     <div className="space-y-6">
-      {/* Search Bar */}
-      <div className="flex gap-2">
-        <Input
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by title..."
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          className="flex-1"
-        />
-        <Button onClick={handleSearch} variant="default">
-          <Search className="h-4 w-4 md:mr-2" />
-          <span className="hidden md:inline">Search</span>
-        </Button>
-        <Button onClick={clearInput} variant="outline">
-          <X className="h-4 w-4 md:mr-2" />
-          <span className="hidden md:inline">Clear</span>
-        </Button>
-      </div>
+      <SearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        onSearch={handleSearch}
+      />
 
-      {/* Caption */}
       <h2 className="text-2xl font-bold text-primary">{caption}</h2>
 
-      {/* Articles List */}
       <ArticleList articles={props.articles} />
 
-      {/* Pagination */}
       {props.totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <Button
