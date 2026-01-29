@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { X } from 'lucide-react';
 import { Badge } from '~/components/ui/badge';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '~/components/ui/command';
 import { cn } from '~/lib/utils';
 
 export interface Option {

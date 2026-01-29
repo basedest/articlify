@@ -1,7 +1,7 @@
 import { createServerCaller } from '~/lib/trpc/server';
 import { notFound } from 'next/navigation';
 import SmartList from '~/components/SmartList';
-import { categories } from '~/lib/lib';
+import { categories, Category } from '~/lib/lib';
 import { Badge } from '~/components/ui/badge';
 
 interface PageProps {
@@ -17,7 +17,7 @@ export default async function CategoryPage({
   const search = await searchParams;
 
   // Validate category
-  if (!categories.includes(category)) {
+  if (!categories.includes(category as Category)) {
     notFound();
   }
 

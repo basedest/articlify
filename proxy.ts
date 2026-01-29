@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// Lightweight middleware - just for redirects or simple checks
+// Lightweight proxy - just for redirects or simple checks
 // Auth protection is handled in app/(protected)/layout.tsx server-side
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // You can add simple redirects here if needed
   return NextResponse.next();
 }
