@@ -45,6 +45,16 @@
 @layer base {
   :root {
     color-scheme: light;
+    /* Callout (view page) – light theme */
+    --callout-warning-bg: hsl(48 96% 89%);
+    --callout-warning-text: hsl(32 95% 15%);
+    --callout-warning-border: hsl(38 92% 50%);
+    --callout-info-bg: hsl(199 89% 90%);
+    --callout-info-text: hsl(199 89% 15%);
+    --callout-info-border: hsl(199 89% 48%);
+    --callout-note-bg: hsl(240 4% 92%);
+    --callout-note-text: var(--color-foreground);
+    --callout-note-border: var(--color-primary);
   }
 
   .dark {
@@ -70,6 +80,16 @@
     --color-border: hsl(220 10% 14%);
     --color-input: hsl(220 10% 14%);
     --color-ring: hsl(142 86% 48%);
+    /* Callout (view page) – dark theme */
+    --callout-warning-bg: hsl(32 95% 8%);
+    --callout-warning-text: hsl(48 96% 90%);
+    --callout-warning-border: hsl(38 92% 50%);
+    --callout-info-bg: hsl(199 89% 12%);
+    --callout-info-text: hsl(199 89% 88%);
+    --callout-info-border: hsl(199 89% 48%);
+    --callout-note-bg: hsl(220 10% 14%);
+    --callout-note-text: var(--color-foreground);
+    --callout-note-border: var(--color-primary);
   }
 
   * {
@@ -379,4 +399,95 @@
 .tiptap a:hover,
 .ProseMirror a:hover {
   text-decoration: none;
+}
+
+/* Callout (warning/info/note) – editor: visible background and border in both themes */
+.tiptap [data-callout],
+.ProseMirror [data-callout] {
+  margin: 1.25em 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+}
+
+.tiptap [data-callout][data-type="warning"],
+.ProseMirror [data-callout][data-type="warning"] {
+  background-color: hsl(48 96% 89%);
+  border-left-color: hsl(38 92% 50%);
+  color: hsl(32 95% 15%);
+}
+
+.dark .tiptap [data-callout][data-type="warning"],
+.dark .ProseMirror [data-callout][data-type="warning"] {
+  background-color: hsl(32 95% 8%);
+  border-left-color: hsl(38 92% 50%);
+  color: hsl(48 96% 90%);
+}
+
+.tiptap [data-callout][data-type="info"],
+.ProseMirror [data-callout][data-type="info"] {
+  background-color: hsl(199 89% 90%);
+  border-left-color: hsl(199 89% 48%);
+  color: hsl(199 89% 15%);
+}
+
+.dark .tiptap [data-callout][data-type="info"],
+.dark .ProseMirror [data-callout][data-type="info"] {
+  background-color: hsl(199 89% 12%);
+  border-left-color: hsl(199 89% 48%);
+  color: hsl(199 89% 88%);
+}
+
+.tiptap [data-callout][data-type="note"],
+.ProseMirror [data-callout][data-type="note"] {
+  background-color: hsl(240 5% 92%);
+  border-left-color: var(--color-primary);
+  color: var(--color-foreground);
+}
+
+.dark .tiptap [data-callout][data-type="note"],
+.dark .ProseMirror [data-callout][data-type="note"] {
+  background-color: hsl(240 5% 14%);
+  border-left-color: var(--color-primary);
+  color: var(--color-foreground);
+}
+
+/* Show callout title in editor (stored in data-title attribute) */
+.tiptap [data-callout][data-title]:not([data-title=""])::before,
+.ProseMirror [data-callout][data-title]:not([data-title=""])::before {
+  content: attr(data-title);
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* Callout (view page) – use theme variables so light/dark follows app theme */
+.prose .callout-view,
+.callout-view {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.prose .callout-view-warning,
+.callout-view-warning {
+  background-color: var(--callout-warning-bg);
+  color: var(--callout-warning-text);
+  border-left-color: var(--callout-warning-border);
+}
+
+.prose .callout-view-info,
+.callout-view-info {
+  background-color: var(--callout-info-bg);
+  color: var(--callout-info-text);
+  border-left-color: var(--callout-info-border);
+}
+
+.prose .callout-view-note,
+.callout-view-note {
+  background-color: var(--callout-note-bg);
+  color: var(--callout-note-text);
+  border-left-color: var(--callout-note-border);
 }

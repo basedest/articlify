@@ -178,16 +178,10 @@ function renderBlock(node: PMNode, key: number): React.ReactNode {
     case 'callout': {
       const type = (node.attrs?.type as string) ?? 'warning';
       const title = (node.attrs?.title as string) ?? '';
-      const isWarning = type === 'warning';
+      const typeClass =
+        type === 'warning' ? 'callout-view-warning' : type === 'info' ? 'callout-view-info' : 'callout-view-note';
       return (
-        <div
-          key={key}
-          className={
-            isWarning
-              ? 'my-6 rounded-lg border-l-4 border-amber-500 bg-amber-50 p-4 dark:bg-amber-950'
-              : 'my-6 rounded-lg border-l-4 border-primary/50 bg-muted/50 p-4'
-          }
-        >
+        <div key={key} className={`callout-view ${typeClass}`}>
           {title && <div className="font-semibold">{title}</div>}
           <div className="mt-1 text-sm">{content.map((child, i) => renderBlock(child, i))}</div>
         </div>
