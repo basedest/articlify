@@ -1,15 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import EditorJS, { OutputData } from '@editorjs/editorjs';
-import {
-  useSaveCallback,
-  useLoadData,
-  options,
-  useSetData,
-  dataKey,
-} from '~/components/Editor';
+import type { ProseMirrorJSON, TiptapEditorRef } from '~/components/Tiptap/TiptapEditor';
 import { Article } from '~/lib/ArticleTypes';
 import TagsPicker from '~/components/TagsPicker';
 import { useSession } from 'next-auth/react';
@@ -27,16 +20,14 @@ import {
   SelectValue,
 } from '~/components/ui/select';
 import { Card, CardContent } from '~/components/ui/card';
-import { Alert, AlertDescription } from '~/components/ui/alert';
-import { Loader2, Upload, Save } from 'lucide-react';
+import { Loader2, Save } from 'lucide-react';
 import { trpc } from '~/lib/trpc/client';
 import { useToast } from '~/hooks/use-toast';
 
-const Editor = dynamic(
-  () =>
-    import('~/components/Editor/editor').then((mod) => mod.EditorContainer) as any,
+const TiptapEditorDynamic = dynamic(
+  () => import('~/components/Tiptap/TiptapEditor').then((m) => ({ default: m.TiptapEditor })),
   { ssr: false }
-) as any;
+);
 
 export default function EditorPage() {
   const router = useRouter();
@@ -47,7 +38,8 @@ export default function EditorPage() {
 
   const [file, setFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [editor, setEditor] = useState<EditorJS | null>(null);
+  const [editorReady, setEditorReady] = useState(false);
+  const tiptapRef = useRef<TiptapEditorRef | null>(null);
   const [uploading, setUploading] = useState(false);
   const [article, setArticle] = useState<Partial<Article>>({});
 
@@ -58,11 +50,11 @@ export default function EditorPage() {
       { enabled: !!editSlug }
     );
 
-  // Load data from props or localStorage
-  const { data: localData, loading: localLoading } = useLoadData();
-  const data = editSlug ? existingArticle?.content : localData;
-
-  useSetData(editor as EditorJS, data as OutputData);
+  // Initial content for Tiptap: use content_pm when editing, else empty doc
+  const initialContent: ProseMirrorJSON | null =
+    editSlug && existingArticle?.content_pm && typeof existingArticle.content_pm === 'object'
+      ? (existingArticle.content_pm as ProseMirrorJSON)
+      : null;
 
   // Initialize article state
   useEffect(() => {
@@ -81,7 +73,6 @@ export default function EditorPage() {
         title: 'Success',
         description: 'Article created successfully',
       });
-      localStorage.removeItem(dataKey);
       router.push(`/${data.category}/${data.slug}`);
     },
     onError: (error) => {
@@ -100,7 +91,6 @@ export default function EditorPage() {
         title: 'Success',
         description: 'Article updated successfully',
       });
-      localStorage.removeItem(dataKey);
       router.push(`/${data!.category}/${data!.slug}`);
     },
     onError: (error) => {
@@ -113,7 +103,6 @@ export default function EditorPage() {
     },
   });
 
-  const onSave = useSaveCallback(editor as EditorJS);
 
   const getSlug = (t: string) => {
     const filter = /[^а-яё\w-]/g;
@@ -147,7 +136,7 @@ export default function EditorPage() {
     setUploading(true);
 
     try {
-      const editorData = await onSave();
+      const contentPm: ProseMirrorJSON | null = tiptapRef.current?.getJSON() ?? null;
 
       let imageUrl: string | undefined = article.img;
       if (file && imageSrc && imageSrc.startsWith('data:')) {
@@ -165,7 +154,6 @@ export default function EditorPage() {
       const slug = getSlug(article.title);
 
       if (editSlug) {
-        // Update existing article
         updateMutation.mutate({
           slug: editSlug,
           title: article.title,
@@ -173,10 +161,11 @@ export default function EditorPage() {
           category: article.category,
           tags: article.tags,
           img: imageUrl,
-          content: editorData,
+          content_pm: contentPm,
+          content_format: 'pm',
+          content_schema_version: 1,
         });
       } else {
-        // Create new article
         createMutation.mutate({
           slug,
           title: article.title,
@@ -184,7 +173,9 @@ export default function EditorPage() {
           category: article.category,
           tags: article.tags || [],
           img: imageUrl,
-          content: editorData,
+          content_pm: contentPm,
+          content_format: 'pm',
+          content_schema_version: 1,
         });
       }
     } catch (error) {
@@ -216,8 +207,7 @@ export default function EditorPage() {
   }, [editSlug, existingArticle, session, router, toast]);
 
   const authLoading = status === 'loading';
-  const disabled =
-    editor === null || localLoading || authLoading || uploading;
+  const disabled = !editorReady || authLoading || uploading;
 
   if (authLoading || (editSlug && articleLoading)) {
     return (
@@ -323,11 +313,10 @@ export default function EditorPage() {
           <Label>Content</Label>
           <Card>
             <CardContent className="p-6">
-              <Editor
-                reInit
-                editorRef={setEditor}
-                options={options}
-                data={data}
+              <TiptapEditorDynamic
+                content={initialContent}
+                editorRef={tiptapRef}
+                onReady={() => setEditorReady(true)}
               />
             </CardContent>
           </Card>

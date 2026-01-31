@@ -4,9 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import TagsList from '~/components/TagsList';
 import { Button } from '~/components/ui/button';
-import { Badge } from '~/components/ui/badge';
 import { Separator } from '~/components/ui/separator';
 import { ArrowLeft, CheckCircle2, Circle } from 'lucide-react';
+import { ProseMirrorRenderer } from '~/components/ProseMirrorRenderer';
+import type { PMDoc } from '~/lib/ProseMirrorTypes';
 
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -75,7 +76,10 @@ export default async function ArticlePage({ params }: PageProps) {
       <Separator className="mb-8" />
 
       <article className="prose prose-zinc dark:prose-invert max-w-none">
-        {article?.content?.blocks.map((item: any) => {
+        {article?.content_pm && article.content_format === 'pm' ? (
+          <ProseMirrorRenderer doc={article.content_pm as unknown as PMDoc} />
+        ) : (
+        article?.content?.blocks?.map((item: any) => {
           const { id } = item;
           switch (item.type) {
             case 'paragraph':
@@ -216,7 +220,8 @@ export default async function ArticlePage({ params }: PageProps) {
             default:
               return null;
           }
-        })}
+        })
+        )}
       </article>
 
       <div className="mt-12 space-y-6 border-t pt-8">

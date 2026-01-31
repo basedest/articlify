@@ -28,11 +28,14 @@ export class ArticleService {
       });
     }
 
+    const contentFormat =
+      articleData.content_pm != null ? 'pm' : (articleData.content_format ?? 'editorjs');
+    const contentSchemaVersion = contentFormat === 'pm' ? 1 : undefined;
+
     return await articleRepository.create({
       ...articleData,
-      // TODO: Change this after migration is complete
-      content_format: 'editorjs',
-      content_schema_version: 1,
+      content_format: contentFormat,
+      content_schema_version: contentSchemaVersion,
       createdAt: new Date(),
     });
   }
