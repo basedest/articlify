@@ -1,4 +1,4 @@
-import { createServerCaller } from '~/lib/trpc/server';
+import { createServerCallerPublic } from '~/lib/trpc/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ interface PageProps {
 export const revalidate = 30; // ISR - revalidate every 30 seconds
 
 export async function generateStaticParams() {
-  const caller = await createServerCaller();
+  const caller = createServerCallerPublic();
   const slugs = await caller.article.getAllSlugs();
 
   return slugs.map((article) => ({
@@ -27,7 +27,7 @@ export async function generateStaticParams() {
 
 export default async function ArticlePage({ params }: PageProps) {
   const { category, slug } = await params;
-  const caller = await createServerCaller();
+  const caller = createServerCallerPublic();
 
   let article;
   try {
@@ -256,7 +256,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const caller = await createServerCaller();
+  const caller = createServerCallerPublic();
 
   try {
     const article = await caller.article.getBySlug({ slug });

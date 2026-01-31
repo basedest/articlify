@@ -1,7 +1,11 @@
 import { type Session } from 'next-auth';
 import { auth } from '~/auth';
 
-export async function createContext() {
+export type Context = {
+  session: Session | null;
+};
+
+export async function createContext(): Promise<Context> {
   let session: Session | null = null;
 
   try {
@@ -18,4 +22,7 @@ export async function createContext() {
   };
 }
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
+/** Public context (no auth). Use for static/ISR pages to avoid reading headers(). */
+export function createPublicContext(): Context {
+  return { session: null };
+}
