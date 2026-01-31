@@ -13,16 +13,14 @@ export class S3Storage implements StorageClient {
   private publicUrl: string;
 
   constructor() {
-    const region = process.env.S3_REGION || 'us-east-1';
+    const region = process.env.S3_REGION || '';
     const accessKeyId = process.env.S3_ACCESS_KEY;
     const secretAccessKey = process.env.S3_SECRET_KEY;
-    this.bucket = process.env.S3_BUCKET || 'articlify-production';
-    // Virtual-hosted style: https://bucket.s3.region.amazonaws.com (required for public URLs)
-    this.publicUrl =
-      process.env.S3_PUBLIC_URL ||
-      `https://${this.bucket}.s3.${region}.amazonaws.com`;
+    this.bucket = process.env.S3_BUCKET || '';
 
-    if (!accessKeyId || !secretAccessKey) {
+    this.publicUrl = process.env.S3_PUBLIC_URL || '';
+
+    if (!accessKeyId || !secretAccessKey || !this.publicUrl || !this.bucket || !region) {
       throw new Error('AWS credentials are required for S3 storage');
     }
 
@@ -32,10 +30,8 @@ export class S3Storage implements StorageClient {
         accessKeyId,
         secretAccessKey,
       },
-      ...(process.env.S3_ENDPOINT && {
-        endpoint: process.env.S3_ENDPOINT,
-        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
-      }),
+      endpoint: this.publicUrl,
+      forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
     });
   }
 
@@ -66,7 +62,9 @@ export class S3Storage implements StorageClient {
   }
 
   getPublicUrl(key: string): string {
-    const base = this.publicUrl.replace(/\/$/, '');
+    const url = new URL(this.publicUrl);
+    const normalizedUrl = `${url.protocol}//${this.bucket}.${url.hostname}`;
+    const base = normalizedUrl.replace(/\/$/, '');
     return `${base}/${key}`;
   }
 

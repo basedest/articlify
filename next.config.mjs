@@ -3,9 +3,10 @@
 // Derive image config from storage env (local MinIO vs prod S3)
 const storageProvider = process.env.STORAGE_PROVIDER || 'minio';
 const isLocalStorage = storageProvider === 'minio';
+const publicUrl = process.env.S3_PUBLIC_URL;
 
 const imageRemotePatterns = [
-  // AWS S3 (production)
+  // AWS S3
   { protocol: 'https', hostname: '**.s3.amazonaws.com', pathname: '/**' },
   { protocol: 'https', hostname: '**.s3.*.amazonaws.com', pathname: '/**' },
 ];
@@ -17,6 +18,12 @@ if (isLocalStorage) {
     hostname: 'localhost',
     port: '9000',
     pathname: '/articlify-images/**',
+  });
+} else if (publicUrl) {
+  imageRemotePatterns.unshift({
+    protocol: new URL(publicUrl).protocol.slice(0, -1),
+    hostname: `**.${new URL(publicUrl).hostname}`,
+    pathname: '/**',
   });
 }
 
