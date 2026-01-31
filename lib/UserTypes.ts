@@ -1,7 +1,7 @@
 import { Schema, model, models, Types } from 'mongoose'
 import bcrypt from "bcryptjs"
 
-//тип данных: пользователь
+//user data type
 export interface User {
     name:       string
     email:      string
@@ -12,7 +12,7 @@ export interface User {
     id?:        Types.ObjectId
 }
 
-//схема данных для БД
+//schema for DB
 const UserSchema = new Schema<User>({
     name: {
         type: String,
@@ -36,17 +36,17 @@ const UserSchema = new Schema<User>({
     image: String,
 })
 
-//перед сохранением пользователя в БД, хешируем пароль
+//before saving user to DB, hash password
 UserSchema.pre("save", async function () {
-    //при изменении или новом пароле
+    //if password is modified or new
     if (this.isModified("password") || this.isNew) {
-      //генерируем соль и хешируем пароль
+      //generate salt and hash password
       const salt = await bcrypt.genSalt(10);
       this.password = await bcrypt.hash(this.password, salt);
     }
 })
 
-//сравнение паролей криптографически
+//compare passwords cryptographically
 UserSchema.methods.comparePassword = async function(password:string) {
   return bcrypt.compare(password, this.password)
 }

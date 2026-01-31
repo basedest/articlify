@@ -30,6 +30,9 @@ export class ArticleService {
 
     return await articleRepository.create({
       ...articleData,
+      // TODO: Change this after migration is complete
+      content_format: 'editorjs',
+      content_schema_version: 1,
       createdAt: new Date(),
     });
   }
