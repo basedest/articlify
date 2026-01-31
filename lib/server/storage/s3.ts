@@ -17,9 +17,10 @@ export class S3Storage implements StorageClient {
     const accessKeyId = process.env.S3_ACCESS_KEY;
     const secretAccessKey = process.env.S3_SECRET_KEY;
     this.bucket = process.env.S3_BUCKET || 'articlify-production';
+    // Virtual-hosted style: https://bucket.s3.region.amazonaws.com (required for public URLs)
     this.publicUrl =
       process.env.S3_PUBLIC_URL ||
-      `https://${this.bucket}.s3.amazonaws.com`;
+      `https://${this.bucket}.s3.${region}.amazonaws.com`;
 
     if (!accessKeyId || !secretAccessKey) {
       throw new Error('AWS credentials are required for S3 storage');
@@ -31,6 +32,10 @@ export class S3Storage implements StorageClient {
         accessKeyId,
         secretAccessKey,
       },
+      ...(process.env.S3_ENDPOINT && {
+        endpoint: process.env.S3_ENDPOINT,
+        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+      }),
     });
   }
 
@@ -61,7 +66,8 @@ export class S3Storage implements StorageClient {
   }
 
   getPublicUrl(key: string): string {
-    return `${this.publicUrl}/${key}`;
+    const base = this.publicUrl.replace(/\/$/, '');
+    return `${base}/${key}`;
   }
 
   async getSignedUrl(key: string, expiresIn = 3600): Promise<string> {

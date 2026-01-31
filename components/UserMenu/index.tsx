@@ -27,7 +27,7 @@ const UserMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="flex items-center gap-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={session.user.image || undefined} />
+            <AvatarImage src={session.user.image ?? '/api/user/avatar'} />
             <AvatarFallback>
               {session.user.name?.[0]?.toUpperCase() || 'U'}
             </AvatarFallback>

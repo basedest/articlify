@@ -1,6 +1,16 @@
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 import { articleService } from '../services/article.service';
+import { getStorageClient } from '~/lib/server/storage/factory';
+
+const CONTENT_TYPE_TO_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+};
 
 export const articleRouter = router({
   list: publicProcedure
@@ -28,15 +38,22 @@ export const articleRouter = router({
 
   create: protectedProcedure
     .input(
-      z.object({
-        slug: z.string().min(1),
-        title: z.string().min(1),
-        description: z.string().min(1),
-        category: z.string().min(1),
-        img: z.string().optional(),
-        tags: z.array(z.string()).optional(),
-        content: z.any(),
-      })
+      z
+        .object({
+          slug: z.string().min(1),
+          title: z.string().min(1),
+          description: z.string().min(1),
+          category: z.string().min(1),
+          img: z.string().optional(),
+          tags: z.array(z.string()).optional(),
+          content: z.any(),
+        })
+        .refine(
+          (data) =>
+            !data.img ||
+            (data.img.startsWith('http://') || data.img.startsWith('https://')),
+          { message: 'Cover image must be an http(s) URL from storage' }
+        )
     )
     .mutation(async ({ input, ctx }) => {
       return await articleService.create({
@@ -47,15 +64,22 @@ export const articleRouter = router({
 
   update: protectedProcedure
     .input(
-      z.object({
-        slug: z.string(),
-        title: z.string().optional(),
-        description: z.string().optional(),
-        category: z.string().optional(),
-        img: z.string().optional(),
-        tags: z.array(z.string()).optional(),
-        content: z.any().optional(),
-      })
+      z
+        .object({
+          slug: z.string(),
+          title: z.string().optional(),
+          description: z.string().optional(),
+          category: z.string().optional(),
+          img: z.string().optional(),
+          tags: z.array(z.string()).optional(),
+          content: z.any().optional(),
+        })
+        .refine(
+          (data) =>
+            !data.img ||
+            (data.img.startsWith('http://') || data.img.startsWith('https://')),
+          { message: 'Cover image must be an http(s) URL from storage' }
+        )
     )
     .mutation(async ({ input, ctx }) => {
       const { slug, ...updateData } = input;
@@ -80,4 +104,46 @@ export const articleRouter = router({
   getAllSlugs: publicProcedure.query(async () => {
     return await articleService.getAllSlugs();
   }),
+
+  /** Upload article cover image to storage; returns public URL. Store URL only, never binary. */
+  uploadCoverImage: protectedProcedure
+    .input(
+      z.object({
+        imageBase64: z.string(),
+        contentType: z.string().regex(/^image\/(jpeg|jpg|png|webp|gif)$/),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.session.user.id;
+      if (!userId) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+      }
+      let buffer: Buffer;
+      try {
+        buffer = Buffer.from(input.imageBase64, 'base64');
+      } catch {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid image data' });
+      }
+      if (buffer.length > 5 * 1024 * 1024) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Cover image must be smaller than 5MB',
+        });
+      }
+      const ext = CONTENT_TYPE_TO_EXT[input.contentType] ?? 'jpg';
+      const key = `articles/covers/${userId}-${Date.now()}.${ext}`;
+      try {
+        const storage = getStorageClient();
+        const url = await storage.uploadFile(buffer, key, input.contentType);
+        return { url };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Storage upload failed';
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: message.includes('credentials') || message.includes('Storage')
+            ? `${message}. Configure STORAGE_PROVIDER and S3/MinIO env vars.`
+            : message,
+        });
+      }
+    }),
 });

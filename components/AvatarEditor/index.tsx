@@ -20,8 +20,8 @@ export default function AvatarEditor() {
   const [uploading, setUploading] = useState(false);
 
   const uploadAvatar = trpc.user.uploadAvatar.useMutation({
-    onSuccess: () => {
-      updateSession();
+    onSuccess: async () => {
+      await updateSession();
       router.refresh();
       toast({
         title: 'Avatar updated',
@@ -85,7 +85,7 @@ export default function AvatarEditor() {
       />
       <div className="relative">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={user.image ?? undefined} />
+          <AvatarImage src={user.image ?? '/api/user/avatar'} />
           <AvatarFallback className="text-lg">
             {displayName[0]?.toUpperCase() ?? 'U'}
           </AvatarFallback>

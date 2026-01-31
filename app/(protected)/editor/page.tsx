@@ -132,15 +132,7 @@ export default function EditorPage() {
     }
   };
 
-  const uploadImageToS3 = async (file: File): Promise<string> => {
-    // TODO: Implement S3 upload via tRPC
-    // For now, return a placeholder
-    // In a real implementation, you'd:
-    // 1. Call a tRPC procedure to get a presigned URL
-    // 2. Upload the file directly to S3
-    // 3. Return the public URL
-    return imageSrc || '';
-  };
+  const uploadCoverImageMutation = trpc.article.uploadCoverImage.useMutation();
 
   const onSubmit = async () => {
     if (!article.title || !article.category || !article.description) {
@@ -157,9 +149,17 @@ export default function EditorPage() {
     try {
       const editorData = await onSave();
 
-      let imageUrl = article.img;
-      if (file && imageSrc) {
-        imageUrl = await uploadImageToS3(file);
+      let imageUrl: string | undefined = article.img;
+      if (file && imageSrc && imageSrc.startsWith('data:')) {
+        const match = imageSrc.match(/^data:([^;]+);base64,(.+)$/);
+        if (match) {
+          const [, contentType, base64] = match;
+          const result = await uploadCoverImageMutation.mutateAsync({
+            imageBase64: base64,
+            contentType: contentType ?? 'image/jpeg',
+          });
+          imageUrl = result.url;
+        }
       }
 
       const slug = getSlug(article.title);

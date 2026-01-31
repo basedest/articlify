@@ -20,7 +20,15 @@ export const userRouter = router({
     }),
 
   updateAvatar: protectedProcedure
-    .input(z.object({ imageUrl: z.string() }))
+    .input(
+      z.object({
+        imageUrl: z
+          .url()
+          .refine((url) => url.startsWith('http://') || url.startsWith('https://'), {
+            message: 'Avatar must be an http or https URL',
+          }),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.session.user.id;
       if (!userId) {
@@ -59,28 +67,22 @@ export const userRouter = router({
         });
       }
 
+      const ext = CONTENT_TYPE_TO_EXT[input.contentType] ?? 'jpg';
+      const key = `avatars/${userId}-${Date.now()}.${ext}`;
       let imageUrl: string;
-
       try {
-        const ext = CONTENT_TYPE_TO_EXT[input.contentType] ?? 'jpg';
-        const key = `avatars/${userId}.${ext}`;
         const storage = getStorageClient();
-        imageUrl = await storage.uploadFile(
-          buffer,
-          key,
-          input.contentType
-        );
-      } catch {
-        // Fallback: store as data URL when storage (MinIO/S3) is unavailable
-        const dataUrl = `data:${input.contentType};base64,${input.imageBase64}`;
-        if (dataUrl.length > 500_000) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message:
-              'Image too large for fallback. Configure MinIO/S3 or use a smaller image (< ~200KB).',
-          });
-        }
-        imageUrl = dataUrl;
+        imageUrl = await storage.uploadFile(buffer, key, input.contentType);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : 'Storage upload failed';
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message:
+            message.includes('credentials') || message.includes('Storage')
+              ? `${message}. Configure STORAGE_PROVIDER and S3/MinIO env vars.`
+              : message,
+        });
       }
 
       return await userService.updateAvatar(userId, imageUrl);

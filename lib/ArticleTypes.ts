@@ -13,6 +13,12 @@ export interface Article {
     img?: string
     tags?: Array<string>
     content?: OutputData
+    /** ProseMirror (Tiptap) doc JSON; nullable until backfilled. */
+    content_pm?: Record<string, unknown> | null
+    /** Which field to use for rendering/saving. */
+    content_format?: 'editorjs' | 'pm'
+    /** Schema version for PM docs (start at 1). */
+    content_schema_version?: number
     _id?: Types.ObjectId
 }
 
@@ -46,6 +52,9 @@ const ArticleSchema = new Schema<Article>({
     img: String,
     tags: [String],
     content: Object,
+    content_pm: { type: Schema.Types.Mixed, required: false },
+    content_format: { type: String, enum: ['editorjs', 'pm'], required: false },
+    content_schema_version: { type: Number, required: false },
     editedAt: Date
 })
 
