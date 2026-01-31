@@ -33,6 +33,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -44,6 +45,28 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-#lockfiles
+# lockfiles
 package-lock.json
-yarn.lock
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Editor and IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*~
+
+# Cursor stuff
+.cursor/plans/
+.cursor/temp_context/

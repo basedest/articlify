@@ -1,19 +1,26 @@
-import { Article } from "../../lib/ArticleTypes"
-import ArticleItem from "../ArticleItem"
-import cl from "./ArticleList.module.scss"
+import { Article } from '~/lib/ArticleTypes';
+import ArticleItem from '../ArticleItem';
 
 export interface ArticleListProps {
-  articles: Article[]
+  articles: Article[];
 }
 
-const ArticleList:React.FC<ArticleListProps> = ({articles}) => {
+const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
+  if (articles.length === 0) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground">
+        No articles found
+      </div>
+    );
+  }
+
   return (
-    <div className={cl.articleList + " min-h-[50vh]"}>
-        {
-          articles.map(article => <ArticleItem key={article.slug} {...article}/>)
-        }
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {articles.map((article) => (
+        <ArticleItem key={article.slug} {...article} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default ArticleList
+export default ArticleList;

@@ -1,0 +1,493 @@
+@import "tailwindcss";
+
+@theme {
+  /* Custom colors */
+  --color-accent: #1db954;
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-accent-bright: #1ed760;
+  --color-based-yellow: #fb4;
+  --color-based-red: #e74c3c;
+  --color-based-black: #191414;
+  --color-spearmint: #4b917b;
+  --color-fuchia: #f037a5;
+  --color-citric: #cdf564;
+  --color-success: #00C851;
+  --color-error: #f44;
+  --color-info: #33b5e5;
+
+  /* shadcn/ui semantic colors - Light mode (background darker than content) */
+  --color-background: hsl(240 4% 94%);
+  --color-foreground: hsl(240 10% 3.9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(240 10% 3.9%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(240 10% 3.9%);
+  --color-primary: hsl(142 76% 36%);
+  --color-primary-foreground: hsl(355.7 100% 97.3%);
+  --color-secondary: hsl(240 4.8% 92%);
+  --color-secondary-foreground: hsl(240 5.9% 10%);
+  --color-muted: hsl(240 4% 91%);
+  --color-muted-foreground: hsl(240 3.8% 46.1%);
+  --color-accent-ui: hsl(240 4.8% 92%);
+  --color-accent-ui-foreground: hsl(240 5.9% 10%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(240 5.9% 88%);
+  --color-input: hsl(240 5.9% 88%);
+  --color-ring: hsl(142 76% 36%);
+
+  /* Border radius */
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    /* Callout (view page) – light theme */
+    --callout-warning-bg: hsl(48 96% 89%);
+    --callout-warning-text: hsl(32 95% 15%);
+    --callout-warning-border: hsl(38 92% 50%);
+    --callout-info-bg: hsl(199 89% 90%);
+    --callout-info-text: hsl(199 89% 15%);
+    --callout-info-border: hsl(199 89% 48%);
+    --callout-note-bg: hsl(240 4% 92%);
+    --callout-note-text: var(--color-foreground);
+    --callout-note-border: var(--color-primary);
+  }
+
+  .dark {
+    color-scheme: dark;
+    /* Page background darkest; cards/content elevated and lighter */
+    --color-accent-foreground: hsl(0 0% 100%);
+    --color-background: hsl(220 15% 4%);
+    --color-foreground: hsl(0 0% 95%);
+    --color-card: hsl(220 12% 10%);
+    --color-card-foreground: hsl(0 0% 95%);
+    --color-popover: hsl(220 12% 10%);
+    --color-popover-foreground: hsl(0 0% 95%);
+    --color-primary: hsl(142 86% 48%);
+    --color-primary-foreground: hsl(144.9 80.4% 10%);
+    --color-secondary: hsl(220 10% 14%);
+    --color-secondary-foreground: hsl(0 0% 98%);
+    --color-muted: hsl(220 10% 8%);
+    --color-muted-foreground: hsl(240 5% 64.9%);
+    --color-accent-ui: hsl(220 10% 14%);
+    --color-accent-ui-foreground: hsl(0 0% 98%);
+    --color-destructive: hsl(0 62.8% 30.6%);
+    --color-destructive-foreground: hsl(0 85.7% 97.3%);
+    --color-border: hsl(220 10% 14%);
+    --color-input: hsl(220 10% 14%);
+    --color-ring: hsl(142 86% 48%);
+    /* Callout (view page) – dark theme */
+    --callout-warning-bg: hsl(32 95% 8%);
+    --callout-warning-text: hsl(48 96% 90%);
+    --callout-warning-border: hsl(38 92% 50%);
+    --callout-info-bg: hsl(199 89% 12%);
+    --callout-info-text: hsl(199 89% 88%);
+    --callout-info-border: hsl(199 89% 48%);
+    --callout-note-bg: hsl(220 10% 14%);
+    --callout-note-text: var(--color-foreground);
+    --callout-note-border: var(--color-primary);
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* EditorJS specific styles */
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: 100%;
+}
+
+.codex-editor__redactor {
+  padding-bottom: 0 !important;
+}
+
+.ce-block {
+  margin-bottom: 1rem;
+}
+
+.ce-paragraph {
+  font-size: 1rem;
+  line-height: 1.625;
+}
+
+.ce-header {
+  font-weight: 700;
+}
+
+/* Tiptap / ProseMirror editor – scope to .tiptap (Tiptap wrapper) and .ProseMirror */
+.tiptap,
+.ProseMirror {
+  outline: none;
+}
+
+.tiptap p.is-editor-empty:first-child::before,
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--color-muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Block elements */
+.tiptap p,
+.ProseMirror p {
+  margin: 0.5em 0 1em;
+  line-height: 1.625;
+}
+
+.tiptap h1,
+.ProseMirror h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 1.5em 0 0.5em;
+  line-height: 1.25;
+}
+
+.tiptap h2,
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25em 0 0.5em;
+  line-height: 1.3;
+}
+
+.tiptap h3,
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  line-height: 1.4;
+}
+
+.tiptap blockquote,
+.ProseMirror blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding-left: 1rem;
+  margin: 1em 0;
+  color: var(--color-muted-foreground);
+  font-style: italic;
+}
+
+.tiptap ul,
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.75em 0;
+}
+
+.tiptap ol,
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.75em 0;
+}
+
+.tiptap li,
+.ProseMirror li {
+  margin: 0.25em 0;
+}
+
+/* Task list – use ul[data-type="taskList"] > li so we match even when li has no data-type (node view) */
+.tiptap ul[data-type="taskList"],
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Any li directly under task list is a task item (label + content div) */
+.tiptap ul[data-type="taskList"] > li,
+.ProseMirror ul[data-type="taskList"] > li,
+.tiptap li[data-type="taskItem"],
+.ProseMirror li[data-type="taskItem"] {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.35em 0;
+}
+
+.tiptap ul[data-type="taskList"] > li > label,
+.ProseMirror ul[data-type="taskList"] > li > label,
+.tiptap li[data-type="taskItem"] > label,
+.ProseMirror li[data-type="taskItem"] > label {
+  display: inline-flex !important;
+  flex-shrink: 0;
+  align-items: center;
+  margin: 0 !important;
+  padding: 0;
+  cursor: pointer;
+}
+
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"],
+.ProseMirror ul[data-type="taskList"] > li > label input[type="checkbox"],
+.tiptap li[data-type="taskItem"] > label input[type="checkbox"],
+.ProseMirror li[data-type="taskItem"] > label input[type="checkbox"] {
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+/* Content div (contentDOM) – stays on same row as checkbox */
+.tiptap ul[data-type="taskList"] > li > div,
+.ProseMirror ul[data-type="taskList"] > li > div,
+.tiptap li[data-type="taskItem"] > div,
+.ProseMirror li[data-type="taskItem"] > div {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: block;
+}
+
+.tiptap ul[data-type="taskList"] > li > div p,
+.ProseMirror ul[data-type="taskList"] > li > div p,
+.tiptap li[data-type="taskItem"] > div p,
+.ProseMirror li[data-type="taskItem"] > div p {
+  margin: 0 !important;
+}
+
+.tiptap ul[data-type="taskList"] > li[data-checked="true"] > div,
+.ProseMirror ul[data-type="taskList"] > li[data-checked="true"] > div,
+.tiptap li[data-type="taskItem"][data-checked="true"] > div,
+.ProseMirror li[data-type="taskItem"][data-checked="true"] > div {
+  text-decoration: line-through;
+  color: var(--color-muted-foreground);
+}
+
+/* Fallback: task list inside any contenteditable (in case .tiptap/.ProseMirror not on parent) */
+[contenteditable="true"] ul[data-type="taskList"] > li {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+[contenteditable="true"] ul[data-type="taskList"] > li > label {
+  display: inline-flex !important;
+  flex-shrink: 0;
+}
+[contenteditable="true"] ul[data-type="taskList"] > li > div {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+[contenteditable="true"] ul[data-type="taskList"] > li > label input,
+[contenteditable="true"] ul[data-type="taskList"] > li > label span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Code */
+.tiptap code,
+.ProseMirror code {
+  background-color: var(--color-muted);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875em;
+  font-family: ui-monospace, monospace;
+}
+
+.tiptap pre,
+.ProseMirror pre {
+  background-color: var(--color-muted);
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  margin: 1em 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.tiptap pre code,
+.ProseMirror pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Horizontal rule */
+.tiptap hr,
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5em 0;
+}
+
+/* Table */
+.tiptap table,
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+
+.tiptap th,
+.tiptap td,
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.tiptap th,
+.ProseMirror th {
+  font-weight: 600;
+  background-color: var(--color-muted);
+}
+
+/* Image & figure */
+.tiptap img,
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+.tiptap figure,
+.ProseMirror figure {
+  margin: 1.25em 0;
+}
+
+.tiptap figcaption,
+.ProseMirror figcaption {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Inline marks */
+.tiptap strong,
+.ProseMirror strong {
+  font-weight: 700;
+}
+
+.tiptap em,
+.ProseMirror em {
+  font-style: italic;
+}
+
+.tiptap u,
+.ProseMirror u {
+  text-decoration: underline;
+}
+
+.tiptap mark,
+.ProseMirror mark {
+  background-color: rgba(251, 191, 36, 0.4);
+  padding: 0 0.1em;
+}
+
+.tiptap a,
+.ProseMirror a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tiptap a:hover,
+.ProseMirror a:hover {
+  text-decoration: none;
+}
+
+/* Callout (warning/info/note) – editor: visible background and border in both themes */
+.tiptap [data-callout],
+.ProseMirror [data-callout] {
+  margin: 1.25em 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+}
+
+.tiptap [data-callout][data-type="warning"],
+.ProseMirror [data-callout][data-type="warning"] {
+  background-color: hsl(48 96% 89%);
+  border-left-color: hsl(38 92% 50%);
+  color: hsl(32 95% 15%);
+}
+
+.dark .tiptap [data-callout][data-type="warning"],
+.dark .ProseMirror [data-callout][data-type="warning"] {
+  background-color: hsl(32 95% 8%);
+  border-left-color: hsl(38 92% 50%);
+  color: hsl(48 96% 90%);
+}
+
+.tiptap [data-callout][data-type="info"],
+.ProseMirror [data-callout][data-type="info"] {
+  background-color: hsl(199 89% 90%);
+  border-left-color: hsl(199 89% 48%);
+  color: hsl(199 89% 15%);
+}
+
+.dark .tiptap [data-callout][data-type="info"],
+.dark .ProseMirror [data-callout][data-type="info"] {
+  background-color: hsl(199 89% 12%);
+  border-left-color: hsl(199 89% 48%);
+  color: hsl(199 89% 88%);
+}
+
+.tiptap [data-callout][data-type="note"],
+.ProseMirror [data-callout][data-type="note"] {
+  background-color: hsl(240 5% 92%);
+  border-left-color: var(--color-primary);
+  color: var(--color-foreground);
+}
+
+.dark .tiptap [data-callout][data-type="note"],
+.dark .ProseMirror [data-callout][data-type="note"] {
+  background-color: hsl(240 5% 14%);
+  border-left-color: var(--color-primary);
+  color: var(--color-foreground);
+}
+
+/* Show callout title in editor (stored in data-title attribute) */
+.tiptap [data-callout][data-title]:not([data-title=""])::before,
+.ProseMirror [data-callout][data-title]:not([data-title=""])::before {
+  content: attr(data-title);
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* Callout (view page) – use theme variables so light/dark follows app theme */
+.prose .callout-view,
+.callout-view {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.prose .callout-view-warning,
+.callout-view-warning {
+  background-color: var(--callout-warning-bg);
+  color: var(--callout-warning-text);
+  border-left-color: var(--callout-warning-border);
+}
+
+.prose .callout-view-info,
+.callout-view-info {
+  background-color: var(--callout-info-bg);
+  color: var(--callout-info-text);
+  border-left-color: var(--callout-info-border);
+}
+
+.prose .callout-view-note,
+.callout-view-note {
+  background-color: var(--callout-note-bg);
+  color: var(--callout-note-text);
+  border-left-color: var(--callout-note-border);
+}

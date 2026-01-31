@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import EditorJS, { EditorConfig, OutputData } from '@editorjs/editorjs'
 import { tools } from './tools'
 
@@ -72,14 +72,14 @@ interface EditorContainerProps {
   options: EditorConfig
 }
 
-export const EditorContainer: React.FC<EditorContainerProps> 
-  = ({ editorRef, children, data, options }) => {
+export const EditorContainer
+  = ({ editorRef, children, data, options }: PropsWithChildren<EditorContainerProps>) => {
   useEditor(tools, { data, editorRef }, options)
 
   return (
-    <React.Fragment>
+    <>
       {!children && <div className="w-full" id="editor-js"></div>}
       {children}
-    </React.Fragment>
+    </>
   )
 }

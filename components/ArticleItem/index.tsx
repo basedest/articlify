@@ -1,101 +1,152 @@
-import { useSession } from "next-auth/react"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import { Article } from "../../lib/ArticleTypes"
-import checkPriveleges from "../../lib/client/checkPriveleges"
-import deleteArticle from "../../lib/client/deleteArticle"
-import { User } from "../../lib/UserTypes"
-import Modal from "../Modal"
-import TagsList from "../TagsList"
+'use client';
 
-const ArticleItem:React.FC<Article> = props => {
-    const img = props.img ?? `/img/${props.category}.png`
-    const { data: session } = useSession()
-    const [modal, setModal] = useState(false)
-    const router = useRouter()
-    return (
-        <>
-            <Modal visible={modal} setVisible={setModal}>
-                <div className="flex flex-col content-center gap-6 text-2xl">
-                    <span className="text-center">
-                        Do you really want to delete this article?
-                    </span>
-                    <div className="flex place-content-center gap-4">
-                        <button 
-                            className="rounded-2xl px-3 pb-2 pt-1 bg-red-600 hover:bg-red-700 dark:hover:bg-red-500"
-                            onClick={() => setModal(false)}
-                        >
-                            No
-                        </button>
-                        <button 
-                            className="rounded-2xl px-3 pb-2 pt-1 bg-green-600 hover:bg-green-700 dark:hover:bg-green-500 "
-                            onClick={ () => {
-                            deleteArticle(props.slug, () => router.replace(router.asPath))
-                            setModal(false)
-                        }}>
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </Modal>
-            <article className="w-full h-fit items-center rounded-2xl shadow-lg bg-white dark:bg-neutral-800">
-                <Link href={`/${props.category}/${props.slug}`}>
-                    <a>
-                        <Image
-                            alt='Image for article'
-                            className='object-cover w-full rounded-2xl block border-none'
-                            width={2} height={1}
-                            layout='responsive'
-                            priority={true}
-                            src={img}
-                        />
-                    </a>
-                </Link>
-                <div className="flex flex-col p-4">
-                    <Link href={`/${props.category}/${props.slug}`}>
-                        <a className="transition-all font-semibold text-4xl">{props.title}</a>
-                    </Link>
-                    <p className="text-lg uppercase font-semibold">
-                        <Link href={`/${props.category}`}>
-                            <a className="text-neutral-400 tracking-wide hover:text-fuchsia-600 dark:text-neutral-500 dark:hover:text-fuchsia-500">{props.category}</a>
-                        </Link>
-                    </p>
-                    <p className="mt-3 mb-6 font-light text-lg text-neutral-500 dark:text-neutral-400">
-                        {props.description}
-                    </p>
-                    <div className="flex gap-2">
-                        <p>@{props.author}</p>
-                        <p>•</p>
-                        <p>{new Date(props.createdAt).toLocaleDateString()}</p>
-                    </div>
-                    <div className="flex mt-4 items-end">
-                        <TagsList tags={props.tags} />
-                        {
-                            checkPriveleges(session?.user as User, props.author)
-                            &&
-                            <div className="flex justify-center gap-1">
-                                <button 
-                                className="rounded-xl bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white py-1 px-3 hover:text-white
-                                 hover:bg-green-600 dark:hover:bg-green-600"
-                                onClick={() => {
-                                    router.push(`/editor?edit=${props.slug}`)
-                                }}>
-                                    edit
-                                </button>
-                                <button className="rounded-xl bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white py-1 px-3 hover:text-white
-                                hover:bg-red-600 dark:hover:bg-red-600"
-                                onClick={() => setModal(true)}>
-                                    delete
-                                </button>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </article>
-        </>
-    )
-}
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Article } from '~/lib/ArticleTypes';
+import { User } from '~/lib/UserTypes';
+import TagsList from '../TagsList';
+import { Button } from '~/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '~/components/ui/dialog';
+import { Badge } from '~/components/ui/badge';
+import { Edit2, Trash2 } from 'lucide-react';
+import { trpc } from '~/lib/trpc/client';
+import { useToast } from '~/hooks/use-toast';
 
-export default ArticleItem
+const ArticleItem: React.FC<Article> = (props) => {
+  const img = props.img ?? `/img/${props.category}.png`;
+  const { data: session } = useSession();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  
+  const deleteMutation = trpc.article.delete.useMutation({
+    onSuccess: () => {
+      toast({
+        title: 'Success',
+        description: 'Article deleted successfully',
+      });
+      router.refresh();
+      setDialogOpen(false);
+    },
+    onError: (error) => {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const canEdit =
+    session?.user &&
+    (session.user.name === props.author || session.user.role === 'admin');
+
+  const handleDelete = () => {
+    deleteMutation.mutate({ slug: props.slug });
+  };
+
+  return (
+    <>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Article</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this article? This action cannot
+              be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+        <Link href={`/${props.category}/${props.slug}`}>
+          <div className="relative aspect-video w-full overflow-hidden">
+            <Image
+              alt={`Cover image for ${props.title}`}
+              className="object-cover transition-transform hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              src={img}
+            />
+          </div>
+        </Link>
+        <CardHeader className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Badge variant="secondary" className="w-fit uppercase">
+              {props.category}
+            </Badge>
+          </div>
+          <Link href={`/${props.category}/${props.slug}`}>
+            <CardTitle className="line-clamp-2 transition-colors hover:text-primary">
+              {props.title}
+            </CardTitle>
+          </Link>
+          <CardDescription className="line-clamp-3">
+            {props.description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 flex gap-2 text-sm text-muted-foreground">
+            <span>@{props.author}</span>
+            <span>•</span>
+            <span>{new Date(props.createdAt).toLocaleDateString()}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <TagsList tags={props.tags} />
+            {canEdit && (
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => router.push(`/editor?edit=${props.slug}`)}
+                >
+                  <Edit2 className="h-3 w-3" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="hover:bg-destructive hover:text-destructive-foreground"
+                  onClick={() => setDialogOpen(true)}
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </>
+  );
+};
+
+export default ArticleItem;

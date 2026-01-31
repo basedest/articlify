@@ -1,42 +1,40 @@
-import React, { Component } from 'react'
-import { ActionMeta, OnChangeValue } from 'react-select'
-import CreatableSelect from 'react-select/creatable'
+'use client';
 
-interface tagOption {
-    value: string
-    label: string
+import React from 'react';
+import { MultiSelect, type Option } from '~/components/ui/multi-select';
+
+const tagOptions: Option[] = [
+  { value: 'javascript', label: 'Javascript' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'react', label: 'React' },
+  { value: 'nodejs', label: 'NodeJS' },
+  { value: 'backend', label: 'backend' },
+  { value: 'frontend', label: 'frontend' },
+  { value: 'nextjs', label: 'Next.js' },
+  { value: 'tailwind', label: 'Tailwind CSS' },
+  { value: 'mongodb', label: 'MongoDB' },
+];
+
+interface TagsPickerProps {
+  value: string[];
+  onChange: (value: string[]) => void;
+  defaultValue?: string[];
 }
 
-const tagOptions: Array<tagOption> = [
-    {value:'javascript', label:'Javascript'},
-    {value:'typescript', label:'TypeScript'},
-    {value:'react', label:'React'},
-    {value:'nodejs', label:'NodeJS'},
-    {value:'backend', label:'backend'},
-    {value:'frontend', label:'frontend'},
-]
+const TagsPicker: React.FC<TagsPickerProps> = ({
+  value,
+  onChange,
+  defaultValue,
+}) => {
+  return (
+    <MultiSelect
+      options={tagOptions}
+      selected={value || defaultValue || []}
+      onChange={onChange}
+      placeholder="Select or create tags..."
+      allowCustom={true}
+    />
+  );
+};
 
-type Props = {
-    onChange: (newValue: OnChangeValue<tagOption, true>,
-      actionMeta: ActionMeta<tagOption>) => void
-    defaultValue: Array<tagOption> | undefined
-}
-  
-class TagsPicker extends Component<Props> {
-    render() {
-        return (
-        <CreatableSelect
-            placeholder='Tags...'
-            className="my-react-select-container my-1"
-            classNamePrefix="my-react-select"
-            isMulti
-            isClearable
-            onChange={this.props.onChange}
-            options={tagOptions}
-            defaultValue={this.props.defaultValue}
-        />
-        )
-    }
-}
-
-export default TagsPicker
+export default TagsPicker;

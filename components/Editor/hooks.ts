@@ -37,7 +37,7 @@ export const useSetData = (editor: EditorJS, data: OutputData) => {
 }
 
 export const useClearDataCallback = (editor: EditorJS) => {
-  return useCallback((ev) => {
+  return useCallback((ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     ev.preventDefault()
     if (!editor) {
       return
