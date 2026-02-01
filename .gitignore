@@ -70,3 +70,6 @@ package-lock.json
 # Cursor stuff
 .cursor/plans/
 .cursor/temp_context/
+
+# private stuff
+private/
