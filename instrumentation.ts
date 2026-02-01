@@ -1,7 +1,6 @@
 /**
  * Runs once when the Node.js server starts.
- * Runs Phase 0 content-format migration: set content_format = 'editorjs', content_schema_version = 1 on existing articles.
- * Runs Phase 3 backfill: convert legacy EditorJS content to ProseMirror and write content_pm.
+ * Runs rename migration: content_pm -> contentPm, content_format -> contentFormat, content_schema_version -> contentSchemaVersion.
  */
 
 export async function register() {
@@ -13,33 +12,17 @@ export async function register() {
     const { connectDB } = await import('~/lib/server/connection');
     await connectDB();
 
-    const { migrateContentFormat } = await import(
-      '~/lib/server/migrations/content-format'
+    const { migrateRenameContentFields } = await import(
+      '~/lib/server/migrations/rename-content-fields'
     );
-    const result = await migrateContentFormat();
+    const result = await migrateRenameContentFields();
 
     if (result.modified > 0) {
       console.log(
-        `[migration] content-format: updated ${result.modified} article(s) (content_format=editorjs, content_schema_version=1)`
+        `[migration] rename-content-fields: updated ${result.modified} article(s) (content_pm -> contentPm, etc.)`
       );
-    }
-
-    const { runBackfillContentPm } = await import(
-      '~/lib/server/migrations/backfill-content-pm'
-    );
-    const backfillResult = await runBackfillContentPm();
-
-    if (backfillResult.processed > 0) {
-      console.log(
-        `[migration] backfill-content-pm: processed ${backfillResult.processed}, updated ${backfillResult.updated}, failed ${backfillResult.failed}`
-      );
-      if (backfillResult.errors.length > 0) {
-        for (const e of backfillResult.errors) {
-          console.error(`[migration] backfill-content-pm error ${e.slugOrId}: ${e.error}`);
-        }
-      }
     }
   } catch (err) {
-    console.error('[migration] startup migration failed:', err);
+    console.error('[migration] rename-content-fields failed:', err);
   }
 }

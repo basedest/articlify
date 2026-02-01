@@ -103,29 +103,6 @@
   }
 }
 
-/* EditorJS specific styles */
-.ce-block__content,
-.ce-toolbar__content {
-  max-width: 100%;
-}
-
-.codex-editor__redactor {
-  padding-bottom: 0 !important;
-}
-
-.ce-block {
-  margin-bottom: 1rem;
-}
-
-.ce-paragraph {
-  font-size: 1rem;
-  line-height: 1.625;
-}
-
-.ce-header {
-  font-weight: 700;
-}
-
 /* Tiptap / ProseMirror editor – scope to .tiptap (Tiptap wrapper) and .ProseMirror */
 .tiptap,
 .ProseMirror {

@@ -50,10 +50,10 @@ export default function EditorPage() {
       { enabled: !!editSlug }
     );
 
-  // Initial content for Tiptap: use content_pm when editing, else empty doc
+  // Initial content for Tiptap: use contentPm when editing, else empty doc
   const initialContent: ProseMirrorJSON | null =
-    editSlug && existingArticle?.content_pm && typeof existingArticle.content_pm === 'object'
-      ? (existingArticle.content_pm as ProseMirrorJSON)
+    editSlug && existingArticle?.contentPm && typeof existingArticle.contentPm === 'object'
+      ? (existingArticle.contentPm as ProseMirrorJSON)
       : null;
 
   // Initialize article state
@@ -136,7 +136,7 @@ export default function EditorPage() {
     setUploading(true);
 
     try {
-      const contentPm: ProseMirrorJSON | null = tiptapRef.current?.getJSON() ?? null;
+      const contentPm: ProseMirrorJSON = tiptapRef.current?.getJSON() ?? {};
 
       let imageUrl: string | undefined = article.img;
       if (file && imageSrc && imageSrc.startsWith('data:')) {
@@ -161,9 +161,9 @@ export default function EditorPage() {
           category: article.category,
           tags: article.tags,
           img: imageUrl,
-          content_pm: contentPm,
-          content_format: 'pm',
-          content_schema_version: 1,
+          contentPm: contentPm,
+          contentFormat: 'pm',
+          contentSchemaVersion: 1,
         });
       } else {
         createMutation.mutate({
@@ -173,9 +173,9 @@ export default function EditorPage() {
           category: article.category,
           tags: article.tags || [],
           img: imageUrl,
-          content_pm: contentPm,
-          content_format: 'pm',
-          content_schema_version: 1,
+          contentPm: contentPm,
+          contentFormat: 'pm',
+          contentSchemaVersion: 1,
         });
       }
     } catch (error) {

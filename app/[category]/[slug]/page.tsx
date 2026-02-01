@@ -5,7 +5,7 @@ import Link from 'next/link';
 import TagsList from '~/components/TagsList';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
-import { ArrowLeft, CheckCircle2, Circle } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { ProseMirrorRenderer } from '~/components/ProseMirrorRenderer';
 import type { PMDoc } from '~/lib/ProseMirrorTypes';
 
@@ -76,152 +76,9 @@ export default async function ArticlePage({ params }: PageProps) {
       <Separator className="mb-8" />
 
       <article className="prose prose-zinc dark:prose-invert max-w-none">
-        {article?.content_pm && article.content_format === 'pm' ? (
-          <ProseMirrorRenderer doc={article.content_pm as unknown as PMDoc} />
-        ) : (
-        article?.content?.blocks?.map((item: any) => {
-          const { id } = item;
-          switch (item.type) {
-            case 'paragraph':
-              return (
-                <p
-                  key={id}
-                  dangerouslySetInnerHTML={{ __html: item.data.text }}
-                  className="mb-4 leading-relaxed"
-                />
-              );
-            case 'header':
-              return item.data.level === 2 ? (
-                <h2 key={id} className="mb-6 mt-12 text-3xl font-bold">
-                  {item.data.text}
-                </h2>
-              ) : (
-                <h3 key={id} className="mb-4 mt-8 text-2xl font-semibold">
-                  {item.data.text}
-                </h3>
-              );
-            case 'list':
-              if (item.data.style === 'ordered') {
-                return (
-                  <ol key={id} className="mb-4 list-decimal pl-6">
-                    {item.data.items.map((li: any, i: number) => (
-                      <li
-                        key={i}
-                        dangerouslySetInnerHTML={{ __html: li }}
-                        className="mb-2"
-                      />
-                    ))}
-                  </ol>
-                );
-              } else {
-                return (
-                  <ul key={id} className="mb-4 list-disc pl-6">
-                    {item.data.items.map((li: any, i: number) => (
-                      <li
-                        key={i}
-                        dangerouslySetInnerHTML={{ __html: li }}
-                        className="mb-2"
-                      />
-                    ))}
-                  </ul>
-                );
-              }
-            case 'quote':
-              return (
-                <blockquote
-                  key={id}
-                  className="mb-6 border-l-4 border-primary pl-4 italic"
-                >
-                  <p dangerouslySetInnerHTML={{ __html: item.data.text }} />
-                  {item.data.caption && (
-                    <footer className="mt-2 text-sm text-muted-foreground">
-                      — {item.data.caption}
-                    </footer>
-                  )}
-                </blockquote>
-              );
-            case 'checklist':
-              return (
-                <ul key={id} className="mb-4 list-none space-y-2">
-                  {item.data.items.map((li: any, i: number) => (
-                    <li key={i} className="flex items-start gap-2">
-                      {li.checked ? (
-                        <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
-                      ) : (
-                        <Circle className="mt-0.5 h-5 w-5 text-muted-foreground" />
-                      )}
-                      <span dangerouslySetInnerHTML={{ __html: li.text }} />
-                    </li>
-                  ))}
-                </ul>
-              );
-            case 'delimiter':
-              return (
-                <Separator key={id} className="my-8" />
-              );
-            case 'simpleImage':
-            case 'image':
-              return (
-                <figure key={id} className="my-6">
-                  <img
-                    className="w-full rounded-lg"
-                    src={item.data.url || item.data.file?.url}
-                    alt={item.data.caption || ''}
-                  />
-                  {item.data.caption && (
-                    <figcaption className="mt-2 text-center text-sm text-muted-foreground">
-                      {item.data.caption}
-                    </figcaption>
-                  )}
-                </figure>
-              );
-            case 'code':
-              return (
-                <pre
-                  key={id}
-                  className="my-6 overflow-x-auto rounded-lg bg-muted p-4"
-                >
-                  <code>{item.data.code}</code>
-                </pre>
-              );
-            case 'table':
-              return (
-                <div key={id} className="my-6 overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <tbody>
-                      {item.data.content.map((row: string[], i: number) => (
-                        <tr key={i} className="border-b">
-                          {row.map((cell, j) => (
-                            <td
-                              key={j}
-                              className="border px-4 py-2"
-                              dangerouslySetInnerHTML={{ __html: cell }}
-                            />
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              );
-            case 'warning':
-              return (
-                <div
-                  key={id}
-                  className="my-6 rounded-lg border-l-4 border-amber-500 bg-amber-50 p-4 dark:bg-amber-950"
-                >
-                  <div className="font-semibold">{item.data.title}</div>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: item.data.message }}
-                    className="mt-1 text-sm"
-                  />
-                </div>
-              );
-            default:
-              return null;
-          }
-        })
-        )}
+        {article.contentPm ? (
+          <ProseMirrorRenderer doc={article.contentPm as unknown as PMDoc} />
+        ) : null}
       </article>
 
       <div className="mt-12 space-y-6 border-t pt-8">

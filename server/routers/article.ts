@@ -47,9 +47,9 @@ export const articleRouter = router({
           img: z.string().optional(),
           tags: z.array(z.string()).optional(),
           content: z.any().optional(),
-          content_pm: z.record(z.string(), z.unknown()).optional().nullable(),
-          content_format: z.union([z.literal('editorjs'), z.literal('pm')]).optional(),
-          content_schema_version: z.number().int().optional(),
+          contentPm: z.record(z.string(), z.unknown()),
+          contentFormat: z.union([z.literal('editorjs'), z.literal('pm')]).optional(),
+          contentSchemaVersion: z.number().int().optional(),
         })
         .refine(
           (data) =>
@@ -76,9 +76,9 @@ export const articleRouter = router({
           img: z.string().optional(),
           tags: z.array(z.string()).optional(),
           content: z.any().optional(),
-          content_pm: z.record(z.string(), z.unknown()).optional().nullable(),
-          content_format: z.union([z.literal('editorjs'), z.literal('pm')]).optional(),
-          content_schema_version: z.number().int().optional(),
+          contentPm: z.record(z.string(), z.unknown()).optional().nullable(),
+          contentFormat: z.union([z.literal('editorjs'), z.literal('pm')]).optional(),
+          contentSchemaVersion: z.number().int().optional(),
         })
         .refine(
           (data) =>

@@ -29,13 +29,13 @@ export class ArticleService {
     }
 
     const contentFormat =
-      articleData.content_pm != null ? 'pm' : (articleData.content_format ?? 'editorjs');
+      articleData.contentPm != null ? 'pm' : (articleData.contentFormat ?? 'pm');
     const contentSchemaVersion = contentFormat === 'pm' ? 1 : undefined;
 
     return await articleRepository.create({
       ...articleData,
-      content_format: contentFormat,
-      content_schema_version: contentSchemaVersion,
+      contentFormat,
+      contentSchemaVersion,
       createdAt: new Date(),
     });
   }
