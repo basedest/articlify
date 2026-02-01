@@ -4450,6 +4450,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.0"
     formidable: "npm:^3.5.4"
     highlight.js: "npm:^11.10.0"
+    husky: "npm:^9.1.7"
     lint-staged: "npm:^16.2.7"
     lowlight: "npm:^3.3.0"
     lucide-react: "npm:^0.563.0"
@@ -6015,6 +6016,15 @@ __metadata:
   version: 11.11.1
   resolution: "highlight.js@npm:11.11.1"
   checksum: 10c0/40f53ac19dac079891fcefd5bd8a21cf2e8931fd47da5bd1dca73b7e4375c1defed0636fc39120c639b9c44119b7d110f7f0c15aa899557a5a1c8910f3c0144c
+  languageName: node
+  linkType: hard
+
+"husky@npm:^9.1.7":
+  version: 9.1.7
+  resolution: "husky@npm:9.1.7"
+  bin:
+    husky: bin.js
+  checksum: 10c0/35bb110a71086c48906aa7cd3ed4913fb913823715359d65e32e0b964cb1e255593b0ae8014a5005c66a68e6fa66c38dcfa8056dbbdfb8b0187c0ffe7ee3a58f
   languageName: node
   linkType: hard
 
