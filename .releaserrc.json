@@ -10,11 +10,6 @@
           "message": "chore(release): ${nextRelease.version}"
         }
       ],
-      ["@semantic-release/github", {}],
-      [
-        "@semantic-release/npm", {
-            "npmPublish": false
-        }
-      ]
+      ["@semantic-release/github", {}]
     ]
-  }
+  }  
