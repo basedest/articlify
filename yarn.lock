@@ -3893,7 +3893,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/npm@npm:^13.1.1, @semantic-release/npm@npm:^13.1.3":
+"@semantic-release/npm@npm:^13.1.1":
   version: 13.1.3
   resolution: "@semantic-release/npm@npm:13.1.3"
   dependencies:
@@ -6298,7 +6298,6 @@ __metadata:
     "@semantic-release/commit-analyzer": "npm:^13.0.1"
     "@semantic-release/git": "npm:^10.0.1"
     "@semantic-release/github": "npm:^12.0.3"
-    "@semantic-release/npm": "npm:^13.1.3"
     "@semantic-release/release-notes-generator": "npm:^14.1.0"
     "@tailwindcss/postcss": "npm:^4.1.18"
     "@tanstack/react-query": "npm:^5.90.20"
