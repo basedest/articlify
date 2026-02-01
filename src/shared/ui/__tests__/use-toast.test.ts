@@ -74,7 +74,10 @@ describe('reducer', () => {
 
         it('REMOVE_TOAST with undefined toastId clears all toasts', () => {
             const state = {
-                toasts: [{ id: '1', open: true }, { id: '2', open: true }],
+                toasts: [
+                    { id: '1', open: true },
+                    { id: '2', open: true },
+                ],
             };
             const action = { type: 'REMOVE_TOAST' as const, toastId: undefined };
 
