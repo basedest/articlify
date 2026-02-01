@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '~/auth';
-import { connectDB } from '~/lib/server/connection';
-import { UserModel } from '~/lib/UserTypes';
+import { connectDB } from '~/shared/lib/server/connection';
+import { UserModel } from '~/entities/user/model/types';
 
 /** Avatars are stored as http(s) URLs only (S3/MinIO). Redirect to that URL. */
 export async function GET() {

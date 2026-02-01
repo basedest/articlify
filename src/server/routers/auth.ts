@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc';
-import { userService } from '../services/user.service';
+import { userService } from '~/entities/user/api/user.service';
 
 export const authRouter = router({
     register: publicProcedure

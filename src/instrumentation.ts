@@ -10,10 +10,10 @@ export async function register() {
     }
 
     try {
-        const { connectDB } = await import('~/lib/server/connection');
+        const { connectDB } = await import('~/shared/lib/server/connection');
         await connectDB();
 
-        const { migrateRenameContentFields } = await import('~/lib/server/migrations/rename-content-fields');
+        const { migrateRenameContentFields } = await import('~/entities/article/api/migrations/rename-content-fields');
         const result = await migrateRenameContentFields();
 
         if (result.modified > 0) {

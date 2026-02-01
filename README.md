@@ -183,7 +183,7 @@ The application uses tRPC for type-safe API communication. Example usage:
 
 ```typescript
 'use client';
-import { trpc } from '~/lib/trpc/client';
+import { trpc } from '~/shared/api/trpc/client';
 
 export function MyComponent() {
   const { data, isLoading } = trpc.article.list.useQuery({ page: 1 });
@@ -196,7 +196,7 @@ export function MyComponent() {
 ### Server-side
 
 ```typescript
-import { createServerCaller } from '~/lib/trpc/server';
+import { createServerCaller } from '~/shared/api/trpc/server';
 
 export default async function Page() {
   const caller = await createServerCaller();

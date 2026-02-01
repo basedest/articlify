@@ -1,7 +1,5 @@
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <div className="from-background to-muted flex min-h-screen items-center justify-center bg-gradient-to-br p-4">
-            {children}
-        </div>
-    );
+import { AuthLayout } from '~/views/layouts/auth';
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+    return <AuthLayout>{children}</AuthLayout>;
 }

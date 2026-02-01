@@ -1,9 +1,9 @@
 import NextAuth, { type DefaultSession, type NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from '~/lib/server/mongodb-client';
-import { UserModel } from '~/lib/UserTypes';
-import { connectDB } from '~/lib/server/connection';
+import { clientPromise } from '~/shared/lib/server/mongodb-client';
+import { UserModel } from '~/entities/user/model/types';
+import { connectDB } from '~/shared/lib/server/connection';
 
 /** Max length for image URL in JWT/session cookie to avoid ERR_RESPONSE_HEADERS_TOO_BIG. */
 const MAX_IMAGE_URL_LENGTH = 2000;
