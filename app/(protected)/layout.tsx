@@ -1,16 +1,5 @@
-import { redirect } from 'next/navigation';
-import { auth } from '~/auth';
+import { ProtectedLayout } from '~/views/layouts/protected';
 
-export default async function ProtectedLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const session = await auth();
-
-  if (!session) {
-    redirect('/login');
-  }
-
-  return <>{children}</>;
+export default async function Layout({ children }: { children: React.ReactNode }) {
+    return <ProtectedLayout>{children}</ProtectedLayout>;
 }

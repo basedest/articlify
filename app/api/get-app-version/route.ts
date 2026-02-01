@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
-import pjson from '~/package.json';
+import pjson from '../../../package.json';
+import { withApiLogging } from '~/shared/lib/server/with-api-logging';
 
-export async function GET() {
-  return NextResponse.json({ version: pjson.version });
-}
+const getHandler = async () => {
+    return NextResponse.json({ version: pjson.version });
+};
+
+export const GET = withApiLogging(async (req) => getHandler());
