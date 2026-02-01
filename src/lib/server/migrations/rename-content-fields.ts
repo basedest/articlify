@@ -8,15 +8,15 @@
 import { ArticleModel } from '~/lib/ArticleTypes';
 
 export async function migrateRenameContentFields(): Promise<{ modified: number }> {
-  const result = await ArticleModel.collection.updateMany(
-    {},
-    {
-      $rename: {
-        content_pm: 'contentPm',
-        content_format: 'contentFormat',
-        content_schema_version: 'contentSchemaVersion',
-      },
-    }
-  );
-  return { modified: result.modifiedCount ?? 0 };
+    const result = await ArticleModel.collection.updateMany(
+        {},
+        {
+            $rename: {
+                content_pm: 'contentPm',
+                content_format: 'contentFormat',
+                content_schema_version: 'contentSchemaVersion',
+            },
+        },
+    );
+    return { modified: result.modifiedCount ?? 0 };
 }

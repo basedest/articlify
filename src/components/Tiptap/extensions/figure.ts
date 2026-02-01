@@ -6,16 +6,16 @@ import { Node } from '@tiptap/core';
  * Register Image and Figcaption extensions in the editor when using Figure.
  */
 export const Figure = Node.create({
-  name: 'figure',
+    name: 'figure',
 
-  group: 'block',
-  content: 'image figcaption?',
+    group: 'block',
+    content: 'image figcaption?',
 
-  parseHTML() {
-    return [{ tag: 'figure' }];
-  },
+    parseHTML() {
+        return [{ tag: 'figure' }];
+    },
 
-  renderHTML({ HTMLAttributes }) {
-    return ['figure', HTMLAttributes, 0];
-  },
+    renderHTML({ HTMLAttributes }) {
+        return ['figure', HTMLAttributes, 0];
+    },
 });

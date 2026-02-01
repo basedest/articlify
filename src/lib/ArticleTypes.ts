@@ -1,26 +1,29 @@
-import { Schema, model, models, Types } from 'mongoose'
+import { Schema, model, models, Types } from 'mongoose';
 
 /** Legacy content field (kept for DB rollback; all articles now use contentPm). */
-export type LegacyContent = { time?: number; blocks?: Array<{ id?: string; type: string; data: Record<string, unknown> }> }
+export type LegacyContent = {
+    time?: number;
+    blocks?: Array<{ id?: string; type: string; data: Record<string, unknown> }>;
+};
 
 //описание типа статьи
 export interface Article {
-    slug: string
-    title: string
-    description: string
-    category: string
-    author: string
-    createdAt: Date
-    editedAt?: Date
-    img?: string
-    tags?: Array<string>
+    slug: string;
+    title: string;
+    description: string;
+    category: string;
+    author: string;
+    createdAt: Date;
+    editedAt?: Date;
+    img?: string;
+    tags?: Array<string>;
     /** ProseMirror (Tiptap) doc JSON */
-    contentPm?: Record<string, unknown> | null
+    contentPm?: Record<string, unknown> | null;
     /** Which field to use for rendering/saving. */
-    contentFormat?: 'editorjs' | 'pm'
+    contentFormat?: 'editorjs' | 'pm';
     /** Schema version for PM docs (start at 1). */
-    contentSchemaVersion?: number
-    _id?: Types.ObjectId
+    contentSchemaVersion?: number;
+    _id?: Types.ObjectId;
 }
 
 //схема для БД
@@ -28,35 +31,35 @@ const ArticleSchema = new Schema<Article>({
     slug: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     title: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
-        required: true
+        required: true,
     },
     category: {
         type: String,
-        required: true
+        required: true,
     },
     author: {
         type: String,
-        required: true
+        required: true,
     },
     createdAt: {
         type: Date,
-        required: true
+        required: true,
     },
     img: String,
     tags: [String],
     contentPm: { type: Schema.Types.Mixed, required: false },
     contentFormat: { type: String, enum: ['editorjs', 'pm'], required: false },
     contentSchemaVersion: { type: Number, required: false },
-    editedAt: Date
-})
+    editedAt: Date,
+});
 
 //экспортируем модель данных
-export const ArticleModel = models.Article || model<Article>('Article', ArticleSchema)
+export const ArticleModel = models.Article || model<Article>('Article', ArticleSchema);

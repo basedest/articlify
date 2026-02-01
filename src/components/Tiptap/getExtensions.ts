@@ -16,28 +16,28 @@ import { Figure, Figcaption, Callout } from './extensions';
 const lowlight = createLowlight(common);
 
 export function getTiptapExtensions() {
-  return [
-    StarterKit.configure({
-      codeBlock: false,
-    }),
-    Link.configure({
-      openOnClick: false,
-      HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' },
-    }),
-    Underline,
-    Highlight,
-    Image,
-    Figcaption,
-    Figure,
-    TaskList,
-    TaskItem.configure({ nested: true }),
-    Table.configure({
-      resizable: true,
-    }),
-    TableRow,
-    TableHeader,
-    TableCell,
-    CodeBlockLowlight.configure({ lowlight }),
-    Callout,
-  ];
+    return [
+        StarterKit.configure({
+            codeBlock: false,
+        }),
+        Link.configure({
+            openOnClick: false,
+            HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' },
+        }),
+        Underline,
+        Highlight,
+        Image,
+        Figcaption,
+        Figure,
+        TaskList,
+        TaskItem.configure({ nested: true }),
+        Table.configure({
+            resizable: true,
+        }),
+        TableRow,
+        TableHeader,
+        TableCell,
+        CodeBlockLowlight.configure({ lowlight }),
+        Callout,
+    ];
 }
