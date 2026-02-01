@@ -2,6 +2,7 @@
   "name": "articlify",
   "version": "0.16.0",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
