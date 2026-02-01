@@ -1,13 +1,18 @@
 /**
  * Runs once when the Node.js server starts.
  * Runs rename migration: content_pm -> contentPm, content_format -> contentFormat, content_schema_version -> contentSchemaVersion.
+ * TODO: remove migration code after migration is completed on production.
  */
+
+import { registerOTel } from '@vercel/otel';
 
 export async function register() {
     if (!process.env.MONGODB_URI) {
         console.log('[migration] Skipping: MONGODB_URI not set');
         return;
     }
+
+    registerOTel({ serviceName: 'articlify' });
 
     try {
         const { connectDB } = await import('~/shared/lib/server/connection');

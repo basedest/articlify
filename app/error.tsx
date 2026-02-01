@@ -4,10 +4,15 @@ import { useEffect } from 'react';
 import { Button } from '~/shared/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '~/shared/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { reportError } from '~/shared/lib/server/report-error';
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
     useEffect(() => {
-        console.error('Error:', error);
+        reportError({
+            message: error.message || 'An unexpected error occurred.',
+            digest: error.digest,
+            stack: error.stack,
+        });
     }, [error]);
 
     return (

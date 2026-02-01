@@ -1,8 +1,9 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { appRouter } from '~/server/routers';
 import { createContext } from '~/server/context';
+import { withApiLogging } from '~/shared/lib/server/with-api-logging';
 
-const handler = (req: Request) =>
+const trpcHandler = (req: Request) =>
     fetchRequestHandler({
         endpoint: '/api/trpc',
         req,
@@ -10,4 +11,7 @@ const handler = (req: Request) =>
         createContext,
     });
 
-export { handler as GET, handler as POST };
+const wrappedHandler = withApiLogging(async (req) => trpcHandler(req));
+
+export const GET = wrappedHandler;
+export const POST = wrappedHandler;

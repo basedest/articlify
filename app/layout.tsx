@@ -4,6 +4,8 @@ import '~/app/styles/globals.css';
 import { AppProviders } from '~/app/providers';
 import { Header } from '~/widgets/header';
 import { Footer } from '~/widgets/footer';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <main className="flex-1">{children}</main>
                         <Footer />
                     </div>
+                    <SpeedInsights />
+                    <Analytics />
                 </AppProviders>
             </body>
         </html>
