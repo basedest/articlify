@@ -4,7 +4,8 @@
  */
 
 export async function register() {
-  if (process.env.NEXT_RUNTIME !== 'nodejs' || !process.env.MONGODB_URI) {
+  if (!process.env.MONGODB_URI) {
+    console.log('[migration] Skipping: MONGODB_URI not set');
     return;
   }
 
@@ -21,6 +22,8 @@ export async function register() {
       console.log(
         `[migration] rename-content-fields: updated ${result.modified} article(s) (content_pm -> contentPm, etc.)`
       );
+    } else {
+      console.log('[migration] rename-content-fields: no documents to update (already migrated or empty)');
     }
   } catch (err) {
     console.error('[migration] rename-content-fields failed:', err);
