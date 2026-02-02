@@ -3,10 +3,11 @@ import { UserArticlesPage, generateMetadata as userArticlesGenerateMetadata } fr
 export const generateMetadata = userArticlesGenerateMetadata;
 
 interface PageProps {
-    params: Promise<{ author: string }>;
+    params: Promise<{ locale: string; author: string }>;
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page(props: PageProps) {
-    return <UserArticlesPage {...props} />;
+    const { author } = await props.params;
+    return <UserArticlesPage params={Promise.resolve({ author })} searchParams={props.searchParams} />;
 }

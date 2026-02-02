@@ -1,8 +1,12 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { PenSquare } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter, usePathname, Link } from '~/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { Article } from '~/entities/article/model/types';
+import { Button } from '~/shared/ui/button';
 import { ArticleList } from '~/widgets/article-list';
 import { SearchBar } from './search-bar';
 import {
@@ -25,9 +29,12 @@ interface SmartListProps {
 export function SmartList(props: SmartListProps) {
     const router = useRouter();
     const pathname = usePathname();
+    const { data: session } = useSession();
+    const t = useTranslations('articles');
+    const tEditor = useTranslations('editor');
     const [searchQuery, setSearchQuery] = useState(props.searchQuery || '');
     const caption =
-        props.articles.length === 0 ? 'No articles' : props.searchQuery ? 'Search results' : 'Latest articles';
+        props.articles.length === 0 ? t('noArticles') : props.searchQuery ? t('searchResults') : t('latestArticles');
 
     const handleSearch = () => {
         const params = new URLSearchParams();
@@ -60,9 +67,24 @@ export function SmartList(props: SmartListProps) {
 
     return (
         <div className="space-y-6">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} onSearch={handleSearch} />
+            <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                onSearch={handleSearch}
+                placeholder={t('searchByTitle')}
+            />
 
-            <h2 className="text-primary text-2xl font-bold">{caption}</h2>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-primary text-2xl font-bold">{caption}</h2>
+                {session && (
+                    <Button asChild>
+                        <Link href="/editor" className="inline-flex items-center gap-2">
+                            <PenSquare className="size-4" />
+                            {tEditor('createNewArticle')}
+                        </Link>
+                    </Button>
+                )}
+            </div>
 
             <ArticleList articles={props.articles} />
 

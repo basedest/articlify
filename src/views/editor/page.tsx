@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import type { ProseMirrorJSON, TiptapEditorRef } from '~/widgets/editor';
 import type { Article } from '~/entities/article/model/types';
 import { TagsPicker } from '~/entities/tag/ui/tags-picker';
 import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from '~/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import { categories } from '~/shared/config/categories';
 import { Button } from '~/shared/ui/button';
 import { Input } from '~/shared/ui/input';
@@ -29,6 +31,9 @@ export function EditorPage() {
     const editSlug = searchParams.get('edit');
     const { data: session, status } = useSession();
     const { toast } = useToast();
+    const t = useTranslations('editor');
+    const tAuth = useTranslations('auth');
+    const tCategory = useTranslations('category');
 
     const [file, setFile] = useState<File | null>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -54,14 +59,14 @@ export function EditorPage() {
     const createMutation = trpc.article.create.useMutation({
         onSuccess: (data) => {
             toast({
-                title: 'Success',
-                description: 'Article created successfully',
+                title: t('success'),
+                description: t('articleCreated'),
             });
             router.push(`/${data.category}/${data.slug}`);
         },
         onError: (error) => {
             toast({
-                title: 'Error',
+                title: t('error'),
                 description: error.message,
                 variant: 'destructive',
             });
@@ -72,14 +77,14 @@ export function EditorPage() {
     const updateMutation = trpc.article.update.useMutation({
         onSuccess: (data) => {
             toast({
-                title: 'Success',
-                description: 'Article updated successfully',
+                title: t('success'),
+                description: t('articleUpdated'),
             });
             router.push(`/${data!.category}/${data!.slug}`);
         },
         onError: (error) => {
             toast({
-                title: 'Error',
+                title: t('error'),
                 description: error.message,
                 variant: 'destructive',
             });
@@ -109,8 +114,8 @@ export function EditorPage() {
     const onSubmit = async () => {
         if (!effectiveArticle.title || !effectiveArticle.category || !effectiveArticle.description) {
             toast({
-                title: 'Validation Error',
-                description: 'Title, category, and description are required',
+                title: t('validationError'),
+                description: t('titleCategoryDescriptionRequired'),
                 variant: 'destructive',
             });
             return;
@@ -163,8 +168,8 @@ export function EditorPage() {
             }
         } catch (error) {
             toast({
-                title: 'Error',
-                description: 'Failed to save article',
+                title: t('error'),
+                description: t('failedToSave'),
                 variant: 'destructive',
             });
             setUploading(false);
@@ -180,13 +185,13 @@ export function EditorPage() {
             session.user.role !== 'admin'
         ) {
             toast({
-                title: 'Access Denied',
-                description: 'You do not have permission to edit this article',
+                title: tAuth('accessDenied'),
+                description: t('noPermissionToEdit'),
                 variant: 'destructive',
             });
             router.push('/');
         }
-    }, [editSlug, existingArticle, session, router, toast]);
+    }, [editSlug, existingArticle, session, router, toast, t, tAuth]);
 
     const authLoading = status === 'loading';
     const disabled = !editorReady || authLoading || uploading;
@@ -201,12 +206,12 @@ export function EditorPage() {
 
     return (
         <div className="container mx-auto max-w-5xl px-4 py-8">
-            <h1 className="mb-8 text-3xl font-bold">{editSlug ? 'Edit Article' : 'Create New Article'}</h1>
+            <h1 className="mb-8 text-3xl font-bold">{editSlug ? t('editArticle') : t('createNewArticle')}</h1>
 
             <Card>
                 <CardContent className="space-y-6 p-6">
                     <div className="space-y-2">
-                        <Label htmlFor="title">Title</Label>
+                        <Label htmlFor="title">{t('title')}</Label>
                         {editSlug ? (
                             <h2 className="text-2xl font-semibold">{effectiveArticle.title}</h2>
                         ) : (
@@ -214,36 +219,36 @@ export function EditorPage() {
                                 id="title"
                                 value={effectiveArticle.title || ''}
                                 onChange={(e) => setArticle({ ...article, title: e.target.value })}
-                                placeholder="Enter article title..."
+                                placeholder={t('placeholderTitle')}
                                 disabled={!!editSlug}
                             />
                         )}
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="description">Description</Label>
+                        <Label htmlFor="description">{t('description')}</Label>
                         <Textarea
                             id="description"
                             value={effectiveArticle.description || ''}
                             onChange={(e) => setArticle({ ...article, description: e.target.value })}
-                            placeholder="Brief description of your article..."
+                            placeholder={t('placeholderDescription')}
                             rows={3}
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="category">Category</Label>
+                        <Label htmlFor="category">{t('category')}</Label>
                         <Select
                             value={effectiveArticle.category}
                             onValueChange={(value) => setArticle({ ...article, category: value })}
                         >
                             <SelectTrigger id="category">
-                                <SelectValue placeholder="Select a category..." />
+                                <SelectValue placeholder={t('selectCategory')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {categories.map((cat) => (
-                                    <SelectItem key={cat} value={cat} className="capitalize">
-                                        {cat}
+                                    <SelectItem key={cat} value={cat}>
+                                        {tCategory(cat)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -251,7 +256,7 @@ export function EditorPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="tags">Tags</Label>
+                        <Label htmlFor="tags">{t('tags')}</Label>
                         <TagsPicker
                             value={effectiveArticle.tags || []}
                             onChange={(tags) => setArticle({ ...article, tags })}
@@ -260,8 +265,8 @@ export function EditorPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="image">Cover Image</Label>
-                        <p className="text-muted-foreground text-sm">Image will be converted to 2:1 ratio</p>
+                        <Label htmlFor="image">{t('coverImage')}</Label>
+                        <p className="text-muted-foreground text-sm">{t('coverImageNote')}</p>
                         <div className="flex items-center gap-4">
                             <Input id="image" type="file" accept="image/*" onChange={handleImageChange} />
                         </div>
@@ -269,7 +274,7 @@ export function EditorPage() {
                             <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                                 <Image
                                     src={displayImageSrc}
-                                    alt="Preview"
+                                    alt={t('preview')}
                                     fill
                                     className="object-cover"
                                     unoptimized={displayImageSrc.startsWith('data:')}
@@ -279,7 +284,7 @@ export function EditorPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Content</Label>
+                        <Label>{t('content')}</Label>
                         <TiptapEditorDynamic
                             content={initialContent}
                             editorRef={tiptapRef}
@@ -292,12 +297,12 @@ export function EditorPage() {
                             {uploading ? (
                                 <>
                                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                    Saving...
+                                    {t('saving')}
                                 </>
                             ) : (
                                 <>
                                     <Save className="mr-2 h-5 w-5" />
-                                    {editSlug ? 'Update Article' : 'Publish Article'}
+                                    {editSlug ? t('updateArticle') : t('publishArticle')}
                                 </>
                             )}
                         </Button>

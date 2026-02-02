@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
+import { Link } from '~/i18n/navigation';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,9 +14,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';
 import { LogOut, User, ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function UserMenu() {
     const { data: session } = useSession();
+    const t = useTranslations('auth');
+    const tButton = useTranslations('button');
 
     if (!session?.user) {
         return null;
@@ -35,12 +38,12 @@ export function UserMenu() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t('myAccount')}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="flex cursor-pointer items-center">
                         <User className="mr-2 h-4 w-4" />
-                        Profile
+                        {t('profile')}
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -49,7 +52,7 @@ export function UserMenu() {
                     className="text-destructive focus:bg-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground cursor-pointer dark:text-red-400"
                 >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    {tButton('signOut')}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

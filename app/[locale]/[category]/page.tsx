@@ -3,10 +3,11 @@ import { CategoryPage, generateMetadata as categoryGenerateMetadata } from '~/vi
 export const generateMetadata = categoryGenerateMetadata;
 
 interface PageProps {
-    params: Promise<{ category: string }>;
+    params: Promise<{ locale: string; category: string }>;
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page(props: PageProps) {
-    return <CategoryPage {...props} />;
+    const { category } = await props.params;
+    return <CategoryPage params={Promise.resolve({ category })} searchParams={props.searchParams} />;
 }
