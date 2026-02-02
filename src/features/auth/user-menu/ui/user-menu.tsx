@@ -46,7 +46,7 @@ export function UserMenu() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={() => signOut()}
-                    className="text-destructive focus:bg-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground cursor-pointer"
+                    className="text-destructive focus:bg-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground cursor-pointer dark:text-red-400"
                 >
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
