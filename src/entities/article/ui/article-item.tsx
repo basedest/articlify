@@ -67,7 +67,7 @@ export function ArticleItem(props: Article) {
                 </DialogContent>
             </Dialog>
 
-            <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+            <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
                 <Link href={`/${props.category}/${props.slug}`}>
                     <div className="relative aspect-video w-full overflow-hidden">
                         <Image
@@ -79,7 +79,7 @@ export function ArticleItem(props: Article) {
                         />
                     </div>
                 </Link>
-                <CardHeader className="space-y-2">
+                <CardHeader className="min-h-0 flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                         <Badge variant="secondary" className="w-fit uppercase">
                             {props.category}
@@ -92,8 +92,8 @@ export function ArticleItem(props: Article) {
                     </Link>
                     <CardDescription className="line-clamp-3">{props.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="text-muted-foreground mb-4 flex gap-2 text-sm">
+                <CardContent className="mt-auto flex flex-col gap-2">
+                    <div className="text-muted-foreground flex gap-2 text-sm">
                         <span>@{props.author}</span>
                         <span>•</span>
                         <span>{new Date(props.createdAt).toLocaleDateString()}</span>
@@ -103,14 +103,14 @@ export function ArticleItem(props: Article) {
                         {canEdit && (
                             <div className="flex gap-2">
                                 <Button
-                                    size="sm"
+                                    size="icon"
                                     variant="outline"
                                     onClick={() => router.push(`/editor?edit=${props.slug}`)}
                                 >
                                     <Edit2 className="h-3 w-3" />
                                 </Button>
                                 <Button
-                                    size="sm"
+                                    size="icon"
                                     variant="outline"
                                     className="hover:bg-destructive hover:text-destructive-foreground"
                                     onClick={() => setDialogOpen(true)}

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TagsList } from '~/entities/tag/ui/tags-list';
+import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';
 import { Separator } from '~/shared/ui/separator';
 import { ArrowLeft } from 'lucide-react';
@@ -50,8 +51,15 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
 
                 <div className="mb-8">
-                    <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
-                        <Link href={`/articles/user/${article.author}`}>
+                    <div className="text-muted-foreground mb-4 flex items-center gap-3 text-sm">
+                        <Link
+                            href={`/articles/user/${article.author}`}
+                            className="flex items-center gap-2 hover:opacity-90"
+                        >
+                            <Avatar className="h-8 w-8">
+                                <AvatarImage src={`/api/user/avatar/${encodeURIComponent(article.author)}`} />
+                                <AvatarFallback>{article.author[0]?.toUpperCase() ?? '?'}</AvatarFallback>
+                            </Avatar>
                             <span className="text-primary font-medium hover:underline">@{article.author}</span>
                         </Link>
                         <span>•</span>
