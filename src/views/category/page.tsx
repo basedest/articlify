@@ -5,6 +5,11 @@ import { SmartList } from '~/widgets/smart-list';
 import { categories, Category } from '~/shared/config/categories';
 import { Badge } from '~/shared/ui/badge';
 
+function parseTags(search: { [key: string]: string | string[] | undefined }): string[] {
+    if (!search.tags) return [];
+    return (Array.isArray(search.tags) ? search.tags : [search.tags]).filter(Boolean) as string[];
+}
+
 interface CategoryPageProps {
     params: Promise<{ category: string }>;
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -20,14 +25,19 @@ export async function CategoryPage({ params, searchParams }: CategoryPageProps) 
 
     const page = search.page ? parseInt(search.page as string) : 1;
     const title = (search.title as string) || '';
+    const tags = parseTags(search);
 
     const caller = await createServerCaller();
-    const result = await caller.article.list({
-        category,
-        title: title || undefined,
-        page,
-        pagesize: 10,
-    });
+    const [result, availableTags] = await Promise.all([
+        caller.article.list({
+            category,
+            title: title || undefined,
+            tags: tags.length > 0 ? tags : undefined,
+            page,
+            pagesize: 10,
+        }),
+        caller.article.getDistinctTags(),
+    ]);
 
     const tCategory = await getTranslations('category');
     const tArticles = await getTranslations('articles');
@@ -38,11 +48,19 @@ export async function CategoryPage({ params, searchParams }: CategoryPageProps) 
             <div className="mb-8 flex items-center gap-3">
                 <h1 className="text-4xl font-bold">{categoryLabel}</h1>
                 <Badge variant="secondary" className="text-lg">
-                    {tArticles('articlesCount', { count: result.total })}
+                    {tArticles('articlesCount', { count: result.total ?? 0 })}
                 </Badge>
             </div>
 
-            <SmartList articles={result.articles} searchQuery={title} page={page} totalPages={result.totalPages} />
+            <SmartList
+                articles={result.articles ?? []}
+                searchQuery={title}
+                page={page}
+                totalPages={result.totalPages}
+                initialTags={tags}
+                showCategoryFilter={false}
+                availableTags={availableTags ?? []}
+            />
         </div>
     );
 }

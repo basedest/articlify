@@ -51,7 +51,7 @@ export function MultiSelect({
 
     return (
         <div className={cn('relative', className)}>
-            <div className="border-input bg-input dark:bg-input/30 ring-offset-background focus-within:ring-ring flex min-h-10 w-full flex-wrap items-center gap-1 rounded-md border px-3 py-2 text-sm focus-within:ring-1">
+            <div className="border-input bg-input dark:bg-input/30 ring-offset-background focus-within:ring-ring flex h-10 w-full flex-nowrap items-center gap-1 overflow-x-auto rounded-md border px-3 py-2 text-sm focus-within:ring-1">
                 {selected.map((item) => {
                     const option = options.find((o) => o.value === item);
                     return (

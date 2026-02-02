@@ -82,7 +82,7 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                 </article>
 
                 <div className="mt-12 space-y-6 border-t pt-8">
-                    <TagsList tags={article.tags} />
+                    <TagsList tags={article.tags} showAll />
 
                     <p className="text-muted-foreground text-sm">
                         {tArticles('lastUpdated')}{' '}

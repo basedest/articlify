@@ -46,7 +46,7 @@ export function SearchBar({
         <div className="relative">
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
-                className="bg-input dark:bg-input pl-9"
+                className="bg-input dark:bg-input/30 h-10 pl-9"
                 placeholder={placeholder}
                 type="search"
                 value={value}

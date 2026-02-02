@@ -92,6 +92,10 @@ export const articleRouter = router({
         return await articleService.getAllSlugs();
     }),
 
+    getDistinctTags: publicProcedure.query(async () => {
+        return await articleService.getDistinctTags();
+    }),
+
     uploadCoverImage: protectedProcedure
         .input(
             z.object({

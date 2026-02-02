@@ -82,9 +82,14 @@ export function ArticleItem(props: Article) {
                 </Link>
                 <CardHeader className="min-h-0 flex-1 space-y-2">
                     <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="w-fit">
-                            {tCategory(props.category)}
-                        </Badge>
+                        <Link href={`/${props.category}`}>
+                            <Badge
+                                variant="secondary"
+                                className="hover:bg-primary hover:text-primary-foreground w-fit cursor-pointer transition-colors"
+                            >
+                                {tCategory(props.category)}
+                            </Badge>
+                        </Link>
                     </div>
                     <Link href={`/${props.category}/${props.slug}`}>
                         <CardTitle className="hover:text-primary line-clamp-2 transition-colors">
