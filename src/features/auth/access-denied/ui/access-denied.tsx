@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from '~/i18n/navigation';
+import { Link } from 'i18n/navigation';
 import { Button } from '~/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/shared/ui/card';
 import { ShieldAlert } from 'lucide-react';

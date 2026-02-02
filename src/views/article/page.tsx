@@ -2,7 +2,7 @@ import { createServerCallerPublic } from '~/shared/api/trpc/server';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Link } from '~/i18n/navigation';
+import { Link } from 'i18n/navigation';
 import { TagsList } from '~/entities/tag/ui/tags-list';
 import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';

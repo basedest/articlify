@@ -2,7 +2,7 @@
 
 import { PenSquare } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useRouter, usePathname, Link } from '~/i18n/navigation';
+import { useRouter, usePathname, Link } from 'i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { Article } from '~/entities/article/model/types';

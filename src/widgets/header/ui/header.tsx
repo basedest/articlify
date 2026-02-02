@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from '~/i18n/navigation';
+import { Link } from 'i18n/navigation';
 import { useSession } from 'next-auth/react';
 import { UserMenu } from '~/features/auth/user-menu';
 import { categories } from '~/shared/config/categories';

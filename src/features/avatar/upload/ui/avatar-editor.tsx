@@ -3,7 +3,7 @@
 import React, { useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '~/i18n/navigation';
+import { useRouter } from '../../../../../i18n/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';
 import { Camera, Loader2 } from 'lucide-react';

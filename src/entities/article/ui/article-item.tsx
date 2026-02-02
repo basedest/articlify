@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Link, useRouter } from '~/i18n/navigation';
+import { Link, useRouter } from 'i18n/navigation';
 import { useState } from 'react';
 import type { Article } from '~/entities/article/model/types';
 import { TagsList } from '~/entities/tag/ui/tags-list';

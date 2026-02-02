@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
-import { routing } from '~/i18n/routing';
+import { routing } from 'i18n/routing';
 import { AppProviders } from '~/app/providers';
 import { Header } from '~/widgets/header';
 import { Footer } from '~/widgets/footer';

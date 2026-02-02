@@ -3,7 +3,7 @@ import {
     generateMetadata as articleGenerateMetadata,
     generateStaticParams as articleGenerateStaticParams,
 } from '~/views/article';
-import { routing } from '~/i18n/routing';
+import { routing } from 'i18n/routing';
 
 export const revalidate = 30;
 export const generateMetadata = articleGenerateMetadata;

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
-import { router, protectedProcedure } from '~/server/trpc';
+import { router, protectedProcedure } from 'server/trpc';
 import { userService } from '~/entities/user/api/user.service';
 import { getStorageClient } from '~/shared/lib/server/storage/factory';
 

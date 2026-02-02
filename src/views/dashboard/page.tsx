@@ -1,7 +1,7 @@
-import { auth } from '~/auth';
+import { auth } from '~/features/auth/auth';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { redirect } from '~/i18n/navigation';
-import { Link } from '~/i18n/navigation';
+import { redirect } from 'i18n/navigation';
+import { Link } from 'i18n/navigation';
 import { Button } from '~/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/shared/ui/card';
 import { AvatarEditor } from '~/features/avatar/upload/ui/avatar-editor';
