@@ -8,7 +8,7 @@ import type { ProseMirrorJSON, TiptapEditorRef } from '~/widgets/editor';
 import type { Article } from '~/entities/article/model/types';
 import { TagsPicker } from '~/entities/tag/ui/tags-picker';
 import { useSession } from 'next-auth/react';
-import { useRouter } from '~/i18n/navigation';
+import { useRouter } from 'i18n/navigation';
 import { useSearchParams } from 'next/navigation';
 import { categories } from '~/shared/config/categories';
 import { Button } from '~/shared/ui/button';

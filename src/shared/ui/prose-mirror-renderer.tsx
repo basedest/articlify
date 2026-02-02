@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Link } from '~/i18n/navigation';
+import { Link } from 'i18n/navigation';
 import Image from 'next/image';
 import type { PMDoc, PMNode, PMMark } from '~/shared/types/prose-mirror';
 

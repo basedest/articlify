@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { Link } from '~/i18n/navigation';
+import { Link } from 'i18n/navigation';
 import {
     DropdownMenu,
     DropdownMenuContent,

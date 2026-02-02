@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { context, trace } from '@opentelemetry/api';
 import { type Session } from 'next-auth';
-import { auth } from '~/auth';
+import { auth } from '~/features/auth/auth';
 
 const X_REQUEST_ID = 'x-request-id';
 

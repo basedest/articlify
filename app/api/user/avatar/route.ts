@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '~/auth';
+import { auth } from '~/features/auth/auth';
 import { connectDB } from '~/shared/lib/server/connection';
 import { UserModel } from '~/entities/user/model/types';
 import { withApiLogging } from '~/shared/lib/server/with-api-logging';

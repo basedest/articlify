@@ -1,13 +1,13 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from '~/i18n/navigation';
+import { usePathname, useRouter } from 'i18n/navigation';
 import { useSession } from 'next-auth/react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/ui/select';
 import { Label } from '~/shared/ui/label';
 import { useTranslations } from 'next-intl';
 import { trpc } from '~/shared/api/trpc/client';
-import { routing } from '~/i18n/routing';
+import { routing } from 'i18n/routing';
 import { cn } from '~/shared/lib/utils';
 
 const LOCALE_COOKIE = 'NEXT_LOCALE';

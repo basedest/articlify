@@ -1,4 +1,4 @@
-import { Link } from '~/i18n/navigation';
+import { Link } from 'i18n/navigation';
 import React from 'react';
 import { Badge } from '~/shared/ui/badge';
 

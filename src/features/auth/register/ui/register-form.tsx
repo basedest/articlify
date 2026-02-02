@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from '~/i18n/navigation';
-import { Link } from '~/i18n/navigation';
+import { useRouter } from 'i18n/navigation';
+import { Link } from 'i18n/navigation';
 import { Button } from '~/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/shared/ui/card';
 import { Input } from '~/shared/ui/input';
