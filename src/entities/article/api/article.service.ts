@@ -87,6 +87,10 @@ export class ArticleService {
     async getAllSlugs() {
         return await articleRepository.getAllSlugs();
     }
+
+    async getDistinctTags() {
+        return await articleRepository.getDistinctTags();
+    }
 }
 
 export const articleService = new ArticleService();
