@@ -2,8 +2,8 @@
 
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Link, useRouter } from '~/i18n/navigation';
 import { useState } from 'react';
 import type { Article } from '~/entities/article/model/types';
 import { TagsList } from '~/entities/tag/ui/tags-list';
@@ -18,6 +18,7 @@ import { useToast } from '~/shared/ui/use-toast';
 export function ArticleItem(props: Article) {
     const img = props.img ?? `/img/${props.category}.png`;
     const { data: session } = useSession();
+    const tCategory = useTranslations('category');
     const [dialogOpen, setDialogOpen] = useState(false);
     const router = useRouter();
     const { toast } = useToast();
@@ -81,8 +82,8 @@ export function ArticleItem(props: Article) {
                 </Link>
                 <CardHeader className="min-h-0 flex-1 space-y-2">
                     <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="w-fit uppercase">
-                            {props.category}
+                        <Badge variant="secondary" className="w-fit">
+                            {tCategory(props.category)}
                         </Badge>
                     </div>
                     <Link href={`/${props.category}/${props.slug}`}>

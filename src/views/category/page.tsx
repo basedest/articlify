@@ -1,4 +1,5 @@
 import { createServerCaller } from '~/shared/api/trpc/server';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { SmartList } from '~/widgets/smart-list';
 import { categories, Category } from '~/shared/config/categories';
@@ -28,12 +29,16 @@ export async function CategoryPage({ params, searchParams }: CategoryPageProps) 
         pagesize: 10,
     });
 
+    const tCategory = await getTranslations('category');
+    const tArticles = await getTranslations('articles');
+    const categoryLabel = tCategory(category as Category);
+
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="mb-8 flex items-center gap-3">
-                <h1 className="text-4xl font-bold capitalize">{category}</h1>
+                <h1 className="text-4xl font-bold">{categoryLabel}</h1>
                 <Badge variant="secondary" className="text-lg">
-                    {result.total} articles
+                    {tArticles('articlesCount', { count: result.total })}
                 </Badge>
             </div>
 
@@ -44,8 +49,11 @@ export async function CategoryPage({ params, searchParams }: CategoryPageProps) 
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
     const { category } = await params;
+    const tCategory = await getTranslations('category');
+    const tArticles = await getTranslations('articles');
+    const categoryLabel = tCategory(category as Category);
     return {
-        title: `${category.charAt(0).toUpperCase() + category.slice(1)} Articles | Articlify`,
-        description: `Browse all articles in the ${category} category`,
+        title: tArticles('categoryPageTitle', { category: categoryLabel }),
+        description: tArticles('categoryPageDescription', { category: categoryLabel }),
     };
 }

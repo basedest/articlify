@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useRouter } from '~/i18n/navigation';
+import { Link } from '~/i18n/navigation';
 import { Button } from '~/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/shared/ui/card';
 import { Input } from '~/shared/ui/input';
@@ -11,9 +11,16 @@ import { Label } from '~/shared/ui/label';
 import { Alert, AlertDescription } from '~/shared/ui/alert';
 import { Loader2 } from 'lucide-react';
 import { trpc } from '~/shared/api/trpc/client';
+import { useTranslations } from 'next-intl';
+import { LanguageSwitcher } from '~/features/i18n';
 
 export function RegisterForm() {
     const router = useRouter();
+    const t = useTranslations('auth');
+    const tForm = useTranslations('form');
+    const tButton = useTranslations('button');
+    const tError = useTranslations('error');
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
@@ -31,7 +38,7 @@ export function RegisterForm() {
         setError('');
 
         if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+            setError(tError('passwordsDoNotMatch'));
             setIsLoading(false);
             return;
         }
@@ -50,13 +57,13 @@ export function RegisterForm() {
             });
 
             if (result?.error) {
-                setError('Registration successful, but login failed. Please try logging in.');
+                setError(tError('registrationSuccessLoginFailed'));
             } else {
                 router.push('/dashboard');
                 router.refresh();
             }
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+            setError(err instanceof Error ? err.message : tError('registrationFailed'));
         } finally {
             setIsLoading(false);
         }
@@ -65,8 +72,13 @@ export function RegisterForm() {
     return (
         <Card className="w-full max-w-md">
             <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold">Register</CardTitle>
-                <CardDescription>Create a new account to start publishing articles</CardDescription>
+                <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-1">
+                        <CardTitle className="text-2xl font-bold">{t('registerTitle')}</CardTitle>
+                        <CardDescription>{t('registerDescription')}</CardDescription>
+                    </div>
+                    <LanguageSwitcher variant="compact" className="shrink-0" />
+                </div>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -77,11 +89,11 @@ export function RegisterForm() {
                     )}
 
                     <div className="space-y-2">
-                        <Label htmlFor="username">Username</Label>
+                        <Label htmlFor="username">{tForm('username')}</Label>
                         <Input
                             id="username"
                             type="text"
-                            placeholder="Choose a username"
+                            placeholder={tForm('placeholderChooseUsername')}
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                             required
@@ -91,11 +103,11 @@ export function RegisterForm() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">{tForm('email')}</Label>
                         <Input
                             id="email"
                             type="email"
-                            placeholder="your@email.com"
+                            placeholder={tForm('placeholderEmail')}
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             required
@@ -103,11 +115,11 @@ export function RegisterForm() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">{tForm('password')}</Label>
                         <Input
                             id="password"
                             type="password"
-                            placeholder="Create a password"
+                            placeholder={tForm('placeholderCreatePassword')}
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
@@ -116,11 +128,11 @@ export function RegisterForm() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="confirmPassword">Confirm Password</Label>
+                        <Label htmlFor="confirmPassword">{tForm('confirmPassword')}</Label>
                         <Input
                             id="confirmPassword"
                             type="password"
-                            placeholder="Confirm your password"
+                            placeholder={tForm('placeholderConfirmPassword')}
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                             required
@@ -131,17 +143,17 @@ export function RegisterForm() {
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Creating account...
+                                {t('creatingAccount')}
                             </>
                         ) : (
-                            'Register'
+                            tButton('register')
                         )}
                     </Button>
 
                     <p className="text-muted-foreground text-center text-sm">
-                        Already have an account?{' '}
+                        {t('alreadyHaveAccount')}{' '}
                         <Link href="/login" className="text-primary font-medium hover:underline">
-                            Login
+                            {tButton('login')}
                         </Link>
                     </p>
                 </form>

@@ -1,0 +1,161 @@
+{
+  "nav": {
+    "home": "Главная",
+    "about": "О сервисе",
+    "categories": "Категории",
+    "editor": "Редактор",
+    "signIn": "Войти",
+    "brand": "Articlify"
+  },
+  "button": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "login": "Войти",
+    "register": "Регистрация",
+    "signOut": "Выйти",
+    "tryAgain": "Попробовать снова",
+    "goHome": "На главную",
+    "selectTheme": "Выберите тему"
+  },
+  "form": {
+    "email": "Эл. почта",
+    "password": "Пароль",
+    "username": "Имя пользователя",
+    "confirmPassword": "Подтвердите пароль",
+    "submit": "Отправить",
+    "placeholderUsername": "Введите имя пользователя",
+    "placeholderPassword": "Введите пароль",
+    "placeholderChooseUsername": "Выберите имя пользователя",
+    "placeholderEmail": "your@email.com",
+    "placeholderCreatePassword": "Придумайте пароль",
+    "placeholderConfirmPassword": "Подтвердите пароль"
+  },
+  "error": {
+    "network": "Ошибка сети, попробуйте снова",
+    "unauthorized": "У вас нет доступа",
+    "invalidCredentials": "Неверное имя пользователя или пароль",
+    "generic": "Произошла ошибка. Попробуйте снова.",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "registrationFailed": "Ошибка регистрации. Попробуйте снова.",
+    "registrationSuccessLoginFailed": "Регистрация прошла успешно, но вход не удался. Попробуйте войти.",
+    "unexpected": "Произошла непредвиденная ошибка."
+  },
+  "footer": {
+    "language": "Язык",
+    "theme": "Тема",
+    "themeSystem": "Системная",
+    "themeDark": "Тёмная",
+    "themeLight": "Светлая",
+    "madeBy": "Автор",
+    "author": "Иван Щербаков",
+    "version": "Версия",
+    "copyright": "© 2022-2025 Articlify Inc. Все права защищены."
+  },
+  "auth": {
+    "loginTitle": "Вход",
+    "loginDescription": "Введите данные для доступа к аккаунту",
+    "loggingIn": "Вход...",
+    "registerTitle": "Регистрация",
+    "registerDescription": "Создайте аккаунт, чтобы публиковать статьи",
+    "creatingAccount": "Создание аккаунта...",
+    "dontHaveAccount": "Нет аккаунта?",
+    "alreadyHaveAccount": "Уже есть аккаунт?",
+    "accessDenied": "Доступ запрещён",
+    "accessDeniedDescription": "Для просмотра этой страницы необходимо войти",
+    "myAccount": "Мой аккаунт",
+    "profile": "Профиль"
+  },
+  "common": {
+    "pageNotFound": "Страница не найдена",
+    "pageNotFoundDescription": "Запрашиваемая страница не существует или была перемещена.",
+    "somethingWentWrong": "Что-то пошло не так!",
+    "english": "English",
+    "russian": "Русский"
+  },
+  "home": {
+    "tagline": "Пространство для вдумчивых текстов — без культуры отмены."
+  },
+  "category": {
+    "art": "Искусство",
+    "it": "IT",
+    "games": "Игры",
+    "music": "Музыка",
+    "science": "Наука",
+    "sports": "Спорт",
+    "travel": "Путешествия",
+    "movies": "Кино",
+    "other": "Другое"
+  },
+  "articles": {
+    "noArticles": "Нет статей",
+    "searchResults": "Результаты поиска",
+    "latestArticles": "Последние статьи",
+    "searchByTitle": "Поиск по названию...",
+    "articlesCount": "{count} статей",
+    "browseCategory": "Статьи в разделе «{category}»",
+    "returnToAllArticles": "Все статьи",
+    "lastUpdated": "Обновлено:",
+    "categoryPageTitle": "Статьи — {category} | Articlify",
+    "categoryPageDescription": "Все статьи в разделе «{category}»"
+  },
+  "dashboard": {
+    "title": "Панель управления",
+    "profile": "Профиль",
+    "profileDescription": "Информация об аккаунте",
+    "memberSince": "Участник с",
+    "viewYourArticles": "Мои статьи",
+    "quickActions": "Быстрые действия",
+    "manageContent": "Управление контентом",
+    "createNewArticle": "Создать статью",
+    "manageArticles": "Управление статьями",
+    "browseArticles": "Все статьи"
+  },
+  "editor": {
+    "placeholder": "Начните писать...",
+    "loadingEditor": "Загрузка редактора…",
+    "editArticle": "Редактировать статью",
+    "createNewArticle": "Создать статью",
+    "title": "Заголовок",
+    "description": "Описание",
+    "category": "Категория",
+    "tags": "Теги",
+    "coverImage": "Обложка",
+    "content": "Содержание",
+    "placeholderTitle": "Введите заголовок статьи...",
+    "placeholderDescription": "Краткое описание статьи...",
+    "selectCategory": "Выберите категорию...",
+    "selectOrCreateTags": "Выберите или создайте теги...",
+    "coverImageNote": "Изображение будет приведено к формату 2:1",
+    "saving": "Сохранение...",
+    "updateArticle": "Обновить статью",
+    "publishArticle": "Опубликовать",
+    "success": "Успешно",
+    "articleCreated": "Статья успешно создана",
+    "articleUpdated": "Статья успешно обновлена",
+    "error": "Ошибка",
+    "validationError": "Ошибка проверки",
+    "titleCategoryDescriptionRequired": "Заполните заголовок, категорию и описание",
+    "failedToSave": "Не удалось сохранить статью",
+    "noPermissionToEdit": "У вас нет прав на редактирование этой статьи",
+    "preview": "Превью"
+  },
+  "pagination": {
+    "previous": "Назад",
+    "next": "Вперёд",
+    "morePages": "Ещё страницы",
+    "goToPreviousPage": "Перейти на предыдущую страницу",
+    "goToNextPage": "Перейти на следующую страницу",
+    "ariaLabel": "Пагинация"
+  },
+  "avatar": {
+    "administrator": "Администратор",
+    "user": "Пользователь",
+    "changeAvatar": "Изменить аватар",
+    "uploading": "Загрузка…",
+    "avatarUpdated": "Аватар обновлён",
+    "avatarUpdatedDescription": "Фото профиля обновлено.",
+    "uploadFailed": "Ошибка загрузки",
+    "fileTooLarge": "Файл слишком большой",
+    "imageTooLarge": "Размер изображения не должен превышать 2 МБ."
+  }
+}

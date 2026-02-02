@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '~/i18n/navigation';
 import { useSession } from 'next-auth/react';
 import { UserMenu } from '~/features/auth/user-menu';
 import { categories } from '~/shared/config/categories';
@@ -8,37 +8,40 @@ import { Button } from '~/shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/shared/ui/dropdown-menu';
 import { ChevronDown, Menu, PenSquare } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export function Header() {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const t = useTranslations('nav');
+    const tCategory = useTranslations('category');
 
     return (
         <nav className="bg-card/95 supports-[backdrop-filter]:bg-card/60 sticky top-0 z-50 border-b backdrop-blur">
             <div className="container mx-auto">
                 <div className="flex h-16 items-center justify-between px-4">
                     <Link href="/" className="text-primary text-2xl font-bold">
-                        Articlify
+                        {t('brand')}
                     </Link>
 
                     <div className="hidden items-center gap-6 md:flex">
                         <Link href="/">
-                            <Button variant="ghost">Home</Button>
+                            <Button variant="ghost">{t('home')}</Button>
                         </Link>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost">
-                                    Categories
+                                    {t('categories')}
                                     <ChevronDown className="ml-1 h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 {categories.map((category) => (
                                     <DropdownMenuItem key={category} asChild>
-                                        <Link href={`/${category}`} className="w-full cursor-pointer capitalize">
-                                            {category}
+                                        <Link href={`/${category}`} className="w-full cursor-pointer">
+                                            {tCategory(category)}
                                         </Link>
                                     </DropdownMenuItem>
                                 ))}
@@ -48,13 +51,13 @@ export function Header() {
                         <Link href="/editor">
                             <Button variant="ghost">
                                 <PenSquare className="mr-2 h-4 w-4" />
-                                Editor
+                                {t('editor')}
                             </Button>
                         </Link>
 
                         {!loading && !session && (
                             <Link href="/login">
-                                <Button variant="default">Sign In</Button>
+                                <Button variant="default">{t('signIn')}</Button>
                             </Link>
                         )}
 
@@ -73,14 +76,14 @@ export function Header() {
                         <div className="flex flex-col gap-2 px-4 pt-4">
                             <Link href="/" onClick={() => setMobileMenuOpen(false)}>
                                 <Button variant="ghost" className="w-full justify-start">
-                                    Home
+                                    {t('home')}
                                 </Button>
                             </Link>
 
                             {categories.map((category) => (
                                 <Link key={category} href={`/${category}`} onClick={() => setMobileMenuOpen(false)}>
-                                    <Button variant="ghost" className="w-full justify-start capitalize">
-                                        {category}
+                                    <Button variant="ghost" className="w-full justify-start">
+                                        {tCategory(category)}
                                     </Button>
                                 </Link>
                             ))}
@@ -88,13 +91,13 @@ export function Header() {
                             <Link href="/editor" onClick={() => setMobileMenuOpen(false)}>
                                 <Button variant="ghost" className="w-full justify-start">
                                     <PenSquare className="mr-2 h-4 w-4" />
-                                    Editor
+                                    {t('editor')}
                                 </Button>
                             </Link>
 
                             {!loading && !session && (
                                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                                    <Button className="w-full">Sign In</Button>
+                                    <Button className="w-full">{t('signIn')}</Button>
                                 </Link>
                             )}
                         </div>

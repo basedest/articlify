@@ -1,0 +1,161 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "categories": "Categories",
+    "editor": "Editor",
+    "signIn": "Sign In",
+    "brand": "Articlify"
+  },
+  "button": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "login": "Login",
+    "register": "Register",
+    "signOut": "Sign Out",
+    "tryAgain": "Try again",
+    "goHome": "Go Home",
+    "selectTheme": "Select theme"
+  },
+  "form": {
+    "email": "Email",
+    "password": "Password",
+    "username": "Username",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit",
+    "placeholderUsername": "Enter your username",
+    "placeholderPassword": "Enter your password",
+    "placeholderChooseUsername": "Choose a username",
+    "placeholderEmail": "your@email.com",
+    "placeholderCreatePassword": "Create a password",
+    "placeholderConfirmPassword": "Confirm your password"
+  },
+  "error": {
+    "network": "Network error, please try again",
+    "unauthorized": "You are not authorized",
+    "invalidCredentials": "Invalid username or password",
+    "generic": "An error occurred. Please try again.",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "registrationFailed": "Registration failed. Please try again.",
+    "registrationSuccessLoginFailed": "Registration successful, but login failed. Please try logging in.",
+    "unexpected": "An unexpected error occurred."
+  },
+  "footer": {
+    "language": "Language",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "madeBy": "Made by",
+    "author": "Ivan Shcherbakov",
+    "version": "Version",
+    "copyright": "Copyright © 2022-2025 Articlify Inc. All rights reserved."
+  },
+  "auth": {
+    "loginTitle": "Login",
+    "loginDescription": "Enter your credentials to access your account",
+    "loggingIn": "Logging in...",
+    "registerTitle": "Register",
+    "registerDescription": "Create a new account to start publishing articles",
+    "creatingAccount": "Creating account...",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "accessDenied": "Access Denied",
+    "accessDeniedDescription": "You need to be signed in to view this page",
+    "myAccount": "My Account",
+    "profile": "Profile"
+  },
+  "common": {
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundDescription": "The page you are looking for doesn't exist or has been moved.",
+    "somethingWentWrong": "Something went wrong!",
+    "english": "English",
+    "russian": "Русский"
+  },
+  "home": {
+    "tagline": "A place <em>with</em> articles and <em>without</em> cancel-culture."
+  },
+  "category": {
+    "art": "Art",
+    "it": "IT",
+    "games": "Games",
+    "music": "Music",
+    "science": "Science",
+    "sports": "Sports",
+    "travel": "Travel",
+    "movies": "Movies",
+    "other": "Other"
+  },
+  "articles": {
+    "noArticles": "No articles",
+    "searchResults": "Search results",
+    "latestArticles": "Latest articles",
+    "searchByTitle": "Search by title...",
+    "articlesCount": "{count} articles",
+    "browseCategory": "Browse {category} category",
+    "returnToAllArticles": "Return to all articles",
+    "lastUpdated": "Last updated:",
+    "categoryPageTitle": "{category} Articles | Articlify",
+    "categoryPageDescription": "Browse all articles in the {category} category"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "profile": "Profile",
+    "profileDescription": "Your account information",
+    "memberSince": "Member since",
+    "viewYourArticles": "View Your Articles",
+    "quickActions": "Quick Actions",
+    "manageContent": "Manage your content",
+    "createNewArticle": "Create New Article",
+    "manageArticles": "Manage Articles",
+    "browseArticles": "Browse Articles"
+  },
+  "editor": {
+    "placeholder": "Start writing...",
+    "loadingEditor": "Loading editor…",
+    "editArticle": "Edit Article",
+    "createNewArticle": "Create New Article",
+    "title": "Title",
+    "description": "Description",
+    "category": "Category",
+    "tags": "Tags",
+    "coverImage": "Cover Image",
+    "content": "Content",
+    "placeholderTitle": "Enter article title...",
+    "placeholderDescription": "Brief description of your article...",
+    "selectCategory": "Select a category...",
+    "selectOrCreateTags": "Select or create tags...",
+    "coverImageNote": "Image will be converted to 2:1 ratio",
+    "saving": "Saving...",
+    "updateArticle": "Update Article",
+    "publishArticle": "Publish Article",
+    "success": "Success",
+    "articleCreated": "Article created successfully",
+    "articleUpdated": "Article updated successfully",
+    "error": "Error",
+    "validationError": "Validation Error",
+    "titleCategoryDescriptionRequired": "Title, category, and description are required",
+    "failedToSave": "Failed to save article",
+    "noPermissionToEdit": "You do not have permission to edit this article",
+    "preview": "Preview"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "morePages": "More pages",
+    "goToPreviousPage": "Go to previous page",
+    "goToNextPage": "Go to next page",
+    "ariaLabel": "Pagination"
+  },
+  "avatar": {
+    "administrator": "Administrator",
+    "user": "User",
+    "changeAvatar": "Change avatar",
+    "uploading": "Uploading…",
+    "avatarUpdated": "Avatar updated",
+    "avatarUpdatedDescription": "Your profile picture has been updated.",
+    "uploadFailed": "Upload failed",
+    "fileTooLarge": "File too large",
+    "imageTooLarge": "Image must be smaller than 2MB."
+  }
+}

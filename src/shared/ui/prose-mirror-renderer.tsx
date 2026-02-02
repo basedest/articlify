@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import { Link } from '~/i18n/navigation';
 import Image from 'next/image';
 import type { PMDoc, PMNode, PMMark } from '~/shared/types/prose-mirror';
 
@@ -49,8 +49,20 @@ function wrapWithMark(content: React.ReactNode, mark: PMMark): React.ReactNode {
             return <code className="bg-muted rounded px-1 py-0.5 font-mono text-sm">{content}</code>;
         case 'link': {
             const href = sanitizeHref(mark.attrs?.href);
+            const isExternal =
+                href.startsWith('http:') ||
+                href.startsWith('https:') ||
+                href.startsWith('mailto:') ||
+                href.startsWith('tel:');
+            if (isExternal) {
+                return (
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                        {content}
+                    </a>
+                );
+            }
             return (
-                <Link href={href} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                <Link href={href} className="text-primary underline">
                     {content}
                 </Link>
             );

@@ -3,9 +3,10 @@ import { ArticlesPage, generateMetadata as articlesGenerateMetadata } from '~/vi
 export const generateMetadata = articlesGenerateMetadata;
 
 interface PageProps {
+    params: Promise<{ locale: string }>;
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page(props: PageProps) {
-    return <ArticlesPage {...props} />;
+    return <ArticlesPage searchParams={props.searchParams} />;
 }

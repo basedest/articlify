@@ -1,7 +1,8 @@
 import { createServerCallerPublic } from '~/shared/api/trpc/server';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '~/i18n/navigation';
 import { TagsList } from '~/entities/tag/ui/tags-list';
 import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';
@@ -42,6 +43,9 @@ export async function ArticlePage({ params }: ArticlePageProps) {
     }
 
     const img = article.img ?? `/img/${article.category}.png`;
+    const tCategory = await getTranslations('category');
+    const tArticles = await getTranslations('articles');
+    const categoryLabel = tCategory(article.category);
 
     return (
         <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -81,7 +85,7 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                     <TagsList tags={article.tags} />
 
                     <p className="text-muted-foreground text-sm">
-                        Last updated:{' '}
+                        {tArticles('lastUpdated')}{' '}
                         {article.editedAt
                             ? new Date(article.editedAt).toLocaleString()
                             : new Date(article.createdAt).toLocaleString()}
@@ -89,13 +93,15 @@ export async function ArticlePage({ params }: ArticlePageProps) {
 
                     <div className="flex flex-col gap-3 sm:flex-row">
                         <Button variant="outline" asChild>
-                            <Link href={`/${article.category}`}>Browse {article.category} category</Link>
+                            <Link href={`/${article.category}`}>
+                                {tArticles('browseCategory', { category: categoryLabel })}
+                            </Link>
                         </Button>
 
                         <Button asChild>
                             <Link href="/">
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Return to all articles
+                                {tArticles('returnToAllArticles')}
                             </Link>
                         </Button>
                     </div>

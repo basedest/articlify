@@ -82,4 +82,14 @@ export const userRouter = router({
 
             return await userService.updateAvatar(userId, imageUrl);
         }),
+
+    updatePreferredLanguage: protectedProcedure
+        .input(z.object({ locale: z.enum(['en', 'ru']) }))
+        .mutation(async ({ input, ctx }) => {
+            const userId = ctx.session.user.id;
+            if (!userId) {
+                throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+            }
+            return await userService.updatePreferredLanguage(userId, input.locale);
+        }),
 });

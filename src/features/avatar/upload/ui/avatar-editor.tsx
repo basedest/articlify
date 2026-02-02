@@ -2,7 +2,8 @@
 
 import React, { useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '~/i18n/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';
 import { Camera, Loader2 } from 'lucide-react';
@@ -16,6 +17,7 @@ export function AvatarEditor() {
     const { data: session, update: updateSession } = useSession();
     const router = useRouter();
     const { toast } = useToast();
+    const t = useTranslations('avatar');
     const inputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
 
@@ -24,13 +26,13 @@ export function AvatarEditor() {
             await updateSession();
             router.refresh();
             toast({
-                title: 'Avatar updated',
-                description: 'Your profile picture has been updated.',
+                title: t('avatarUpdated'),
+                description: t('avatarUpdatedDescription'),
             });
         },
         onError: (error) => {
             toast({
-                title: 'Upload failed',
+                title: t('uploadFailed'),
                 description: error.message,
                 variant: 'destructive',
             });
@@ -44,8 +46,8 @@ export function AvatarEditor() {
 
         if (file.size > MAX_SIZE_BYTES) {
             toast({
-                title: 'File too large',
-                description: 'Image must be smaller than 2MB.',
+                title: t('fileTooLarge'),
+                description: t('imageTooLarge'),
                 variant: 'destructive',
             });
             e.target.value = '';
@@ -70,7 +72,7 @@ export function AvatarEditor() {
     if (!session?.user) return null;
 
     const user = session.user;
-    const displayName = user.name ?? 'User';
+    const displayName = user.name ?? t('user');
 
     return (
         <div className="flex items-center gap-4">
@@ -81,7 +83,7 @@ export function AvatarEditor() {
                 onChange={handleFileChange}
                 className="sr-only"
                 disabled={uploading}
-                aria-label="Change avatar"
+                aria-label={t('changeAvatar')}
             />
             <div className="relative">
                 <Avatar className="h-20 w-20">
@@ -95,14 +97,16 @@ export function AvatarEditor() {
                     className="absolute right-0 bottom-0 h-8 w-8 rounded-full shadow"
                     onClick={() => inputRef.current?.click()}
                     disabled={uploading}
-                    aria-label="Change avatar"
+                    aria-label={t('changeAvatar')}
                 >
                     {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
                 </Button>
             </div>
             <div>
                 <h3 className="text-xl font-semibold">{displayName}</h3>
-                <p className="text-muted-foreground text-sm">{user.role === 'admin' ? 'Administrator' : 'User'}</p>
+                <p className="text-muted-foreground text-sm">
+                    {user.role === 'admin' ? t('administrator') : t('user')}
+                </p>
                 <Button
                     type="button"
                     variant="link"
@@ -110,7 +114,7 @@ export function AvatarEditor() {
                     onClick={() => inputRef.current?.click()}
                     disabled={uploading}
                 >
-                    {uploading ? 'Uploading…' : 'Change avatar'}
+                    {uploading ? t('uploading') : t('changeAvatar')}
                 </Button>
             </div>
         </div>
