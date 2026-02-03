@@ -59,7 +59,7 @@ export function RegisterForm() {
             if (signUpError) {
                 setError(signUpError.message ?? tError('registrationFailed'));
             } else {
-                router.push('/dashboard');
+                router.push('/verify-email');
                 router.refresh();
             }
         } catch (err: unknown) {

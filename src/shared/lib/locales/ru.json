@@ -38,7 +38,8 @@
     "passwordsDoNotMatch": "Пароли не совпадают",
     "registrationFailed": "Ошибка регистрации. Попробуйте снова.",
     "registrationSuccessLoginFailed": "Регистрация прошла успешно, но вход не удался. Попробуйте войти.",
-    "unexpected": "Произошла непредвиденная ошибка."
+    "unexpected": "Произошла непредвиденная ошибка.",
+    "emailNotVerified": "Подтвердите адрес эл. почты для входа."
   },
   "footer": {
     "language": "Язык",
@@ -63,7 +64,13 @@
     "accessDenied": "Доступ запрещён",
     "accessDeniedDescription": "Для просмотра этой страницы необходимо войти",
     "myAccount": "Мой аккаунт",
-    "profile": "Профиль"
+    "profile": "Профиль",
+    "checkEmailTitle": "Проверьте почту",
+    "checkEmailDescription": "Мы отправили ссылку для подтверждения на вашу эл. почту. Подтвердите её, чтобы войти.",
+    "resendVerification": "Отправить письмо повторно",
+    "verifyEmailBeforeSignIn": "Подтвердите эл. почту перед входом. Проверьте входящие или запросите повторную отправку.",
+    "resendVerificationSuccess": "Письмо отправлено. Проверьте входящие.",
+    "resendVerificationFailed": "Не удалось отправить письмо. Попробуйте позже."
   },
   "common": {
     "pageNotFound": "Страница не найдена",
