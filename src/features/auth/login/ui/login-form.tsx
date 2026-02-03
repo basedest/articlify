@@ -25,6 +25,7 @@ export function LoginForm() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isEmailNotVerifiedError, setIsEmailNotVerifiedError] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -34,6 +35,7 @@ export function LoginForm() {
         e.preventDefault();
         setIsLoading(true);
         setError('');
+        setIsEmailNotVerifiedError(false);
 
         try {
             const { error } = await (
@@ -41,7 +43,7 @@ export function LoginForm() {
                     username: (opts: {
                         username: string;
                         password: string;
-                    }) => Promise<{ error?: { message?: string } }>;
+                    }) => Promise<{ error?: { message?: string; status?: number } }>;
                 }
             ).username({
                 username: formData.username,
@@ -49,7 +51,9 @@ export function LoginForm() {
             });
 
             if (error) {
-                setError(tError('invalidCredentials'));
+                const emailNotVerified = error.status === 403 || error.message === 'Email not verified';
+                setIsEmailNotVerifiedError(emailNotVerified);
+                setError(emailNotVerified ? t('verifyEmailBeforeSignIn') : tError('invalidCredentials'));
             } else {
                 router.push(callbackUrl);
                 router.refresh();
@@ -76,7 +80,17 @@ export function LoginForm() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {error && (
                         <Alert variant="destructive">
-                            <AlertDescription>{error}</AlertDescription>
+                            <AlertDescription>
+                                {error}
+                                {isEmailNotVerifiedError && (
+                                    <>
+                                        {' '}
+                                        <Link href="/verify-email" className="font-medium underline underline-offset-2">
+                                            {t('resendVerification')}
+                                        </Link>
+                                    </>
+                                )}
+                            </AlertDescription>
                         </Alert>
                     )}
 

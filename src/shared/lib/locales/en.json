@@ -38,7 +38,8 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "registrationFailed": "Registration failed. Please try again.",
     "registrationSuccessLoginFailed": "Registration successful, but login failed. Please try logging in.",
-    "unexpected": "An unexpected error occurred."
+    "unexpected": "An unexpected error occurred.",
+    "emailNotVerified": "Please verify your email address to sign in."
   },
   "footer": {
     "language": "Language",
@@ -63,7 +64,13 @@
     "accessDenied": "Access Denied",
     "accessDeniedDescription": "You need to be signed in to view this page",
     "myAccount": "My Account",
-    "profile": "Profile"
+    "profile": "Profile",
+    "checkEmailTitle": "Check your email",
+    "checkEmailDescription": "We sent a verification link to your email. Please verify to sign in.",
+    "resendVerification": "Resend verification email",
+    "verifyEmailBeforeSignIn": "Please verify your email before signing in. Check your inbox or resend the verification email.",
+    "resendVerificationSuccess": "Verification email sent. Check your inbox.",
+    "resendVerificationFailed": "Failed to send verification email. Try again later."
   },
   "common": {
     "pageNotFound": "Page Not Found",

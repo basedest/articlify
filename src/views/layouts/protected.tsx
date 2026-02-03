@@ -10,5 +10,11 @@ export async function ProtectedLayout({ children }: { children: React.ReactNode 
         redirect({ href: '/login', locale });
     }
 
+    const user = session!.user as { emailVerified?: boolean };
+    if (user.emailVerified === false) {
+        const locale = await getLocale();
+        redirect({ href: '/verify-email', locale });
+    }
+
     return <>{children}</>;
 }
