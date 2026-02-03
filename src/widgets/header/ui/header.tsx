@@ -1,7 +1,7 @@
 'use client';
 
 import { Link } from 'i18n/navigation';
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
 import { UserMenu } from '~/features/auth/user-menu';
 import { categories } from '~/shared/config/categories';
 import { Button } from '~/shared/ui/button';
@@ -11,8 +11,8 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 export function Header() {
-    const { data: session, status } = useSession();
-    const loading = status === 'loading';
+    const { data: session, isPending } = authClient.useSession();
+    const loading = isPending;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const t = useTranslations('nav');
     const tCategory = useTranslations('category');

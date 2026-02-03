@@ -2,7 +2,7 @@
 'use client';
 
 import { PenSquare, X } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
 import { useRouter, usePathname, Link } from 'i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { useState, useCallback, useEffect } from 'react';
@@ -37,7 +37,7 @@ interface SmartListProps {
 export function SmartList(props: SmartListProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const { data: session } = useSession();
+    const { data: session } = authClient.useSession();
     const t = useTranslations('articles');
     const tCategory = useTranslations('category');
     const tEditor = useTranslations('editor');

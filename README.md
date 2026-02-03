@@ -10,7 +10,7 @@ This is a fully modernized Next.js application featuring:
 
 - **Next.js 16** with App Router
 - **React 19** with Server Components
-- **Auth.js v5 (NextAuth v5)** for authentication
+- **Better Auth** for authentication (username + password)
 - **tRPC** for end-to-end type-safe APIs
 - **shadcn/ui** + **Tailwind CSS** for UI
 - **Feature-Sliced Design (FSD)** for code organization 
@@ -34,7 +34,7 @@ This is a fully modernized Next.js application featuring:
 
 ### Backend
 - tRPC for type-safe APIs
-- Auth.js v5 (NextAuth)
+- Better Auth
 - MongoDB with Mongoose
 - Clean architecture (Routers → Services → Repositories)
 
@@ -99,9 +99,8 @@ Edit `.env` and configure:
 # Database
 MONGODB_URI=mongodb://root:password@localhost:27017/articlify?authSource=admin
 
-# Auth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key-here-generate-with-openssl-rand-base64-32
+# Auth (Better Auth)
+BETTER_AUTH_SECRET=your-secret-key-here-generate-with-openssl-rand-base64-32
 
 # Storage (Local Development - MinIO)
 STORAGE_PROVIDER=minio
@@ -114,7 +113,17 @@ S3_PUBLIC_URL=http://localhost:9000/articlify-images
 S3_FORCE_PATH_STYLE=true
 ```
 
-4. **Start Docker services**
+4. **Migrating existing users (one-time)**
+
+If you have existing users in the Mongoose `users` collection, run the migration script once (prefer on a DB copy):
+
+```bash
+MONGODB_URI="your-uri" node scripts/migrate-better-auth.cjs
+```
+
+This copies users into Better Auth `user` and `account` collections and preserves existing bcrypt passwords.
+
+5. **Start Docker services**
 
 ```bash
 yarn docker:up
@@ -124,7 +133,7 @@ This starts:
 - MongoDB on port 27017
 - MinIO on port 9000 (API) and 9001 (Console)
 
-5. **Run the development server**
+6. **Run the development server**
 
 ```bash
 yarn dev
@@ -165,7 +174,7 @@ articlify/
 │   │   ├── layout.tsx
 │   │   └── page.tsx             # Home
 │   ├── api/                      # API routes
-│   │   ├── auth/[...nextauth]/  # Auth.js
+│   │   ├── auth/[...all]/       # Better Auth
 │   │   ├── trpc/[trpc]/         # tRPC endpoint
 │   │   └── user/avatar/         # Avatar upload
 │   ├── layout.tsx
@@ -180,7 +189,7 @@ articlify/
 ├── server/                       # tRPC root (context, trpc instance, auth router)
 ├── i18n/                         # next-intl (routing, request, navigation)
 ├── docker/
-├── auth.ts                       # Auth.js config (when used from root)
+├── auth.ts                       # Better Auth config (when used from root)
 ├── middleware.ts
 └── docker-compose.yml
 ```

@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { context, trace } from '@opentelemetry/api';
-import { type Session } from 'next-auth';
-import { auth } from '~/features/auth/auth';
+import { auth, getSession, type Session } from '~/features/auth/auth';
 
 const X_REQUEST_ID = 'x-request-id';
 
@@ -9,6 +8,8 @@ export type Context = {
     session: Session | null;
     requestId?: string;
     traceId?: string;
+    headers?: Headers;
+    authApi: typeof auth.api;
 };
 
 export type CreateContextOptions = {
@@ -32,7 +33,7 @@ export async function createContext(opts?: CreateContextOptions): Promise<Contex
 
     try {
         // Try to get session - will fail during build/generateStaticParams
-        session = (await auth()) as Session | null;
+        session = await getSession();
     } catch {
         // During build time or outside request scope, session is null
         session = null;
@@ -42,6 +43,8 @@ export async function createContext(opts?: CreateContextOptions): Promise<Contex
         session,
         requestId,
         traceId,
+        headers: opts?.req?.headers,
+        authApi: auth.api,
     };
 }
 
@@ -51,5 +54,6 @@ export function createPublicContext(): Context {
         session: null,
         requestId: uuidv4(),
         traceId: trace.getSpan(context.active())?.spanContext().traceId,
+        authApi: auth.api,
     };
 }

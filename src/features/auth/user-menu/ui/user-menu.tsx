@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { signOut, useSession } from 'next-auth/react';
 import { Link } from 'i18n/navigation';
+import { authClient } from '~/shared/api/auth-client';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -17,7 +17,7 @@ import { LogOut, User, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export function UserMenu() {
-    const { data: session } = useSession();
+    const { data: session } = authClient.useSession();
     const t = useTranslations('auth');
     const tButton = useTranslations('button');
 
@@ -48,7 +48,7 @@ export function UserMenu() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    onClick={() => signOut()}
+                    onClick={() => authClient.signOut()}
                     className="text-destructive focus:bg-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground cursor-pointer dark:text-red-400"
                 >
                     <LogOut className="mr-2 h-4 w-4" />
