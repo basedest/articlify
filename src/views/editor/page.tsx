@@ -7,7 +7,8 @@ import { useTranslations } from 'next-intl';
 import type { ProseMirrorJSON, TiptapEditorRef } from '~/widgets/editor';
 import type { Article } from '~/entities/article/model/types';
 import { TagsPicker } from '~/entities/tag/ui/tags-picker';
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
+import type { SessionUser } from '~/shared/types/session';
 import { useRouter } from 'i18n/navigation';
 import { useSearchParams } from 'next/navigation';
 import { categories } from '~/shared/config/categories';
@@ -29,7 +30,8 @@ export function EditorPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const editSlug = searchParams.get('edit');
-    const { data: session, status } = useSession();
+    const { data: session, isPending: statusPending } = authClient.useSession();
+    const status = statusPending ? 'loading' : 'authenticated';
     const { toast } = useToast();
     const t = useTranslations('editor');
     const tAuth = useTranslations('auth');
@@ -176,13 +178,14 @@ export function EditorPage() {
         }
     };
 
+    const sessionUser = session?.user as SessionUser | undefined;
     useEffect(() => {
         if (
             editSlug &&
             existingArticle &&
-            session &&
-            existingArticle.author !== session.user.name &&
-            session.user.role !== 'admin'
+            sessionUser &&
+            existingArticle.author !== sessionUser.name &&
+            sessionUser.role !== 'admin'
         ) {
             toast({
                 title: tAuth('accessDenied'),
@@ -191,7 +194,7 @@ export function EditorPage() {
             });
             router.push('/');
         }
-    }, [editSlug, existingArticle, session, router, toast, t, tAuth]);
+    }, [editSlug, existingArticle, sessionUser, router, toast, t, tAuth]);
 
     const authLoading = status === 'loading';
     const disabled = !editorReady || authLoading || uploading;

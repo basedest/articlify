@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
+import type { SessionUser } from '~/shared/types/session';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '../../../../../i18n/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
@@ -14,7 +15,7 @@ const ACCEPTED_TYPES = 'image/jpeg,image/jpg,image/png,image/webp,image/gif';
 const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
 
 export function AvatarEditor() {
-    const { data: session, update: updateSession } = useSession();
+    const { data: session } = authClient.useSession();
     const router = useRouter();
     const { toast } = useToast();
     const t = useTranslations('avatar');
@@ -23,7 +24,7 @@ export function AvatarEditor() {
 
     const uploadAvatar = trpc.user.uploadAvatar.useMutation({
         onSuccess: async () => {
-            await updateSession();
+            await authClient.getSession();
             router.refresh();
             toast({
                 title: t('avatarUpdated'),
@@ -71,7 +72,7 @@ export function AvatarEditor() {
 
     if (!session?.user) return null;
 
-    const user = session.user;
+    const user = session.user as SessionUser;
     const displayName = user.name ?? t('user');
 
     return (

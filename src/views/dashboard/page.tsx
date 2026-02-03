@@ -1,4 +1,4 @@
-import { auth } from '~/features/auth/auth';
+import { getSession } from '~/features/auth/auth';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { redirect } from 'i18n/navigation';
 import { Link } from 'i18n/navigation';
@@ -9,7 +9,7 @@ import { Separator } from '~/shared/ui/separator';
 import { CalendarDays, Mail, UserCircle } from 'lucide-react';
 
 export async function DashboardPage() {
-    const session = await auth();
+    const session = await getSession();
 
     if (!session || !session.user) {
         const locale = await getLocale();

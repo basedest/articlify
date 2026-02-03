@@ -2,11 +2,10 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'i18n/navigation';
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/ui/select';
 import { Label } from '~/shared/ui/label';
 import { useTranslations } from 'next-intl';
-import { trpc } from '~/shared/api/trpc/client';
 import { routing } from 'i18n/routing';
 import { cn } from '~/shared/lib/utils';
 
@@ -26,10 +25,10 @@ export function LanguageSwitcher({ id, className, variant = 'default' }: Languag
     const locale = useLocale();
     const pathname = usePathname();
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session } = authClient.useSession();
+
     const t = useTranslations('footer');
     const tCommon = useTranslations('common');
-    const updatePreferredLanguageMutation = trpc.user.updatePreferredLanguage.useMutation();
 
     const handleChange = (newLocale: string) => {
         if (!routing.locales.includes(newLocale as 'en' | 'ru')) return;
@@ -39,7 +38,9 @@ export function LanguageSwitcher({ id, className, variant = 'default' }: Languag
             setLocaleCookie(newLocale);
         }
         if (session?.user?.id) {
-            updatePreferredLanguageMutation.mutateAsync({ locale: newLocale as 'en' | 'ru' }).catch(() => {});
+            (authClient.updateUser as (body: { preferredLanguage?: string }) => Promise<unknown>)({
+                preferredLanguage: newLocale,
+            }).catch(() => {});
         }
     };
 

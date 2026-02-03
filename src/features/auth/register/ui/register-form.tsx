@@ -1,16 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'i18n/navigation';
 import { Link } from 'i18n/navigation';
+import { authClient } from '~/shared/api/auth-client';
 import { Button } from '~/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/shared/ui/card';
 import { Input } from '~/shared/ui/input';
 import { Label } from '~/shared/ui/label';
 import { Alert, AlertDescription } from '~/shared/ui/alert';
 import { Loader2 } from 'lucide-react';
-import { trpc } from '~/shared/api/trpc/client';
 import { useTranslations } from 'next-intl';
 import { LanguageSwitcher } from '~/features/i18n';
 
@@ -30,8 +29,6 @@ export function RegisterForm() {
         confirmPassword: '',
     });
 
-    const registerMutation = trpc.auth.register.useMutation();
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -44,20 +41,22 @@ export function RegisterForm() {
         }
 
         try {
-            await registerMutation.mutateAsync({
-                name: formData.username,
+            const { error: signUpError } = await (
+                authClient.signUp.email as (opts: {
+                    email: string;
+                    password: string;
+                    name: string;
+                    username?: string;
+                }) => Promise<{ error?: { message?: string } }>
+            )({
                 email: formData.email,
                 password: formData.password,
-            });
-
-            const result = await signIn('credentials', {
+                name: formData.username,
                 username: formData.username,
-                password: formData.password,
-                redirect: false,
             });
 
-            if (result?.error) {
-                setError(tError('registrationSuccessLoginFailed'));
+            if (signUpError) {
+                setError(signUpError.message ?? tError('registrationFailed'));
             } else {
                 router.push('/dashboard');
                 router.refresh();

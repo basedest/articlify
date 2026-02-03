@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'i18n/navigation';
+import { authClient } from '~/shared/api/auth-client';
 import { useSearchParams } from 'next/navigation';
 import { Link } from 'i18n/navigation';
 import { Button } from '~/shared/ui/button';
@@ -36,13 +36,19 @@ export function LoginForm() {
         setError('');
 
         try {
-            const result = await signIn('credentials', {
+            const { error } = await (
+                authClient.signIn as {
+                    username: (opts: {
+                        username: string;
+                        password: string;
+                    }) => Promise<{ error?: { message?: string } }>;
+                }
+            ).username({
                 username: formData.username,
                 password: formData.password,
-                redirect: false,
             });
 
-            if (result?.error) {
+            if (error) {
                 setError(tError('invalidCredentials'));
             } else {
                 router.push(callbackUrl);

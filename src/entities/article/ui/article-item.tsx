@@ -1,6 +1,7 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
+import type { SessionUser } from '~/shared/types/session';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from 'i18n/navigation';
@@ -17,7 +18,7 @@ import { useToast } from '~/shared/ui/use-toast';
 
 export function ArticleItem(props: Article) {
     const img = props.img ?? `/img/${props.category}.png`;
-    const { data: session } = useSession();
+    const { data: session } = authClient.useSession();
     const tCategory = useTranslations('category');
     const [dialogOpen, setDialogOpen] = useState(false);
     const router = useRouter();
@@ -41,7 +42,8 @@ export function ArticleItem(props: Article) {
         },
     });
 
-    const canEdit = session?.user && (session.user.name === props.author || session.user.role === 'admin');
+    const user = session?.user as SessionUser | undefined;
+    const canEdit = user && (user.name === props.author || user.role === 'admin');
 
     const handleDelete = () => {
         deleteMutation.mutate({ slug: props.slug });

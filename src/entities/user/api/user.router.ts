@@ -80,7 +80,14 @@ export const userRouter = router({
                 });
             }
 
-            return await userService.updateAvatar(userId, imageUrl);
+            const updated = await userService.updateAvatar(userId, imageUrl);
+            if (ctx.headers) {
+                await ctx.authApi.updateUser({
+                    headers: ctx.headers,
+                    body: { image: imageUrl },
+                });
+            }
+            return updated;
         }),
 
     updatePreferredLanguage: protectedProcedure
@@ -89,6 +96,12 @@ export const userRouter = router({
             const userId = ctx.session.user.id;
             if (!userId) {
                 throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+            }
+            if (ctx.headers) {
+                await ctx.authApi.updateUser({
+                    headers: ctx.headers,
+                    body: { preferredLanguage: input.locale },
+                });
             }
             return await userService.updatePreferredLanguage(userId, input.locale);
         }),
