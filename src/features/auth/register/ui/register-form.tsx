@@ -41,12 +41,13 @@ export function RegisterForm() {
         }
 
         try {
+            // API requires both name and username; form has a single "Username" field used for both.
             const { error: signUpError } = await (
                 authClient.signUp.email as (opts: {
                     email: string;
                     password: string;
                     name: string;
-                    username?: string;
+                    username: string;
                 }) => Promise<{ error?: { message?: string } }>
             )({
                 email: formData.email,

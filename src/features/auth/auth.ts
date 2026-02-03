@@ -9,6 +9,7 @@ import { clientPromise } from '~/shared/lib/server/mongodb-client';
 
 const client = await clientPromise;
 const db = client.db();
+const useTransactions = process.env.MONGODB_USE_TRANSACTIONS === 'true';
 
 const baseURL = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
 const isDev = process.env.NODE_ENV !== 'production';
@@ -16,7 +17,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 export const auth = betterAuth({
     baseURL,
     trustedOrigins: [baseURL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
-    database: mongodbAdapter(db, { client }),
+    database: mongodbAdapter(db, useTransactions ? { client } : undefined),
     session: {
         cookieCache: {
             enabled: true,
