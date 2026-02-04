@@ -57,7 +57,9 @@ export function RegisterForm() {
             });
 
             if (signUpError) {
-                setError(signUpError.message ?? tError('registrationFailed'));
+                const msg = signUpError.message ?? '';
+                const isEmailTaken = msg.includes('User already exists') && msg.includes('another email');
+                setError(isEmailTaken ? tError('emailAlreadyTaken') : msg || tError('registrationFailed'));
             } else {
                 router.push('/verify-email');
                 router.refresh();

@@ -11,36 +11,57 @@ import { Alert, AlertDescription } from '~/shared/ui/alert';
 import { useTranslations } from 'next-intl';
 import { LanguageSwitcher } from '~/features/i18n';
 import { Loader2 } from 'lucide-react';
+import { resendVerificationEmail } from '~/features/auth/actions/resend-verification';
 
-export function VerifyEmailPage() {
+type VerifyEmailPageProps = {
+    maskedEmail: string | null;
+};
+
+export function VerifyEmailPage({ maskedEmail }: VerifyEmailPageProps) {
     const t = useTranslations('auth');
     const tButton = useTranslations('button');
     const tForm = useTranslations('form');
 
-    const [email, setEmail] = useState('');
+    const [resendEmail, setResendEmail] = useState('');
     const [resendLoading, setResendLoading] = useState(false);
     const [resendSuccess, setResendSuccess] = useState(false);
     const [resendError, setResendError] = useState('');
 
+    const hasSession = maskedEmail !== null;
+
     const handleResend = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!hasSession && !resendEmail.trim()) return;
         setResendLoading(true);
         setResendError('');
         setResendSuccess(false);
         try {
-            const { error } = await (
-                authClient.sendVerificationEmail as (opts: {
-                    email: string;
-                    callbackURL?: string;
-                }) => Promise<{ error?: { message?: string } }>
-            )({
-                email,
-                callbackURL: '/dashboard',
-            });
-            if (error) {
-                setResendError(error.message ?? t('resendVerificationFailed'));
+            if (hasSession) {
+                const result = await resendVerificationEmail();
+                if (result.ok) {
+                    setResendSuccess(true);
+                } else {
+                    setResendError(
+                        result.error === 'session_required'
+                            ? t('resendVerificationSessionRequired')
+                            : t('resendVerificationFailed'),
+                    );
+                }
             } else {
-                setResendSuccess(true);
+                const { error } = await (
+                    authClient.sendVerificationEmail as (opts: {
+                        email: string;
+                        callbackURL?: string;
+                    }) => Promise<{ error?: { message?: string } }>
+                )({
+                    email: resendEmail.trim(),
+                    callbackURL: '/dashboard',
+                });
+                if (error) {
+                    setResendError(error.message ?? t('resendVerificationFailed'));
+                } else {
+                    setResendSuccess(true);
+                }
             }
         } catch {
             setResendError(t('resendVerificationFailed'));
@@ -55,24 +76,30 @@ export function VerifyEmailPage() {
                 <div className="flex items-start justify-between gap-2">
                     <div className="space-y-1">
                         <CardTitle className="text-2xl font-bold">{t('checkEmailTitle')}</CardTitle>
-                        <CardDescription>{t('checkEmailDescription')}</CardDescription>
+                        <CardDescription>
+                            {maskedEmail !== null
+                                ? t('checkEmailDescriptionWithMask', { maskedEmail })
+                                : t('checkEmailDescription')}
+                        </CardDescription>
                     </div>
                     <LanguageSwitcher variant="compact" className="shrink-0" />
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
                 <form onSubmit={handleResend} className="space-y-3">
-                    <div className="space-y-2">
-                        <Label htmlFor="resend-email">{tForm('email')}</Label>
-                        <Input
-                            id="resend-email"
-                            type="email"
-                            placeholder={tForm('placeholderEmail')}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
+                    {!hasSession && (
+                        <div className="space-y-2">
+                            <Label htmlFor="resend-email">{tForm('email')}</Label>
+                            <Input
+                                id="resend-email"
+                                type="email"
+                                placeholder={tForm('placeholderEmail')}
+                                value={resendEmail}
+                                onChange={(e) => setResendEmail(e.target.value)}
+                                required={!hasSession}
+                            />
+                        </div>
+                    )}
                     {resendSuccess && (
                         <Alert>
                             <AlertDescription>{t('resendVerificationSuccess')}</AlertDescription>
