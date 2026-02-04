@@ -1,11 +1,8 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { getServerConfig } from '~/shared/config/env/server';
 import { getSession } from '../auth';
-
-const getBaseURL = () =>
-    process.env.BETTER_AUTH_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
 export async function resendVerificationEmail(): Promise<{ ok: true } | { ok: false; error: string }> {
     const session = await getSession();
@@ -15,7 +12,7 @@ export async function resendVerificationEmail(): Promise<{ ok: true } | { ok: fa
 
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
-    const baseURL = getBaseURL();
+    const baseURL = getServerConfig().auth.baseUrl;
 
     const res = await fetch(`${baseURL}/api/auth/send-verification-email`, {
         method: 'POST',
