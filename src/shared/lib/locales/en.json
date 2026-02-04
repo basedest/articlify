@@ -37,6 +37,7 @@
     "generic": "An error occurred. Please try again.",
     "passwordsDoNotMatch": "Passwords do not match",
     "registrationFailed": "Registration failed. Please try again.",
+    "emailAlreadyTaken": "This email is already in use. Sign in if it's yours, or use a different address.",
     "registrationSuccessLoginFailed": "Registration successful, but login failed. Please try logging in.",
     "unexpected": "An unexpected error occurred.",
     "emailNotVerified": "Please verify your email address to sign in."
@@ -67,7 +68,9 @@
     "profile": "Profile",
     "checkEmailTitle": "Check your email",
     "checkEmailDescription": "We sent a verification link to your email. Please verify to sign in.",
+    "checkEmailDescriptionWithMask": "We sent a verification link to {maskedEmail}. Check that inbox and verify, or resend below.",
     "resendVerification": "Resend verification email",
+    "resendVerificationSessionRequired": "Session expired. Please sign in again to resend.",
     "verifyEmailBeforeSignIn": "Please verify your email before signing in. Check your inbox or resend the verification email.",
     "resendVerificationSuccess": "Verification email sent. Check your inbox.",
     "resendVerificationFailed": "Failed to send verification email. Try again later."
