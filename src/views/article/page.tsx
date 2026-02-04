@@ -1,8 +1,10 @@
 import { createServerCallerPublic } from '~/shared/api/trpc/server';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from 'i18n/navigation';
 import { TagsList } from '~/entities/tag/ui/tags-list';
+import { Avatar, AvatarFallback, AvatarImage } from '~/shared/ui/avatar';
 import { Button } from '~/shared/ui/button';
 import { Separator } from '~/shared/ui/separator';
 import { ArrowLeft } from 'lucide-react';
@@ -41,6 +43,9 @@ export async function ArticlePage({ params }: ArticlePageProps) {
     }
 
     const img = article.img ?? `/img/${article.category}.png`;
+    const tCategory = await getTranslations('category');
+    const tArticles = await getTranslations('articles');
+    const categoryLabel = tCategory(article.category);
 
     return (
         <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -50,8 +55,15 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
 
                 <div className="mb-8">
-                    <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
-                        <Link href={`/articles/user/${article.author}`}>
+                    <div className="text-muted-foreground mb-4 flex items-center gap-3 text-sm">
+                        <Link
+                            href={`/articles/user/${article.author}`}
+                            className="flex items-center gap-2 hover:opacity-90"
+                        >
+                            <Avatar className="h-8 w-8">
+                                <AvatarImage src={`/api/user/avatar/${encodeURIComponent(article.author)}`} />
+                                <AvatarFallback>{article.author[0]?.toUpperCase() ?? '?'}</AvatarFallback>
+                            </Avatar>
                             <span className="text-primary font-medium hover:underline">@{article.author}</span>
                         </Link>
                         <span>•</span>
@@ -70,10 +82,10 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                 </article>
 
                 <div className="mt-12 space-y-6 border-t pt-8">
-                    <TagsList tags={article.tags} />
+                    <TagsList tags={article.tags} showAll />
 
                     <p className="text-muted-foreground text-sm">
-                        Last updated:{' '}
+                        {tArticles('lastUpdated')}{' '}
                         {article.editedAt
                             ? new Date(article.editedAt).toLocaleString()
                             : new Date(article.createdAt).toLocaleString()}
@@ -81,13 +93,15 @@ export async function ArticlePage({ params }: ArticlePageProps) {
 
                     <div className="flex flex-col gap-3 sm:flex-row">
                         <Button variant="outline" asChild>
-                            <Link href={`/${article.category}`}>Browse {article.category} category</Link>
+                            <Link href={`/${article.category}`}>
+                                {tArticles('browseCategory', { category: categoryLabel })}
+                            </Link>
                         </Button>
 
                         <Button asChild>
                             <Link href="/">
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Return to all articles
+                                {tArticles('returnToAllArticles')}
                             </Link>
                         </Button>
                     </div>

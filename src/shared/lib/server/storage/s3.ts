@@ -1,32 +1,27 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl as awsGetSignedUrl } from '@aws-sdk/s3-request-presigner';
+import type { ServerConfig } from '~/shared/config/env/server';
 import type { StorageClient } from './index';
+
+type S3StorageConfig = Extract<ServerConfig['storage'], { provider: 's3' }>;
 
 export class S3Storage implements StorageClient {
     private client: S3Client;
     private bucket: string;
     private publicUrl: string;
 
-    constructor() {
-        const region = process.env.S3_REGION || '';
-        const accessKeyId = process.env.S3_ACCESS_KEY;
-        const secretAccessKey = process.env.S3_SECRET_KEY;
-        this.bucket = process.env.S3_BUCKET || '';
-
-        this.publicUrl = process.env.S3_PUBLIC_URL || '';
-
-        if (!accessKeyId || !secretAccessKey || !this.publicUrl || !this.bucket || !region) {
-            throw new Error('AWS credentials are required for S3 storage');
-        }
+    constructor(config: S3StorageConfig) {
+        this.bucket = config.bucket;
+        this.publicUrl = config.publicUrl;
 
         this.client = new S3Client({
-            region,
+            region: config.region,
             credentials: {
-                accessKeyId,
-                secretAccessKey,
+                accessKeyId: config.accessKeyId,
+                secretAccessKey: config.secretAccessKey,
             },
-            endpoint: this.publicUrl,
-            forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+            endpoint: config.publicUrl,
+            forcePathStyle: config.forcePathStyle,
         });
     }
 

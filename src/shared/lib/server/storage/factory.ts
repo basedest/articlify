@@ -1,3 +1,4 @@
+import { getServerConfig } from '~/shared/config/env/server';
 import type { StorageClient } from './index';
 import { MinIOStorage } from './minio';
 import { S3Storage } from './s3';
@@ -9,16 +10,12 @@ export function getStorageClient(): StorageClient {
         return storageInstance;
     }
 
-    const provider = process.env.STORAGE_PROVIDER || 'minio';
+    const storage = getServerConfig().storage;
 
-    switch (provider) {
-        case 's3':
-            storageInstance = new S3Storage();
-            break;
-        case 'minio':
-        default:
-            storageInstance = new MinIOStorage();
-            break;
+    if (storage.provider === 's3') {
+        storageInstance = new S3Storage(storage);
+    } else {
+        storageInstance = new MinIOStorage(storage);
     }
 
     return storageInstance;

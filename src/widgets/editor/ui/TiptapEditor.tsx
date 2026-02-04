@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useEditor, EditorContent, type Content } from '@tiptap/react';
+import { useTranslations } from 'next-intl';
 import { getTiptapExtensions } from './getExtensions';
 import { TiptapToolbar } from './TiptapToolbar';
 
@@ -35,12 +36,14 @@ const emptyDoc: ProseMirrorJSON = {
 export function TiptapEditor({
     content,
     onUpdate,
-    placeholder = 'Start writing...',
+    placeholder,
     editorRef,
     editable = true,
     className = '',
     onReady,
 }: TiptapEditorProps) {
+    const t = useTranslations('editor');
+    const resolvedPlaceholder = placeholder ?? t('placeholder');
     const initialContent: Content =
         content && typeof content === 'object' && content.type === 'doc' ? (content as Content) : emptyDoc;
 
@@ -87,7 +90,7 @@ export function TiptapEditor({
         return (
             <div className={`border-input bg-input dark:bg-input/30 rounded-lg border ${className}`}>
                 <div className="text-muted-foreground flex h-[200px] animate-pulse items-center justify-center">
-                    Loading editor…
+                    {t('loadingEditor')}
                 </div>
             </div>
         );

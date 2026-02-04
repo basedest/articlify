@@ -8,6 +8,7 @@ export interface User {
     regDate: Date;
     role?: string;
     image?: string;
+    preferredLanguage?: string;
     id?: Types.ObjectId;
 }
 
@@ -18,6 +19,7 @@ const UserSchema = new Schema<User>({
     regDate: { type: Date, required: true },
     role: String,
     image: String,
+    preferredLanguage: String,
 });
 
 UserSchema.pre('save', async function () {

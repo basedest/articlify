@@ -24,7 +24,7 @@ export class ArticleRepository {
         }
 
         if (tags && tags.length > 0) {
-            filter.tags = { $all: tags };
+            filter.tags = { $in: tags };
         }
 
         if (title) {
@@ -95,6 +95,12 @@ export class ArticleRepository {
             slug: string;
             category: string;
         }>;
+    }
+
+    async getDistinctTags(): Promise<string[]> {
+        await connectDB();
+        const tags = await ArticleModel.distinct('tags');
+        return (tags as string[]).filter(Boolean).sort();
     }
 }
 

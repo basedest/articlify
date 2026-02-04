@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { MultiSelect, type Option } from '~/shared/ui/multi-select';
 
 const tagOptions: Option[] = [
@@ -22,12 +23,13 @@ interface TagsPickerProps {
 }
 
 export function TagsPicker({ value, onChange, defaultValue }: TagsPickerProps) {
+    const t = useTranslations('editor');
     return (
         <MultiSelect
             options={tagOptions}
             selected={value || defaultValue || []}
             onChange={onChange}
-            placeholder="Select or create tags..."
+            placeholder={t('selectOrCreateTags')}
             allowCustom={true}
         />
     );

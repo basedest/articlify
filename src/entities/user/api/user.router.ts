@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
-import { router, protectedProcedure } from '~/server/trpc';
+import { router, protectedProcedure } from 'server/trpc';
 import { userService } from '~/entities/user/api/user.service';
 import { getStorageClient } from '~/shared/lib/server/storage/factory';
 
@@ -80,6 +80,29 @@ export const userRouter = router({
                 });
             }
 
-            return await userService.updateAvatar(userId, imageUrl);
+            const updated = await userService.updateAvatar(userId, imageUrl);
+            if (ctx.headers) {
+                await ctx.authApi.updateUser({
+                    headers: ctx.headers,
+                    body: { image: imageUrl },
+                });
+            }
+            return updated;
+        }),
+
+    updatePreferredLanguage: protectedProcedure
+        .input(z.object({ locale: z.enum(['en', 'ru']) }))
+        .mutation(async ({ input, ctx }) => {
+            const userId = ctx.session.user.id;
+            if (!userId) {
+                throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+            }
+            if (ctx.headers) {
+                await ctx.authApi.updateUser({
+                    headers: ctx.headers,
+                    body: { preferredLanguage: input.locale },
+                });
+            }
+            return await userService.updatePreferredLanguage(userId, input.locale);
         }),
 });

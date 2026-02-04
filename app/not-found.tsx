@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button } from '~/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/shared/ui/card';
 
-export default function NotFound() {
+export default function RootNotFound() {
     return (
         <div className="container mx-auto flex min-h-screen items-center justify-center px-4">
             <Card className="max-w-md">

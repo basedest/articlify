@@ -1,6 +1,7 @@
 import pino from 'pino';
 import { v4 as uuidv4 } from 'uuid';
 import { context, trace } from '@opentelemetry/api';
+import { getServerConfig } from '~/shared/config/env/server';
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
@@ -17,10 +18,11 @@ export interface LogOptions {
     durationMs?: number;
 }
 
+const { logLevel, nodeEnv } = getServerConfig();
 const logger = pino({
-    level: process.env.LOG_LEVEL || 'info',
-    transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty' } : undefined,
-    base: { service: 'articlify', environment: process.env.NODE_ENV || 'dev' },
+    level: logLevel,
+    transport: nodeEnv !== 'production' ? { target: 'pino-pretty' } : undefined,
+    base: { service: 'articlify', environment: nodeEnv },
     timestamp: () => `,"timestamp":"${new Date().toISOString()}"`,
 });
 

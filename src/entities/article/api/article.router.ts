@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
-import { router, publicProcedure, protectedProcedure } from '~/server/trpc';
+import { router, publicProcedure, protectedProcedure } from 'server/trpc';
 import { articleService } from '~/entities/article/api/article.service';
 import { getStorageClient } from '~/shared/lib/server/storage/factory';
 
@@ -81,15 +81,29 @@ export const articleRouter = router({
         )
         .mutation(async ({ input, ctx }) => {
             const { slug, ...updateData } = input;
-            return await articleService.update(slug, updateData, ctx.session.user.name!, ctx.session.user.role);
+            return await articleService.update(
+                slug,
+                updateData,
+                ctx.session.user.name ?? '',
+                // TODO: why tf do we need to put role here?
+                (ctx.session.user as { role?: string }).role ?? undefined,
+            );
         }),
 
     delete: protectedProcedure.input(z.object({ slug: z.string() })).mutation(async ({ input, ctx }) => {
-        return await articleService.delete(input.slug, ctx.session.user.name!, ctx.session.user.role);
+        return await articleService.delete(
+            input.slug,
+            ctx.session.user.name ?? '',
+            (ctx.session.user as { role?: string }).role ?? undefined,
+        );
     }),
 
     getAllSlugs: publicProcedure.query(async () => {
         return await articleService.getAllSlugs();
+    }),
+
+    getDistinctTags: publicProcedure.query(async () => {
+        return await articleService.getDistinctTags();
     }),
 
     uploadCoverImage: protectedProcedure

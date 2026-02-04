@@ -1,9 +1,10 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { authClient } from '~/shared/api/auth-client';
+import type { SessionUser } from '~/shared/types/session';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Link, useRouter } from 'i18n/navigation';
 import { useState } from 'react';
 import type { Article } from '~/entities/article/model/types';
 import { TagsList } from '~/entities/tag/ui/tags-list';
@@ -17,7 +18,8 @@ import { useToast } from '~/shared/ui/use-toast';
 
 export function ArticleItem(props: Article) {
     const img = props.img ?? `/img/${props.category}.png`;
-    const { data: session } = useSession();
+    const { data: session } = authClient.useSession();
+    const tCategory = useTranslations('category');
     const [dialogOpen, setDialogOpen] = useState(false);
     const router = useRouter();
     const { toast } = useToast();
@@ -40,7 +42,8 @@ export function ArticleItem(props: Article) {
         },
     });
 
-    const canEdit = session?.user && (session.user.name === props.author || session.user.role === 'admin');
+    const user = session?.user as SessionUser | undefined;
+    const canEdit = user && (user.name === props.author || user.role === 'admin');
 
     const handleDelete = () => {
         deleteMutation.mutate({ slug: props.slug });
@@ -67,7 +70,7 @@ export function ArticleItem(props: Article) {
                 </DialogContent>
             </Dialog>
 
-            <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+            <Card className="flex h-full flex-col overflow-hidden transition-shadow hover:shadow-lg">
                 <Link href={`/${props.category}/${props.slug}`}>
                     <div className="relative aspect-video w-full overflow-hidden">
                         <Image
@@ -79,11 +82,16 @@ export function ArticleItem(props: Article) {
                         />
                     </div>
                 </Link>
-                <CardHeader className="space-y-2">
+                <CardHeader className="min-h-0 flex-1 space-y-2">
                     <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="w-fit uppercase">
-                            {props.category}
-                        </Badge>
+                        <Link href={`/${props.category}`}>
+                            <Badge
+                                variant="secondary"
+                                className="hover:bg-primary hover:text-primary-foreground w-fit cursor-pointer transition-colors"
+                            >
+                                {tCategory(props.category)}
+                            </Badge>
+                        </Link>
                     </div>
                     <Link href={`/${props.category}/${props.slug}`}>
                         <CardTitle className="hover:text-primary line-clamp-2 transition-colors">
@@ -92,8 +100,8 @@ export function ArticleItem(props: Article) {
                     </Link>
                     <CardDescription className="line-clamp-3">{props.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="text-muted-foreground mb-4 flex gap-2 text-sm">
+                <CardContent className="mt-auto flex flex-col gap-2">
+                    <div className="text-muted-foreground flex gap-2 text-sm">
                         <span>@{props.author}</span>
                         <span>•</span>
                         <span>{new Date(props.createdAt).toLocaleDateString()}</span>
@@ -103,14 +111,14 @@ export function ArticleItem(props: Article) {
                         {canEdit && (
                             <div className="flex gap-2">
                                 <Button
-                                    size="sm"
+                                    size="icon"
                                     variant="outline"
                                     onClick={() => router.push(`/editor?edit=${props.slug}`)}
                                 >
                                     <Edit2 className="h-3 w-3" />
                                 </Button>
                                 <Button
-                                    size="sm"
+                                    size="icon"
                                     variant="outline"
                                     className="hover:bg-destructive hover:text-destructive-foreground"
                                     onClick={() => setDialogOpen(true)}

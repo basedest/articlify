@@ -43,6 +43,17 @@ export class UserService {
         }
         return user;
     }
+
+    async updatePreferredLanguage(id: string, locale: string) {
+        const user = await userRepository.updateById(id, { preferredLanguage: locale });
+        if (!user) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: 'User not found',
+            });
+        }
+        return user;
+    }
 }
 
 export const userService = new UserService();
