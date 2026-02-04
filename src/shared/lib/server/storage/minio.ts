@@ -8,7 +8,10 @@ import {
     PutBucketPolicyCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl as awsGetSignedUrl } from '@aws-sdk/s3-request-presigner';
+import type { ServerConfig } from '~/shared/config/env/server';
 import type { StorageClient } from './index';
+
+type MinIOStorageConfig = Extract<ServerConfig['storage'], { provider: 'minio' }>;
 
 /** MinIO/S3-compatible: ensure bucket exists before upload (fixes "bucket does not exist"). */
 async function ensureBucketExists(client: S3Client, bucket: string): Promise<void> {
@@ -61,20 +64,16 @@ export class MinIOStorage implements StorageClient {
     private bucket: string;
     private publicUrl: string;
 
-    constructor() {
-        const endpoint = process.env.S3_ENDPOINT || 'http://localhost:9000';
-        const region = process.env.S3_REGION || 'us-east-1';
-        const accessKeyId = process.env.S3_ACCESS_KEY || 'minioadmin';
-        const secretAccessKey = process.env.S3_SECRET_KEY || 'minioadmin';
-        this.bucket = process.env.S3_BUCKET || 'articlify-images';
-        this.publicUrl = process.env.S3_PUBLIC_URL || 'http://localhost:9000/articlify-images';
+    constructor(config: MinIOStorageConfig) {
+        this.bucket = config.bucket;
+        this.publicUrl = config.publicUrl;
 
         this.client = new S3Client({
-            endpoint,
-            region,
+            endpoint: config.endpoint,
+            region: config.region,
             credentials: {
-                accessKeyId,
-                secretAccessKey,
+                accessKeyId: config.accessKeyId,
+                secretAccessKey: config.secretAccessKey,
             },
             forcePathStyle: true, // Required for MinIO
         });

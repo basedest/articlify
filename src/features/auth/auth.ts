@@ -5,6 +5,7 @@ import { betterAuth, generateId } from 'better-auth';
 import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import { username } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
+import { getServerConfig } from '~/shared/config/env/server';
 import { clientPromise } from '~/shared/lib/server/mongodb-client';
 import { getMailer } from '~/shared/lib/server/mailer';
 import { VerificationEmailBody } from './lib/verification-email-body';
@@ -13,24 +14,14 @@ import { log } from '~/shared/lib/server/logger';
 
 const client = await clientPromise;
 const db = client.db();
-const useTransactions = process.env.MONGODB_USE_TRANSACTIONS === 'true';
-
-const baseURL = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
-const isDev = process.env.NODE_ENV !== 'production';
-
-const trustedOrigins: string[] = [baseURL, 'http://localhost:3000', 'http://127.0.0.1:3000'];
-if (process.env.VERCEL_URL) {
-    trustedOrigins.push(`https://${process.env.VERCEL_URL}`, `https://www.${process.env.VERCEL_URL}`);
-}
-const extraOrigins = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(',')
-    .map((o) => o.trim())
-    .filter(Boolean);
-if (extraOrigins?.length) trustedOrigins.push(...extraOrigins);
+const config = getServerConfig();
+const { baseUrl: baseURL, trustedOrigins } = config.auth;
+const isDev = config.nodeEnv !== 'production';
 
 export const auth = betterAuth({
     baseURL,
     trustedOrigins,
-    database: mongodbAdapter(db, useTransactions ? { client } : undefined),
+    database: mongodbAdapter(db, config.mongodb.useTransactions ? { client } : undefined),
     session: {
         cookieCache: {
             enabled: true,

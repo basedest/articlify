@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
-const { MONGODB_URI } = process.env;
+import { getServerConfig } from '~/shared/config/env/server';
 
-// Подключение к базе данных MongoDB
 export const connectDB = async () => {
-    const conn = await mongoose.connect(MONGODB_URI as string).catch((err) => console.log(err));
+    const conn = await mongoose.connect(getServerConfig().mongodb.uri).catch((err) => console.log(err));
 
     return conn;
 };

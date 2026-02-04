@@ -1,17 +1,18 @@
 import { Resend } from 'resend';
 import type { Mailer, SendParams, SendResult } from './index';
 
+export interface ResendMailerOptions {
+    apiKey: string;
+    from: string;
+}
+
 export class ResendMailer implements Mailer {
     private client: Resend;
     private defaultFrom: string;
 
-    constructor() {
-        const apiKey = process.env.RESEND_API_KEY;
-        if (!apiKey) {
-            throw new Error('RESEND_API_KEY is required when MAILER_PROVIDER=resend. Set it in your environment.');
-        }
-        this.client = new Resend(apiKey);
-        this.defaultFrom = process.env.MAILER_FROM || 'onboarding@resend.dev';
+    constructor(options: ResendMailerOptions) {
+        this.client = new Resend(options.apiKey);
+        this.defaultFrom = options.from;
     }
 
     async send(params: SendParams): Promise<SendResult> {

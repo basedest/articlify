@@ -1,3 +1,4 @@
+import { getServerConfig } from '~/shared/config/env/server';
 import { log } from '../logger';
 import type { Mailer } from './index';
 import { LogMailer } from './log';
@@ -12,12 +13,15 @@ export function getMailer(): Mailer {
         return mailerInstance;
     }
 
-    const provider = process.env.MAILER_PROVIDER || 'log';
+    const { mailer: mailerConfig } = getServerConfig();
     let mailer: Mailer;
 
-    switch (provider) {
+    switch (mailerConfig.provider) {
         case 'resend':
-            mailer = new ResendMailer();
+            mailer = new ResendMailer({
+                apiKey: mailerConfig.resendApiKey!,
+                from: mailerConfig.from,
+            });
             break;
         case 'log':
         default:
@@ -25,8 +29,7 @@ export function getMailer(): Mailer {
             break;
     }
 
-    const retryEnabled = process.env.MAILER_RETRY_ENABLED === 'true';
-    if (retryEnabled) {
+    if (mailerConfig.retryEnabled) {
         mailer = withRetry(mailer, {
             maxAttempts: 3,
             delayMs: 1000,
@@ -44,12 +47,8 @@ export function getMailer(): Mailer {
         });
     }
 
-    const rateLimitPerMinute = process.env.MAILER_RATE_LIMIT_PER_MINUTE;
-    if (rateLimitPerMinute) {
-        const maxPerMinute = parseInt(rateLimitPerMinute, 10);
-        if (!Number.isNaN(maxPerMinute) && maxPerMinute > 0) {
-            mailer = withRateLimit(mailer, { maxPerMinute });
-        }
+    if (mailerConfig.rateLimitPerMinute != null && mailerConfig.rateLimitPerMinute > 0) {
+        mailer = withRateLimit(mailer, { maxPerMinute: mailerConfig.rateLimitPerMinute });
     }
 
     mailerInstance = mailer;

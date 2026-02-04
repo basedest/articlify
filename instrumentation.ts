@@ -1,16 +1,16 @@
 import { registerOTel } from '@vercel/otel';
 import { MongoClient, ObjectId } from 'mongodb';
+import { getServerConfig } from '~/shared/config/env/server';
 
 export async function register() {
     registerOTel({ serviceName: 'articlify' });
+    getServerConfig(); // Fail fast if env is invalid
     await migrateBetterAuth();
 }
 
 async function migrateBetterAuth() {
-    if (!process.env.MONGODB_URI) {
-        throw new Error('MONGODB_URI is not set');
-    }
-    const client = new MongoClient(process.env.MONGODB_URI);
+    const { mongodb } = getServerConfig();
+    const client = new MongoClient(mongodb.uri);
     await client.connect();
     const db = client.db();
 
