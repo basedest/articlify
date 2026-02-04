@@ -18,9 +18,18 @@ const useTransactions = process.env.MONGODB_USE_TRANSACTIONS === 'true';
 const baseURL = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
 const isDev = process.env.NODE_ENV !== 'production';
 
+const trustedOrigins: string[] = [baseURL, 'http://localhost:3000', 'http://127.0.0.1:3000'];
+if (process.env.VERCEL_URL) {
+    trustedOrigins.push(`https://${process.env.VERCEL_URL}`, `https://www.${process.env.VERCEL_URL}`);
+}
+const extraOrigins = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+if (extraOrigins?.length) trustedOrigins.push(...extraOrigins);
+
 export const auth = betterAuth({
     baseURL,
-    trustedOrigins: [baseURL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
+    trustedOrigins,
     database: mongodbAdapter(db, useTransactions ? { client } : undefined),
     session: {
         cookieCache: {
