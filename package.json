@@ -30,6 +30,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.978.0",
     "@aws-sdk/s3-request-presigner": "^3.978.0",
+    "@basedest/mailer": "^1.0.0",
     "@headlessui/react": "^2.2.9",
     "@hookform/resolvers": "^5.2.2",
     "@opentelemetry/api": "^1.9.0",

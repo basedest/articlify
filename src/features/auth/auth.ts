@@ -7,7 +7,7 @@ import { username } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
 import { getServerConfig } from '~/shared/config/env/server';
 import { clientPromise } from '~/shared/lib/server/mongodb-client';
-import { getMailer } from '~/shared/lib/server/mailer';
+import { getMailer } from '~/shared/lib/server/get-mailer';
 import { VerificationEmailBody } from './lib/verification-email-body';
 import * as React from 'react';
 import { log } from '~/shared/lib/server/logger';
