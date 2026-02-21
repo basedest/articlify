@@ -1059,6 +1059,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@basedest/mailer@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@basedest/mailer@npm:1.0.0"
+  dependencies:
+    resend: "npm:^6.9.1"
+  peerDependencies:
+    react: ">=18.0.0"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/d64ae2db2b0c8459963b988503c5c6d645fd3c367e04bed4f11d3e162dc4cc5ad37aa9512d47c45e7cb1f03098355e9791173b5ebee2ffedb1b86cf1840ee2e1
+  languageName: node
+  linkType: hard
+
 "@better-auth/core@npm:1.4.18":
   version: 1.4.18
   resolution: "@better-auth/core@npm:1.4.18"
@@ -6953,6 +6967,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.978.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.978.0"
+    "@basedest/mailer": "npm:^1.0.0"
     "@commitlint/cli": "npm:^20.4.0"
     "@commitlint/config-conventional": "npm:^20.4.0"
     "@eslint/js": "npm:^9.39.2"
@@ -7045,6 +7060,7 @@ __metadata:
     react-hook-form: "npm:^7.71.1"
     resend: "npm:^6.9.1"
     semantic-release: "npm:^25.0.3"
+    server-only: "npm:^0.0.1"
     sharp: "npm:^0.34.5"
     superjson: "npm:^2.2.6"
     tailwind-merge: "npm:^3.4.0"
@@ -14148,6 +14164,13 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/4afe5c986567db82f44c8c6faef8fe9df2a9b1d98098fc1721f57c696c4c21cebd572f297fc21002f81889492345b8470473bc6f4aff5fb032a6ea59ea2bc45e
+  languageName: node
+  linkType: hard
+
+"server-only@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "server-only@npm:0.0.1"
+  checksum: 10c0/4704f0ef85da0be981af6d4ed8e739d39bcfd265b9c246a684060acda5642d0fdc6daffc2308e71e2682c5f508090978802eae0a77623c9b90a49f9ae68048d6
   languageName: node
   linkType: hard
 
