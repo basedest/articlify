@@ -51,7 +51,7 @@
     "madeBy": "Made by",
     "author": "Ivan Shcherbakov",
     "version": "Version",
-    "copyright": "Copyright © 2022-2025 Articlify Inc. All rights reserved."
+    "copyright": "Copyright © 2022-2026 Articlify Inc. All rights reserved."
   },
   "auth": {
     "loginTitle": "Login",
@@ -163,6 +163,17 @@
     "failedToSave": "Failed to save article",
     "noPermissionToEdit": "You do not have permission to edit this article",
     "preview": "Preview"
+  },
+  "email": {
+    "verifyEmail": {
+      "subject": "Verify your email address",
+      "preview": "Verify your email address for Articlify",
+      "heading": "Verify your email address",
+      "body": "Thanks for signing up! Please verify your email address to get started. This link will expire in 24 hours.",
+      "button": "Verify email address",
+      "fallback": "Or copy and paste this URL into your browser:",
+      "footer": "If you did not create an account with Articlify, you can safely ignore this email. Someone may have entered your email address by mistake."
+    }
   },
   "pagination": {
     "previous": "Previous",

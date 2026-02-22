@@ -8,9 +8,9 @@ import { nextCookies } from 'better-auth/next-js';
 import { getServerConfig } from '~/shared/config/env/server';
 import { clientPromise } from '~/shared/lib/server/mongodb-client';
 import { getMailer } from '~/shared/lib/server/get-mailer';
-import { VerificationEmailBody } from './lib/verification-email-body';
-import * as React from 'react';
 import { log } from '~/shared/lib/server/logger';
+import { createTranslator } from 'next-intl';
+import VerificationEmailBody from '~/shared/emails/verify-email';
 
 const client = await clientPromise;
 const db = client.db();
@@ -53,19 +53,25 @@ export const auth = betterAuth({
         sendOnSignIn: true,
         autoSignInAfterVerification: true,
         sendVerificationEmail: async ({ user, url }) => {
+            const rawLocale = (user as Record<string, unknown>).preferredLanguage;
+            const locale = rawLocale === 'ru' ? 'ru' : 'en';
+
+            const messages = (await import(`~/shared/lib/locales/${locale}.json`)).default;
+            const t = createTranslator({ messages, namespace: 'email.verifyEmail', locale });
+
             const mailer = getMailer();
 
             void mailer.send({
                 to: user.email,
-                subject: 'Verify your email address',
-                body: React.createElement(VerificationEmailBody, { url }),
+                subject: t('subject'),
+                body: await VerificationEmailBody({ url, locale }),
             });
 
             log({
                 level: 'info',
                 message: 'sent verification email',
                 userId: user.id,
-                extra: { url },
+                extra: { url, locale },
             });
         },
     },
