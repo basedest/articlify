@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { router, protectedProcedure } from 'server/trpc';
 import { userService } from '~/entities/user/api/user.service';
 import { getStorageClient } from '~/shared/lib/server/storage/factory';
+import { log } from '~/shared/lib/server/logger';
 
 const CONTENT_TYPE_TO_EXT: Record<string, string> = {
     'image/jpeg': 'jpg',
@@ -70,13 +71,15 @@ export const userRouter = router({
                 const storage = getStorageClient();
                 imageUrl = await storage.uploadFile(buffer, key, input.contentType);
             } catch (err) {
-                const message = err instanceof Error ? err.message : 'Storage upload failed';
+                log({
+                    level: 'error',
+                    message: 'avatar upload failed',
+                    userId,
+                    extra: { error: err instanceof Error ? err.message : String(err) },
+                });
                 throw new TRPCError({
                     code: 'INTERNAL_SERVER_ERROR',
-                    message:
-                        message.includes('credentials') || message.includes('Storage')
-                            ? `${message}. Configure STORAGE_PROVIDER and S3/MinIO env vars.`
-                            : message,
+                    message: 'Failed to upload image. Please try again.',
                 });
             }
 

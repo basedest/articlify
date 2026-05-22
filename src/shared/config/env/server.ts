@@ -91,7 +91,8 @@ const serverEnvSchema = rawServerEnvSchema
                   }
                 : ({
                       provider: 's3' as const,
-                      endpoint: undefined,
+                      // Optional for AWS S3 (SDK uses regional endpoint); required for S3-compatible providers.
+                      endpoint: raw.S3_ENDPOINT?.trim() || undefined,
                       region: raw.S3_REGION?.trim() || '',
                       accessKeyId: raw.S3_ACCESS_KEY?.trim() ?? '',
                       secretAccessKey: raw.S3_SECRET_KEY?.trim() ?? '',
@@ -162,7 +163,7 @@ export type ServerConfig = {
           }
         | {
               provider: 's3';
-              endpoint: undefined;
+              endpoint: string | undefined;
               region: string;
               accessKeyId: string;
               secretAccessKey: string;

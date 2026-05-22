@@ -43,7 +43,8 @@ export function ArticleItem(props: Article) {
     });
 
     const user = session?.user as SessionUser | undefined;
-    const canEdit = user && (user.name === props.author || user.role === 'admin');
+    const isOwner = user && (props.authorId ? props.authorId === user.id : props.author === user.name);
+    const canEdit = !!user && (isOwner || user.role === 'admin');
 
     const handleDelete = () => {
         deleteMutation.mutate({ slug: props.slug });

@@ -11,7 +11,10 @@ export interface Article {
     title: string;
     description: string;
     category: string;
+    /** Display name of the author (used in URLs and UI). */
     author: string;
+    /** Stable user id used for ownership/auth checks. Optional for legacy docs created before this field existed. */
+    authorId?: string;
     createdAt: Date;
     editedAt?: Date;
     img?: string;
@@ -26,14 +29,15 @@ export interface Article {
 }
 
 const ArticleSchema = new Schema<Article>({
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, required: true, unique: true, index: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    category: { type: String, required: true },
-    author: { type: String, required: true },
-    createdAt: { type: Date, required: true },
+    category: { type: String, required: true, index: true },
+    author: { type: String, required: true, index: true },
+    authorId: { type: String, required: false, index: true },
+    createdAt: { type: Date, required: true, index: true },
     img: String,
-    tags: [String],
+    tags: { type: [String], index: true },
     contentPm: { type: Schema.Types.Mixed, required: false },
     contentFormat: { type: String, enum: ['editorjs', 'pm'], required: false },
     contentSchemaVersion: { type: Number, required: false },

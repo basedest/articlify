@@ -71,7 +71,7 @@ export const auth = betterAuth({
                 level: 'info',
                 message: 'sent verification email',
                 userId: user.id,
-                extra: { url, locale },
+                extra: { locale },
             });
         },
     },
