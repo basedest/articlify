@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { PenSquare, X } from 'lucide-react';
 import { authClient } from '~/shared/api/auth-client';
 import { useRouter, usePathname, Link } from 'i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { Article } from '~/entities/article/model/types';
 import { categories, type Category } from '~/shared/config/categories';
 import { Button } from '~/shared/ui/button';
@@ -45,21 +44,23 @@ export function SmartList(props: SmartListProps) {
     const [category, setCategory] = useState<string>(props.initialCategory ?? '');
     const [selectedTags, setSelectedTags] = useState<string[]>(props.initialTags ?? []);
 
-    useEffect(() => {
-        if (props.searchQuery) {
-            setSearchQuery(props.searchQuery);
-        }
-    }, [props.searchQuery]);
-    useEffect(() => {
-        if (props.initialCategory) {
-            setCategory(props.initialCategory);
-        }
-    }, [props.initialCategory]);
-    useEffect(() => {
-        if (props.initialTags) {
-            setSelectedTags(props.initialTags);
-        }
-    }, [props.initialTags]);
+    // Re-sync local state when the URL-driven props change (e.g., back/forward navigation).
+    // Uses the "set state during render" pattern so we don't need an effect.
+    const [lastPropSearch, setLastPropSearch] = useState(props.searchQuery);
+    const [lastPropCategory, setLastPropCategory] = useState(props.initialCategory);
+    const [lastPropTags, setLastPropTags] = useState(props.initialTags);
+    if (lastPropSearch !== props.searchQuery) {
+        setLastPropSearch(props.searchQuery);
+        setSearchQuery(props.searchQuery || '');
+    }
+    if (lastPropCategory !== props.initialCategory) {
+        setLastPropCategory(props.initialCategory);
+        setCategory(props.initialCategory ?? '');
+    }
+    if (lastPropTags !== props.initialTags) {
+        setLastPropTags(props.initialTags);
+        setSelectedTags(props.initialTags ?? []);
+    }
 
     const caption =
         props.articles.length === 0 ? t('noArticles') : props.searchQuery ? t('searchResults') : t('latestArticles');
@@ -160,6 +161,7 @@ export function SmartList(props: SmartListProps) {
                         selected={selectedTags}
                         onChange={handleTagsChange}
                         placeholder={t('filterTags')}
+                        ariaLabel={t('filterTags')}
                         allowCustom={false}
                     />
                 </div>
@@ -212,6 +214,7 @@ export function SmartList(props: SmartListProps) {
                                 }}
                                 className={page <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                                 aria-disabled={page <= 1}
+                                tabIndex={page <= 1 ? -1 : undefined}
                             />
                         </PaginationItem>
                         {showLeftEllipsis && (
@@ -276,6 +279,7 @@ export function SmartList(props: SmartListProps) {
                                 }}
                                 className={page >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                                 aria-disabled={page >= totalPages}
+                                tabIndex={page >= totalPages ? -1 : undefined}
                             />
                         </PaginationItem>
                     </PaginationContent>

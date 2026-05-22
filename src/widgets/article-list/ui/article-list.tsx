@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { Article } from '~/entities/article/model/types';
 import { ArticleItem } from '~/entities/article/ui/article-item';
 
@@ -6,9 +7,12 @@ export interface ArticleListProps {
 }
 
 export function ArticleList({ articles }: ArticleListProps) {
+    const t = useTranslations('articles');
     if (articles.length === 0) {
         return (
-            <div className="text-muted-foreground flex min-h-[50vh] items-center justify-center">No articles found</div>
+            <div className="text-muted-foreground flex min-h-[50vh] items-center justify-center">
+                {t('noArticlesFound')}
+            </div>
         );
     }
 

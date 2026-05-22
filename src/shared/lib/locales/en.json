@@ -5,7 +5,8 @@
     "categories": "Categories",
     "editor": "Editor",
     "signIn": "Sign In",
-    "brand": "Articlify"
+    "brand": "Articlify",
+    "toggleMenu": "Toggle navigation menu"
   },
   "button": {
     "save": "Save",
@@ -121,7 +122,16 @@
     "articlesByLabel": "Articles by",
     "articlesByAuthor": "Articles by @{author}",
     "userArticlesPageTitle": "Articles by @{author} | Articlify",
-    "userArticlesPageDescription": "Browse all articles written by {author}"
+    "userArticlesPageDescription": "Browse all articles written by {author}",
+    "deleteTitle": "Delete Article",
+    "deleteConfirm": "Are you sure you want to delete this article? This action cannot be undone.",
+    "deleteAction": "Delete",
+    "deletePending": "Deleting...",
+    "deleteSuccessTitle": "Success",
+    "deleteSuccessDescription": "Article deleted successfully",
+    "deleteErrorTitle": "Error",
+    "noArticlesFound": "No articles found",
+    "createTagLabel": "Create \"{value}\""
   },
   "dashboard": {
     "title": "Dashboard",
