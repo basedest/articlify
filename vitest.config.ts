@@ -8,6 +8,17 @@ export default defineConfig({
         setupFiles: ['src/shared/test/setup.ts'],
         include: ['src/**/*.test.{ts,tsx}'],
         exclude: ['node_modules', '.next', '**/node_modules/**'],
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'json', 'html'],
+            include: ['src/**/*.{ts,tsx}'],
+            exclude: [
+                'src/**/*.test.{ts,tsx}',
+                'src/**/__tests__/**',
+                'src/shared/test/**',
+                'src/**/*.d.ts',
+            ],
+        },
     },
     resolve: {
         alias: {

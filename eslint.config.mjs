@@ -2,6 +2,8 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import prettier from 'eslint-plugin-prettier';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
 
 const eslintConfig = defineConfig([
     ...nextVitals,
@@ -18,6 +20,26 @@ const eslintConfig = defineConfig([
                 },
             ],
             'react/display-name': 'off',
+        },
+    },
+    // Async-safety: catch floating promises and misused async handlers.
+    // Type-aware linting is required for these rules.
+    {
+        files: ['src/**/*.{ts,tsx}', 'server/**/*.ts', 'app/**/*.{ts,tsx}'],
+        plugins: { '@typescript-eslint': tseslint },
+        languageOptions: {
+            parser: tsparser,
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-floating-promises': 'error',
+            '@typescript-eslint/no-misused-promises': [
+                'error',
+                { checksVoidReturn: { attributes: false } },
+            ],
         },
     },
     // FSD layer boundaries: shared cannot import from higher layers

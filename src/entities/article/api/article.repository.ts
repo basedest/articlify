@@ -1,5 +1,6 @@
 import { ArticleModel, type Article } from '~/entities/article/model/types';
 import { connectDB } from '~/shared/lib/server/connection';
+import { escapeRegex } from '~/shared/lib/escape-regex';
 import { Types } from 'mongoose';
 
 export interface ArticleQuery {
@@ -28,9 +29,7 @@ export class ArticleRepository {
         }
 
         if (title) {
-            // Escape regex special chars to prevent ReDoS / regex injection.
-            const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            filter.title = { $regex: escaped, $options: 'i' };
+            filter.title = { $regex: escapeRegex(title), $options: 'i' };
         }
 
         if (author) {

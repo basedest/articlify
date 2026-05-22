@@ -21,4 +21,10 @@ jobs:
 
             - run: yarn install --frozen-lockfile
             - run: yarn run lint
+            - run: yarn run type-check
             - run: yarn test
+            - run: yarn build
+              env:
+                  # Build only needs schema-valid env; secrets are not exercised.
+                  MONGODB_URI: mongodb://localhost:27017/articlify-ci
+                  BETTER_AUTH_SECRET: ci-build-only-not-used-at-runtime
