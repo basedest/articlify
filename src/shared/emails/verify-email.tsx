@@ -69,7 +69,7 @@ export default async function VerificationEmailBody({ url, locale = 'en' }: Veri
 }
 
 VerificationEmailBody.PreviewProps = {
-    url: 'https://articlify.basedest.tech/api/auth/verify-email?token=eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imkuc2hjaGVyYmFrb3ZAdmsudGVhbSIsImlhdCI6MTc3MTc0NDc2NSwiZXhwIjoxNzcxNzQ4MzY1fQ.m7GlIyJlOM6YSOtZxciLwhji2_gkbZW2dmGlyN6FGhU&callbackURL=%2F',
+    url: 'https://articlify.example.com/api/auth/verify-email?token=PREVIEW_TOKEN&callbackURL=%2F',
     locale: 'en',
 } as VerificationEmailBodyProps;
 

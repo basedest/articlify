@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { router, publicProcedure, protectedProcedure } from 'server/trpc';
 import { articleService } from '~/entities/article/api/article.service';
 import { getStorageClient } from '~/shared/lib/server/storage/factory';
+import { log } from '~/shared/lib/server/logger';
 
 const CONTENT_TYPE_TO_EXT: Record<string, string> = {
     'image/jpeg': 'jpg',
@@ -44,7 +45,6 @@ export const articleRouter = router({
                     category: z.string().min(1),
                     img: z.string().optional(),
                     tags: z.array(z.string()).optional(),
-                    content: z.any().optional(),
                     contentPm: z.record(z.string(), z.unknown()),
                     contentFormat: z.union([z.literal('editorjs'), z.literal('pm')]).optional(),
                     contentSchemaVersion: z.number().int().optional(),
@@ -54,9 +54,14 @@ export const articleRouter = router({
                 }),
         )
         .mutation(async ({ input, ctx }) => {
+            const userId = ctx.session.user.id;
+            if (!userId) {
+                throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+            }
             return await articleService.create({
                 ...input,
-                author: ctx.session.user.name!,
+                author: ctx.session.user.name ?? '',
+                authorId: userId,
             });
         }),
 
@@ -70,7 +75,6 @@ export const articleRouter = router({
                     category: z.string().optional(),
                     img: z.string().optional(),
                     tags: z.array(z.string()).optional(),
-                    content: z.any().optional(),
                     contentPm: z.record(z.string(), z.unknown()).optional().nullable(),
                     contentFormat: z.union([z.literal('editorjs'), z.literal('pm')]).optional(),
                     contentSchemaVersion: z.number().int().optional(),
@@ -80,22 +84,28 @@ export const articleRouter = router({
                 }),
         )
         .mutation(async ({ input, ctx }) => {
+            const userId = ctx.session.user.id;
+            if (!userId) {
+                throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+            }
             const { slug, ...updateData } = input;
-            return await articleService.update(
-                slug,
-                updateData,
-                ctx.session.user.name ?? '',
-                // TODO: why tf do we need to put role here?
-                (ctx.session.user as { role?: string }).role ?? undefined,
-            );
+            return await articleService.update(slug, updateData, {
+                id: userId,
+                name: ctx.session.user.name ?? undefined,
+                role: ctx.session.user.role ?? undefined,
+            });
         }),
 
     delete: protectedProcedure.input(z.object({ slug: z.string() })).mutation(async ({ input, ctx }) => {
-        return await articleService.delete(
-            input.slug,
-            ctx.session.user.name ?? '',
-            (ctx.session.user as { role?: string }).role ?? undefined,
-        );
+        const userId = ctx.session.user.id;
+        if (!userId) {
+            throw new TRPCError({ code: 'BAD_REQUEST', message: 'User ID not found' });
+        }
+        return await articleService.delete(input.slug, {
+            id: userId,
+            name: ctx.session.user.name ?? undefined,
+            role: ctx.session.user.role,
+        });
     }),
 
     getAllSlugs: publicProcedure.query(async () => {
@@ -137,13 +147,15 @@ export const articleRouter = router({
                 const url = await storage.uploadFile(buffer, key, input.contentType);
                 return { url };
             } catch (err) {
-                const message = err instanceof Error ? err.message : 'Storage upload failed';
+                log({
+                    level: 'error',
+                    message: 'cover image upload failed',
+                    userId,
+                    extra: { error: err instanceof Error ? err.message : String(err) },
+                });
                 throw new TRPCError({
                     code: 'INTERNAL_SERVER_ERROR',
-                    message:
-                        message.includes('credentials') || message.includes('Storage')
-                            ? `${message}. Configure STORAGE_PROVIDER and S3/MinIO env vars.`
-                            : message,
+                    message: 'Failed to upload image. Please try again.',
                 });
             }
         }),

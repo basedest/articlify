@@ -2,6 +2,13 @@ import { articleRepository, type ArticleQuery } from '~/entities/article/api/art
 import { type Article } from '~/entities/article/model/types';
 import { TRPCError } from '@trpc/server';
 
+// Falls back to author-name check for legacy docs created before `authorId` existed.
+function isOwnerOrAdmin(article: Article, actor: { id: string; name?: string; role?: string }): boolean {
+    if (actor.role === 'admin') return true;
+    if (article.authorId) return article.authorId === actor.id;
+    return !!actor.name && article.author === actor.name;
+}
+
 export class ArticleService {
     async findAll(query: ArticleQuery = {}) {
         return await articleRepository.findAll(query);
@@ -19,26 +26,32 @@ export class ArticleService {
     }
 
     async create(articleData: Omit<Article, '_id' | 'createdAt' | 'editedAt'>) {
-        const existing = await articleRepository.findBySlug(articleData.slug);
-        if (existing) {
-            throw new TRPCError({
-                code: 'CONFLICT',
-                message: 'Article with this slug already exists',
-            });
-        }
-
         const contentFormat = articleData.contentPm != null ? 'pm' : (articleData.contentFormat ?? 'pm');
         const contentSchemaVersion = contentFormat === 'pm' ? 1 : undefined;
 
-        return await articleRepository.create({
-            ...articleData,
-            contentFormat,
-            contentSchemaVersion,
-            createdAt: new Date(),
-        });
+        try {
+            return await articleRepository.create({
+                ...articleData,
+                contentFormat,
+                contentSchemaVersion,
+                createdAt: new Date(),
+            });
+        } catch (err) {
+            if (err && typeof err === 'object' && 'code' in err && (err as { code: number }).code === 11000) {
+                throw new TRPCError({
+                    code: 'CONFLICT',
+                    message: 'Article with this slug already exists',
+                });
+            }
+            throw err;
+        }
     }
 
-    async update(slug: string, updateData: Partial<Article>, userId: string, userRole?: string) {
+    async update(
+        slug: string,
+        updateData: Partial<Article>,
+        actor: { id: string; name?: string; role?: string },
+    ) {
         const article = await articleRepository.findBySlug(slug);
         if (!article) {
             throw new TRPCError({
@@ -47,7 +60,7 @@ export class ArticleService {
             });
         }
 
-        if (article.author !== userId && userRole !== 'admin') {
+        if (!isOwnerOrAdmin(article, actor)) {
             throw new TRPCError({
                 code: 'FORBIDDEN',
                 message: 'You do not have permission to edit this article',
@@ -57,7 +70,7 @@ export class ArticleService {
         return await articleRepository.updateBySlug(slug, updateData);
     }
 
-    async delete(slug: string, userId: string, userRole?: string) {
+    async delete(slug: string, actor: { id: string; name?: string; role?: string }) {
         const article = await articleRepository.findBySlug(slug);
         if (!article) {
             throw new TRPCError({
@@ -66,7 +79,7 @@ export class ArticleService {
             });
         }
 
-        if (article.author !== userId && userRole !== 'admin') {
+        if (!isOwnerOrAdmin(article, actor)) {
             throw new TRPCError({
                 code: 'FORBIDDEN',
                 message: 'You do not have permission to delete this article',

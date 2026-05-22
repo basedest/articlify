@@ -13,8 +13,8 @@ export interface User {
 }
 
 const UserSchema = new Schema<User>({
-    name: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true, index: true },
+    email: { type: String, required: true, unique: true, index: true },
     password: { type: String, required: true },
     regDate: { type: Date, required: true },
     role: String,

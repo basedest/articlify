@@ -85,43 +85,57 @@ describe('ArticleService', () => {
             );
         });
 
-        it('update allows when user is author', async () => {
-            const article = { ...baseArticle(), author: 'user1' };
+        it('update allows when user is author by authorId', async () => {
+            const article = { ...baseArticle(), author: 'user1', authorId: 'id-1' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
             vi.mocked(articleRepository.updateBySlug).mockResolvedValue({ ...article, title: 'Updated' } as Article);
 
-            const result = await service.update('test-slug', { title: 'Updated' }, 'user1');
+            const result = await service.update('test-slug', { title: 'Updated' }, { id: 'id-1', name: 'user1' });
 
             expect(articleRepository.updateBySlug).toHaveBeenCalledWith('test-slug', { title: 'Updated' });
             expect(result).toEqual(expect.objectContaining({ title: 'Updated' }));
         });
 
-        it('update allows when user is admin even if not author', async () => {
-            const article = { ...baseArticle(), author: 'other' };
+        it('update falls back to author name for legacy docs without authorId', async () => {
+            const article = { ...baseArticle(), author: 'user1' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
             vi.mocked(articleRepository.updateBySlug).mockResolvedValue(article as Article);
 
-            await service.update('test-slug', { title: 'Updated' }, 'admin-user', 'admin');
+            await service.update('test-slug', { title: 'X' }, { id: 'some-id', name: 'user1' });
+
+            expect(articleRepository.updateBySlug).toHaveBeenCalled();
+        });
+
+        it('update allows when user is admin even if not author', async () => {
+            const article = { ...baseArticle(), author: 'other', authorId: 'id-other' };
+            vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
+            vi.mocked(articleRepository.updateBySlug).mockResolvedValue(article as Article);
+
+            await service.update(
+                'test-slug',
+                { title: 'Updated' },
+                { id: 'id-admin', name: 'admin-user', role: 'admin' },
+            );
 
             expect(articleRepository.updateBySlug).toHaveBeenCalledWith('test-slug', { title: 'Updated' });
         });
 
-        it('delete allows when user is author', async () => {
-            const article = { ...baseArticle(), author: 'user1' };
+        it('delete allows when user is author by authorId', async () => {
+            const article = { ...baseArticle(), author: 'user1', authorId: 'id-1' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
             vi.mocked(articleRepository.deleteBySlug).mockResolvedValue(true);
 
-            const result = await service.delete('test-slug', 'user1');
+            const result = await service.delete('test-slug', { id: 'id-1', name: 'user1' });
 
             expect(result).toEqual({ success: true });
         });
 
         it('delete allows when user is admin even if not author', async () => {
-            const article = { ...baseArticle(), author: 'other' };
+            const article = { ...baseArticle(), author: 'other', authorId: 'id-other' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
             vi.mocked(articleRepository.deleteBySlug).mockResolvedValue(true);
 
-            const result = await service.delete('test-slug', 'admin-user', 'admin');
+            const result = await service.delete('test-slug', { id: 'id-admin', name: 'admin-user', role: 'admin' });
 
             expect(result).toEqual({ success: true });
         });
@@ -138,34 +152,38 @@ describe('ArticleService', () => {
             expect(articleRepository.findBySlug).toHaveBeenCalledWith('missing');
         });
 
-        it('create throws CONFLICT when slug already exists', async () => {
-            vi.mocked(articleRepository.findBySlug).mockResolvedValue(baseArticle() as Article);
+        it('create throws CONFLICT when slug already exists (duplicate key error)', async () => {
+            const dupErr = Object.assign(new Error('E11000'), { code: 11000 });
+            vi.mocked(articleRepository.create).mockRejectedValue(dupErr);
 
             await expect(service.create(baseArticle())).rejects.toMatchObject({
                 code: 'CONFLICT',
                 message: 'Article with this slug already exists',
             });
-            expect(articleRepository.create).not.toHaveBeenCalled();
         });
     });
 
     describe('invalid input / permission', () => {
-        it('update throws FORBIDDEN when user is not author and not admin', async () => {
-            const article = { ...baseArticle(), author: 'other' };
+        it('update throws FORBIDDEN when authorId does not match and not admin', async () => {
+            const article = { ...baseArticle(), author: 'other', authorId: 'id-other' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
 
-            await expect(service.update('test-slug', { title: 'Updated' }, 'random-user')).rejects.toMatchObject({
+            await expect(
+                service.update('test-slug', { title: 'X' }, { id: 'random-id', name: 'random-user' }),
+            ).rejects.toMatchObject({
                 code: 'FORBIDDEN',
                 message: 'You do not have permission to edit this article',
             });
             expect(articleRepository.updateBySlug).not.toHaveBeenCalled();
         });
 
-        it('update throws FORBIDDEN when user is not author and userRole is not admin', async () => {
-            const article = { ...baseArticle(), author: 'other' };
+        it('update throws FORBIDDEN when user role is not admin and not the author', async () => {
+            const article = { ...baseArticle(), author: 'other', authorId: 'id-other' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
 
-            await expect(service.update('test-slug', {}, 'random-user', 'user')).rejects.toMatchObject({
+            await expect(
+                service.update('test-slug', {}, { id: 'random-id', name: 'random-user', role: 'user' }),
+            ).rejects.toMatchObject({
                 code: 'FORBIDDEN',
             });
         });
@@ -173,17 +191,17 @@ describe('ArticleService', () => {
         it('update throws NOT_FOUND when article does not exist', async () => {
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(null);
 
-            await expect(service.update('missing', {}, 'user1')).rejects.toMatchObject({
+            await expect(service.update('missing', {}, { id: 'id-1', name: 'user1' })).rejects.toMatchObject({
                 code: 'NOT_FOUND',
                 message: 'Article not found',
             });
         });
 
-        it('delete throws FORBIDDEN when user is not author and not admin', async () => {
-            const article = { ...baseArticle(), author: 'other' };
+        it('delete throws FORBIDDEN when authorId does not match and not admin', async () => {
+            const article = { ...baseArticle(), author: 'other', authorId: 'id-other' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
 
-            await expect(service.delete('test-slug', 'random-user')).rejects.toMatchObject({
+            await expect(service.delete('test-slug', { id: 'random-id', name: 'random-user' })).rejects.toMatchObject({
                 code: 'FORBIDDEN',
                 message: 'You do not have permission to delete this article',
             });
@@ -193,18 +211,18 @@ describe('ArticleService', () => {
         it('delete throws NOT_FOUND when article does not exist', async () => {
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(null);
 
-            await expect(service.delete('missing', 'user1')).rejects.toMatchObject({
+            await expect(service.delete('missing', { id: 'id-1', name: 'user1' })).rejects.toMatchObject({
                 code: 'NOT_FOUND',
                 message: 'Article not found',
             });
         });
 
         it('delete throws INTERNAL_SERVER_ERROR when deleteBySlug returns false', async () => {
-            const article = { ...baseArticle(), author: 'user1' };
+            const article = { ...baseArticle(), author: 'user1', authorId: 'id-1' };
             vi.mocked(articleRepository.findBySlug).mockResolvedValue(article as Article);
             vi.mocked(articleRepository.deleteBySlug).mockResolvedValue(false);
 
-            await expect(service.delete('test-slug', 'user1')).rejects.toMatchObject({
+            await expect(service.delete('test-slug', { id: 'id-1', name: 'user1' })).rejects.toMatchObject({
                 code: 'INTERNAL_SERVER_ERROR',
                 message: 'Failed to delete article',
             });

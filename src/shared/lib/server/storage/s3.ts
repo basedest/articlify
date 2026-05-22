@@ -14,13 +14,15 @@ export class S3Storage implements StorageClient {
         this.bucket = config.bucket;
         this.publicUrl = config.publicUrl;
 
+        // For real AWS S3, leave `endpoint` undefined so the SDK uses the regional endpoint.
+        // For S3-compatible providers (e.g., R2, DigitalOcean Spaces), pass the API endpoint via S3_ENDPOINT.
         this.client = new S3Client({
             region: config.region,
             credentials: {
                 accessKeyId: config.accessKeyId,
                 secretAccessKey: config.secretAccessKey,
             },
-            endpoint: config.publicUrl,
+            ...(config.endpoint ? { endpoint: config.endpoint } : {}),
             forcePathStyle: config.forcePathStyle,
         });
     }

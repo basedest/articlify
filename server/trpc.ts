@@ -59,7 +59,7 @@ export const router = t.router;
 export const publicProcedure = t.procedure.use(loggingMiddleware);
 
 // Protected procedure - requires authentication
-export const protectedProcedure = t.procedure.use(async (opts) => {
+export const protectedProcedure = t.procedure.use(loggingMiddleware).use(async (opts) => {
     const { ctx } = opts;
     if (!ctx.session || !ctx.session.user) {
         throw new TRPCError({ code: 'UNAUTHORIZED' });

@@ -28,7 +28,9 @@ export class ArticleRepository {
         }
 
         if (title) {
-            filter.title = { $regex: title, $options: 'i' };
+            // Escape regex special chars to prevent ReDoS / regex injection.
+            const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            filter.title = { $regex: escaped, $options: 'i' };
         }
 
         if (author) {

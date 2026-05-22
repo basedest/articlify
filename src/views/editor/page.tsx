@@ -180,13 +180,12 @@ export function EditorPage() {
 
     const sessionUser = session?.user as SessionUser | undefined;
     useEffect(() => {
-        if (
-            editSlug &&
-            existingArticle &&
-            sessionUser &&
-            existingArticle.author !== sessionUser.name &&
-            sessionUser.role !== 'admin'
-        ) {
+        if (!editSlug || !existingArticle || !sessionUser) return;
+        const isAdmin = sessionUser.role === 'admin';
+        const isOwner = existingArticle.authorId
+            ? existingArticle.authorId === sessionUser.id
+            : existingArticle.author === sessionUser.name;
+        if (!isOwner && !isAdmin) {
             toast({
                 title: tAuth('accessDenied'),
                 description: t('noPermissionToEdit'),
