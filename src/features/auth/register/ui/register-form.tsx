@@ -48,7 +48,7 @@ export function RegisterForm() {
                     password: string;
                     name: string;
                     username: string;
-                }) => Promise<{ error?: { message?: string } }>
+                }) => Promise<{ error?: { code?: string; message?: string } }>
             )({
                 email: formData.email,
                 password: formData.password,
@@ -57,8 +57,13 @@ export function RegisterForm() {
             });
 
             if (signUpError) {
+                // Better Auth's `code` is the stable interface; `message` text is not.
+                const code = signUpError.code ?? '';
                 const msg = signUpError.message ?? '';
-                const isEmailTaken = msg.includes('User already exists') && msg.includes('another email');
+                const isEmailTaken =
+                    code === 'USER_ALREADY_EXISTS' ||
+                    code === 'EMAIL_ALREADY_EXISTS' ||
+                    /already exists/i.test(msg);
                 setError(isEmailTaken ? tError('emailAlreadyTaken') : msg || tError('registrationFailed'));
             } else {
                 router.push('/verify-email');

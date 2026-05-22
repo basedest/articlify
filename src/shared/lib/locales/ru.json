@@ -5,7 +5,8 @@
     "categories": "Категории",
     "editor": "Редактор",
     "signIn": "Войти",
-    "brand": "Articlify"
+    "brand": "Articlify",
+    "toggleMenu": "Открыть/закрыть меню"
   },
   "button": {
     "save": "Сохранить",
@@ -121,7 +122,16 @@
     "articlesByLabel": "Статьи",
     "articlesByAuthor": "Статьи @{author}",
     "userArticlesPageTitle": "Статьи @{author} | Articlify",
-    "userArticlesPageDescription": "Все статьи автора {author}"
+    "userArticlesPageDescription": "Все статьи автора {author}",
+    "deleteTitle": "Удалить статью",
+    "deleteConfirm": "Вы уверены, что хотите удалить эту статью? Это действие нельзя отменить.",
+    "deleteAction": "Удалить",
+    "deletePending": "Удаление...",
+    "deleteSuccessTitle": "Готово",
+    "deleteSuccessDescription": "Статья успешно удалена",
+    "deleteErrorTitle": "Ошибка",
+    "noArticlesFound": "Статьи не найдены",
+    "createTagLabel": "Создать «{value}»"
   },
   "dashboard": {
     "title": "Панель управления",

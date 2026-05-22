@@ -9,17 +9,12 @@ interface SearchBarProps {
     value: string;
     onChange: (value: string) => void;
     onSearch: () => void;
-    placeholder?: string;
+    /** Required so the caller passes a translated string. */
+    placeholder: string;
     debounceMs?: number;
 }
 
-export function SearchBar({
-    value,
-    onChange,
-    onSearch,
-    placeholder = 'Search by title...',
-    debounceMs = 500,
-}: SearchBarProps) {
+export function SearchBar({ value, onChange, onSearch, placeholder, debounceMs = 500 }: SearchBarProps) {
     const [debouncedValue] = useDebounceValue(value, debounceMs);
     const onSearchRef = useRef(onSearch);
     const isFirstRun = useRef(true);

@@ -24,13 +24,16 @@ interface TagsPickerProps {
 
 export function TagsPicker({ value, onChange, defaultValue }: TagsPickerProps) {
     const t = useTranslations('editor');
+    const tArticles = useTranslations('articles');
     return (
         <MultiSelect
             options={tagOptions}
             selected={value || defaultValue || []}
             onChange={onChange}
             placeholder={t('selectOrCreateTags')}
+            ariaLabel={t('tags')}
             allowCustom={true}
+            createLabel={(v) => tArticles('createTagLabel', { value: v })}
         />
     );
 }

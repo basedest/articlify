@@ -3,7 +3,7 @@
 import { authClient } from '~/shared/api/auth-client';
 import type { SessionUser } from '~/shared/types/session';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link, useRouter } from 'i18n/navigation';
 import { useState } from 'react';
 import type { Article } from '~/entities/article/model/types';
@@ -20,6 +20,9 @@ export function ArticleItem(props: Article) {
     const img = props.img ?? `/img/${props.category}.png`;
     const { data: session } = authClient.useSession();
     const tCategory = useTranslations('category');
+    const tArticles = useTranslations('articles');
+    const tButton = useTranslations('button');
+    const locale = useLocale();
     const [dialogOpen, setDialogOpen] = useState(false);
     const router = useRouter();
     const { toast } = useToast();
@@ -27,15 +30,15 @@ export function ArticleItem(props: Article) {
     const deleteMutation = trpc.article.delete.useMutation({
         onSuccess: () => {
             toast({
-                title: 'Success',
-                description: 'Article deleted successfully',
+                title: tArticles('deleteSuccessTitle'),
+                description: tArticles('deleteSuccessDescription'),
             });
             router.refresh();
             setDialogOpen(false);
         },
         onError: (error) => {
             toast({
-                title: 'Error',
+                title: tArticles('deleteErrorTitle'),
                 description: error.message,
                 variant: 'destructive',
             });
@@ -55,17 +58,15 @@ export function ArticleItem(props: Article) {
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Article</DialogTitle>
-                        <DialogDescription>
-                            Are you sure you want to delete this article? This action cannot be undone.
-                        </DialogDescription>
+                        <DialogTitle>{tArticles('deleteTitle')}</DialogTitle>
+                        <DialogDescription>{tArticles('deleteConfirm')}</DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                            Cancel
+                            {tButton('cancel')}
                         </Button>
                         <Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
-                            {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+                            {deleteMutation.isPending ? tArticles('deletePending') : tArticles('deleteAction')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -105,7 +106,7 @@ export function ArticleItem(props: Article) {
                     <div className="text-muted-foreground flex gap-2 text-sm">
                         <span>@{props.author}</span>
                         <span>•</span>
-                        <span>{new Date(props.createdAt).toLocaleDateString()}</span>
+                        <span>{new Date(props.createdAt).toLocaleDateString(locale)}</span>
                     </div>
                     <div className="flex items-center justify-between">
                         <TagsList tags={props.tags} />

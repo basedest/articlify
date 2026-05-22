@@ -1,5 +1,5 @@
 import { createServerCallerPublic } from '~/shared/api/trpc/server';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Link } from 'i18n/navigation';
@@ -45,6 +45,7 @@ export async function ArticlePage({ params }: ArticlePageProps) {
     const img = article.img ?? `/img/${article.category}.png`;
     const tCategory = await getTranslations('category');
     const tArticles = await getTranslations('articles');
+    const locale = await getLocale();
     const categoryLabel = tCategory(article.category);
 
     return (
@@ -67,7 +68,7 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                             <span className="text-primary font-medium hover:underline">@{article.author}</span>
                         </Link>
                         <span>•</span>
-                        <span>{new Date(article.createdAt).toLocaleDateString()}</span>
+                        <span>{new Date(article.createdAt).toLocaleDateString(locale)}</span>
                     </div>
 
                     <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">{article.title}</h1>
@@ -87,8 +88,8 @@ export async function ArticlePage({ params }: ArticlePageProps) {
                     <p className="text-muted-foreground text-sm">
                         {tArticles('lastUpdated')}{' '}
                         {article.editedAt
-                            ? new Date(article.editedAt).toLocaleString()
-                            : new Date(article.createdAt).toLocaleString()}
+                            ? new Date(article.editedAt).toLocaleString(locale)
+                            : new Date(article.createdAt).toLocaleString(locale)}
                     </p>
 
                     <div className="flex flex-col gap-3 sm:flex-row">

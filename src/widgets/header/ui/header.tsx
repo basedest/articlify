@@ -65,14 +65,21 @@ export function Header() {
                     </div>
 
                     <div className="md:hidden">
-                        <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label={t('toggleMenu')}
+                            aria-expanded={mobileMenuOpen}
+                            aria-controls="mobile-menu"
+                        >
                             <Menu className="h-6 w-6" />
                         </Button>
                     </div>
                 </div>
 
                 {mobileMenuOpen && (
-                    <div className="border-t pb-4 md:hidden">
+                    <div id="mobile-menu" className="border-t pb-4 md:hidden">
                         <div className="flex flex-col gap-2 px-4 pt-4">
                             <Link href="/" onClick={() => setMobileMenuOpen(false)}>
                                 <Button variant="ghost" className="w-full justify-start">

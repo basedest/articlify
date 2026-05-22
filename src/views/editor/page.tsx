@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { ProseMirrorJSON, TiptapEditorRef } from '~/widgets/editor';
 import type { Article } from '~/entities/article/model/types';
@@ -21,20 +20,34 @@ import { Card, CardContent } from '~/shared/ui/card';
 import { Loader2, Save } from 'lucide-react';
 import { trpc } from '~/shared/api/trpc/client';
 import { useToast } from '~/shared/ui/use-toast';
+import { useArticleEditPermission } from './use-article-edit-permission';
+import { ImageUploadSection } from './image-upload-section';
 
 const TiptapEditorDynamic = dynamic(() => import('~/widgets/editor').then((m) => ({ default: m.TiptapEditor })), {
     ssr: false,
 });
+
+// Accept Latin, Cyrillic, and Unicode letter classes so non-English titles
+// still produce a non-empty slug. Falls back to a timestamp if nothing usable
+// remains.
+function getSlug(t: string): string {
+    const slug = t
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\p{L}\p{N}-]+/gu, '')
+        .replace(/-{2,}/g, '-')
+        .replace(/^-|-$/g, '');
+    return slug || `article-${Date.now()}`;
+}
 
 export function EditorPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const editSlug = searchParams.get('edit');
     const { data: session, isPending: statusPending } = authClient.useSession();
-    const status = statusPending ? 'loading' : 'authenticated';
     const { toast } = useToast();
     const t = useTranslations('editor');
-    const tAuth = useTranslations('auth');
     const tCategory = useTranslations('category');
 
     const [file, setFile] = useState<File | null>(null);
@@ -58,58 +71,33 @@ export function EditorPage() {
         editSlug && existingArticle ? { ...existingArticle, ...article } : article;
     const displayImageSrc = imageSrc ?? effectiveArticle.img ?? null;
 
+    useArticleEditPermission({
+        editSlug,
+        existingArticle,
+        sessionUser: session?.user as SessionUser | undefined,
+    });
+
     const createMutation = trpc.article.create.useMutation({
         onSuccess: (data) => {
-            toast({
-                title: t('success'),
-                description: t('articleCreated'),
-            });
+            toast({ title: t('success'), description: t('articleCreated') });
             router.push(`/${data.category}/${data.slug}`);
         },
         onError: (error) => {
-            toast({
-                title: t('error'),
-                description: error.message,
-                variant: 'destructive',
-            });
+            toast({ title: t('error'), description: error.message, variant: 'destructive' });
             setUploading(false);
         },
     });
 
     const updateMutation = trpc.article.update.useMutation({
         onSuccess: (data) => {
-            toast({
-                title: t('success'),
-                description: t('articleUpdated'),
-            });
+            toast({ title: t('success'), description: t('articleUpdated') });
             router.push(`/${data!.category}/${data!.slug}`);
         },
         onError: (error) => {
-            toast({
-                title: t('error'),
-                description: error.message,
-                variant: 'destructive',
-            });
+            toast({ title: t('error'), description: error.message, variant: 'destructive' });
             setUploading(false);
         },
     });
-
-    const getSlug = (t: string) => {
-        const filter = /[^а-яё\w-]/g;
-        return t.toLowerCase().split(' ').join('-').replace(filter, '');
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImageSrc(reader.result as string);
-            };
-            reader.readAsDataURL(selectedFile);
-        }
-    };
 
     const uploadCoverImageMutation = trpc.article.uploadCoverImage.useMutation();
 
@@ -141,70 +129,37 @@ export function EditorPage() {
                 }
             }
 
-            const slug = getSlug(effectiveArticle.title!);
+            const common = {
+                title: effectiveArticle.title!,
+                description: effectiveArticle.description!,
+                category: effectiveArticle.category!,
+                tags: effectiveArticle.tags || [],
+                img: imageUrl,
+                contentPm,
+                contentFormat: 'pm' as const,
+                contentSchemaVersion: 1,
+            };
 
             if (editSlug) {
-                updateMutation.mutate({
-                    slug: editSlug,
-                    title: effectiveArticle.title!,
-                    description: effectiveArticle.description!,
-                    category: effectiveArticle.category!,
-                    tags: effectiveArticle.tags,
-                    img: imageUrl,
-                    contentPm: contentPm,
-                    contentFormat: 'pm',
-                    contentSchemaVersion: 1,
-                });
+                updateMutation.mutate({ slug: editSlug, ...common });
             } else {
-                createMutation.mutate({
-                    slug,
-                    title: effectiveArticle.title!,
-                    description: effectiveArticle.description!,
-                    category: effectiveArticle.category!,
-                    tags: effectiveArticle.tags || [],
-                    img: imageUrl,
-                    contentPm: contentPm,
-                    contentFormat: 'pm',
-                    contentSchemaVersion: 1,
-                });
+                createMutation.mutate({ slug: getSlug(effectiveArticle.title!), ...common });
             }
-        } catch (error) {
-            toast({
-                title: t('error'),
-                description: t('failedToSave'),
-                variant: 'destructive',
-            });
+        } catch {
+            toast({ title: t('error'), description: t('failedToSave'), variant: 'destructive' });
             setUploading(false);
         }
     };
 
-    const sessionUser = session?.user as SessionUser | undefined;
-    useEffect(() => {
-        if (!editSlug || !existingArticle || !sessionUser) return;
-        const isAdmin = sessionUser.role === 'admin';
-        const isOwner = existingArticle.authorId
-            ? existingArticle.authorId === sessionUser.id
-            : existingArticle.author === sessionUser.name;
-        if (!isOwner && !isAdmin) {
-            toast({
-                title: tAuth('accessDenied'),
-                description: t('noPermissionToEdit'),
-                variant: 'destructive',
-            });
-            router.push('/');
-        }
-    }, [editSlug, existingArticle, sessionUser, router, toast, t, tAuth]);
-
-    const authLoading = status === 'loading';
-    const disabled = !editorReady || authLoading || uploading;
-
-    if (authLoading || (editSlug && articleLoading)) {
+    if (statusPending || (editSlug && articleLoading)) {
         return (
             <div className="flex min-h-screen items-center justify-center">
                 <Loader2 className="text-primary h-8 w-8 animate-spin" />
             </div>
         );
     }
+
+    const disabled = !editorReady || uploading;
 
     return (
         <div className="container mx-auto max-w-5xl px-4 py-8">
@@ -222,7 +177,6 @@ export function EditorPage() {
                                 value={effectiveArticle.title || ''}
                                 onChange={(e) => setArticle({ ...article, title: e.target.value })}
                                 placeholder={t('placeholderTitle')}
-                                disabled={!!editSlug}
                             />
                         )}
                     </div>
@@ -266,24 +220,13 @@ export function EditorPage() {
                         />
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="image">{t('coverImage')}</Label>
-                        <p className="text-muted-foreground text-sm">{t('coverImageNote')}</p>
-                        <div className="flex items-center gap-4">
-                            <Input id="image" type="file" accept="image/*" onChange={handleImageChange} />
-                        </div>
-                        {displayImageSrc && (
-                            <div className="relative aspect-video w-full overflow-hidden rounded-lg">
-                                <Image
-                                    src={displayImageSrc}
-                                    alt={t('preview')}
-                                    fill
-                                    className="object-cover"
-                                    unoptimized={displayImageSrc.startsWith('data:')}
-                                />
-                            </div>
-                        )}
-                    </div>
+                    <ImageUploadSection
+                        displaySrc={displayImageSrc}
+                        onFileChange={(f, dataUrl) => {
+                            setFile(f);
+                            setImageSrc(dataUrl);
+                        }}
+                    />
 
                     <div className="space-y-2">
                         <Label>{t('content')}</Label>
