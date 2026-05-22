@@ -77,16 +77,29 @@ const serverEnvSchema = rawServerEnvSchema
                 ? raw.MAILER_RATE_LIMIT_PER_MINUTE
                 : undefined;
 
+        // MinIO defaults match docker-compose for local dev; production must set everything explicitly.
+        const isProd = nodeEnv === 'production';
+        const minioDefault = (envValue: string | undefined, devFallback: string, name: string): string => {
+            const trimmed = envValue?.trim();
+            if (trimmed) return trimmed;
+            if (isProd) throw new Error(`${name} is required when STORAGE_PROVIDER=minio in production`);
+            return devFallback;
+        };
+
         const storage =
             storageProvider === 'minio'
                 ? {
                       provider: 'minio' as const,
-                      endpoint: raw.S3_ENDPOINT?.trim() || 'http://localhost:9000',
-                      region: raw.S3_REGION?.trim() || 'us-east-1',
-                      accessKeyId: raw.S3_ACCESS_KEY?.trim() || 'minioadmin',
-                      secretAccessKey: raw.S3_SECRET_KEY?.trim() || 'minioadmin',
-                      bucket: raw.S3_BUCKET?.trim() || 'articlify-images',
-                      publicUrl: raw.S3_PUBLIC_URL?.trim() || 'http://localhost:9000/articlify-images',
+                      endpoint: minioDefault(raw.S3_ENDPOINT, 'http://localhost:9000', 'S3_ENDPOINT'),
+                      region: minioDefault(raw.S3_REGION, 'us-east-1', 'S3_REGION'),
+                      accessKeyId: minioDefault(raw.S3_ACCESS_KEY, 'minioadmin', 'S3_ACCESS_KEY'),
+                      secretAccessKey: minioDefault(raw.S3_SECRET_KEY, 'minioadmin', 'S3_SECRET_KEY'),
+                      bucket: minioDefault(raw.S3_BUCKET, 'articlify-images', 'S3_BUCKET'),
+                      publicUrl: minioDefault(
+                          raw.S3_PUBLIC_URL,
+                          'http://localhost:9000/articlify-images',
+                          'S3_PUBLIC_URL',
+                      ),
                       forcePathStyle: true,
                   }
                 : ({
