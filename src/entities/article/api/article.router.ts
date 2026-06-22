@@ -104,7 +104,7 @@ export const articleRouter = router({
         return await articleService.delete(input.slug, {
             id: userId,
             name: ctx.session.user.name ?? undefined,
-            role: ctx.session.user.role,
+            role: ctx.session.user.role ?? undefined,
         });
     }),
 

@@ -47,11 +47,7 @@ export class ArticleService {
         }
     }
 
-    async update(
-        slug: string,
-        updateData: Partial<Article>,
-        actor: { id: string; name?: string; role?: string },
-    ) {
+    async update(slug: string, updateData: Partial<Article>, actor: { id: string; name?: string; role?: string }) {
         const article = await articleRepository.findBySlug(slug);
         if (!article) {
             throw new TRPCError({
