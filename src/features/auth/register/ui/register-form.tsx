@@ -61,9 +61,7 @@ export function RegisterForm() {
                 const code = signUpError.code ?? '';
                 const msg = signUpError.message ?? '';
                 const isEmailTaken =
-                    code === 'USER_ALREADY_EXISTS' ||
-                    code === 'EMAIL_ALREADY_EXISTS' ||
-                    /already exists/i.test(msg);
+                    code === 'USER_ALREADY_EXISTS' || code === 'EMAIL_ALREADY_EXISTS' || /already exists/i.test(msg);
                 setError(isEmailTaken ? tError('emailAlreadyTaken') : msg || tError('registrationFailed'));
             } else {
                 router.push('/verify-email');

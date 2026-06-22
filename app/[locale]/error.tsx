@@ -13,7 +13,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
     const tError = useTranslations('error');
 
     useEffect(() => {
-        reportError({
+        void reportError({
             message: error.message || tError('unexpected'),
             digest: error.digest,
             stack: error.stack,

@@ -11,7 +11,7 @@ import '~/app/styles/globals.css';
 // EN + RU side-by-side rather than picking a single language for the user.
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
     useEffect(() => {
-        reportError({
+        void reportError({
             message: error.message || 'A critical error occurred.',
             digest: error.digest,
             stack: error.stack,

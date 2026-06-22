@@ -10,6 +10,20 @@ jobs:
     test:
         runs-on: ubuntu-latest
 
+        services:
+            # `yarn build` connects to MongoDB at build time: generateStaticParams
+            # for the article page calls article.getAllSlugs, and session-aware pages
+            # call getSession(). An empty DB is enough — build just needs it reachable.
+            mongodb:
+                image: mongo:7.0
+                ports:
+                    - 27017:27017
+                options: >-
+                    --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
         steps:
             - uses: actions/checkout@v4
 
@@ -25,6 +39,16 @@ jobs:
             - run: yarn test
             - run: yarn build
               env:
-                  # Build only needs schema-valid env; secrets are not exercised.
+                  # The build connects to the mongodb service above (for static params
+                  # and getSession), but storage is never exercised — only validated.
+                  # `next build` runs with NODE_ENV=production, so getServerConfig()
+                  # demands the full storage env set even though it is never called.
                   MONGODB_URI: mongodb://localhost:27017/articlify-ci
                   BETTER_AUTH_SECRET: ci-build-only-not-used-at-runtime
+                  STORAGE_PROVIDER: minio
+                  S3_ENDPOINT: http://localhost:9000
+                  S3_REGION: us-east-1
+                  S3_ACCESS_KEY: ci-build-only
+                  S3_SECRET_KEY: ci-build-only
+                  S3_BUCKET: articlify-ci
+                  S3_PUBLIC_URL: http://localhost:9000/articlify-ci
